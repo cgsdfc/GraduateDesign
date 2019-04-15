@@ -18,15 +18,15 @@
 按照Ekman的方法对该句子进行情感注释，并得到每一个单词的分值。
 
 \begin{table}[]
-\centering
-\caption{Scaling System样例说明}
-\label{scaling}
-\begin{tabular}{c|c|c|c|c|c|c}
-\hline
-例句                  & \multicolumn{6}{c}{Trains crash near Thai resort town} \\ \hline
-\multirow{2}{*}{情感} & anger  & disgust  & fear  & joy  & sadness  & surprise  \\ \cline{2-7} 
-                    & 2      & 0        & 62    & 0    & 90       & 10        \\ \hline
-\end{tabular}
+    \centering
+    \caption{Scaling System样例说明}
+    \label{scaling}
+    \begin{tabular}{c|c|c|c|c|c|c}
+        \hline
+        例句 & \multicolumn{6}{c}{Trains crash near Thai resort town} \\ \hline
+        \multirow{2}{*}{情感} & anger & disgust & fear & joy & sadness & surprise  \\ \cline{2-7}
+        & 2 & 0 & 62 & 0 & 90 & 10        \\ \hline
+    \end{tabular}
 \end{table}
 
 确定情感的另外一种计算方法是使用缩放系统（Scaling System）。
@@ -62,7 +62,7 @@ Scaling System使得复杂的情感可以得到进一步得到更充分的理解
 计算公式定义如下：
 
 \begin{equation}
-s = sign\left(\sum_{i=1}^{k}s_{i}+0.5s_{0}\right )
+    s = sign\left(\sum_{i=1}^{k}s_{i}+0.5s_{0}\right )
 \end{equation}
 
 其中，${s}$表示句子的整体情感分值，${s_{i}}$代表第${i}$个单词的情感分值，而${s_{0}}$是整体情感的主要极性。
@@ -75,8 +75,8 @@ s = sign\left(\sum_{i=1}^{k}s_{i}+0.5s_{0}\right )
 ${N}$表示句子中在情感此单中出现的单词个数，${sign}$则表示符号函数。
 
 \begin{equation}
-p = sign\left(\frac{\sum_{i=1}^{N}q_{i}}{N}\right)
-\label{eq:fairscore}
+    p = sign\left(\frac{\sum_{i=1}^{N}q_{i}}{N}\right)
+    \label{eq:fairscore}
 \end{equation}
 
 除此之外，也有一些研究者中提出了基于规则反转的计算机制。
@@ -86,10 +86,10 @@ p = sign\left(\frac{\sum_{i=1}^{N}q_{i}}{N}\right)
 计算过程如下所示：
 
 \begin{equation}
-s_{i}=sign\left ( q_{i}+\sum_{j:h_{j}=i}s_{j}\left ( -1 \right )_{i}^{r} \right )
+    s_{i}=sign\left ( q_{i}+\sum_{j:h_{j}=i}s_{j}\left ( -1 \right )_{i}^{r} \right )
 \end{equation}
 \begin{equation}
-p=sign\left ( s_{0} +0.5p_{0}\right )
+    p=sign\left ( s_{0} +0.5p_{0}\right )
 \end{equation}
 
 其中，${s_{i}}$表示根节点为${i}$的子树的情感极性，${q_{i}}$是第${i}$个子句的情感极性。
@@ -107,7 +107,7 @@ ${p}$是句子最后的整体情感倾向。
 本文从公开的Movie Review数据集（烂番茄电影评论数据集）中选取了对电影《母亲！》（\emph Mother!）高度赞扬的影评：
 
 \begin{description}
-\item ‘Mother!’ is an unpredictable, unsettling and satisfying work!!!
+    \item ‘Mother!’ is an unpredictable, unsettling and satisfying work!!!
 \end{description}
 
 从中不难看出，采用计算语言学方法所构建出来的情感词典只能在特定语境下给出文本语句的情感倾向。
@@ -147,10 +147,10 @@ ${p}$是句子最后的整体情感倾向。
 如图~\ref{fig:multilabel}所示。其中第一类是将多标签学习方法转换为分类问题，第二类则是基于算法本身进行适应性更新。
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.8\columnwidth]{figures-atGRU/multilabel.pdf}
-	\caption{多标签学习算法的主要分类}
-	\label{fig:multilabel}
+    \centering
+    \includegraphics[width=0.8\columnwidth]{figures-atGRU/multilabel.pdf}
+    \caption{多标签学习算法的主要分类}
+    \label{fig:multilabel}
 \end{figure}
 
 正如图~\ref{fig:multilabel}所示，第一类，多标签学习方法可以转换为分类问题。
@@ -167,7 +167,7 @@ ${p}$是句子最后的整体情感倾向。
 2）二阶策略（Second-Order Strategy）：二阶策略是考虑标签之间的两两相关性，构造多标签学习系统，
 虽然因为在一定程度上考虑了标签之间的相关性，所以系统的泛化性能较优，但是也会导致计算复杂度显著提升。
 
-3）高阶策略（High-Order Strategy）：相较于二阶策略，高阶策略的考察对象是高阶标签。  
+3）高阶策略（High-Order Strategy）：相较于二阶策略，高阶策略的考察对象是高阶标签。
 一组随机标签集合的相关性是高阶策略的实施对象。构造多标签学习系统。
 该策略可以真实反映问题的标签相关性，但是模型复杂度就会相较于二阶策略来讲更高。在处理大规模的学习问题方面比较吃力。
 
@@ -182,16 +182,16 @@ ${p}$是句子最后的整体情感倾向。
 为了克服这一问题所带来的局限性，近些年来，研究者们通过从大量文献中学习联合表示法（jointly representation），
 提出了低维词嵌入的概念~\upcite{DBLP:journals/jamia/NikfarjamSOGG15}。
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=280bp]{figures-atGRU/skipgram.pdf}
-	\caption{Skip-gram模型详细架构}
-	\label{fig:skip-gram}
+    \centering
+    \includegraphics[width=280bp]{figures-atGRU/skipgram.pdf}
+    \caption{Skip-gram模型详细架构}
+    \label{fig:skip-gram}
 \end{figure}
 
 Skip-gram模型如图~\ref{fig:skip-gram}所示，是训练大量无标记语料库词嵌入的通用方法。
 在该模型中，通过最大概率${p\left(o|c;\theta \right)}$来获得词嵌入。
 \begin{equation}
-\widehat{y}=p\left ( o|c \right )=\frac{exp\left ( u_{o}^{T} v_{c}\right )}{\sum_{w=1}^{W}exp\left ( u_{w}^{T} v_{c}\right )}
+    \widehat{y}=p\left ( o|c \right )=\frac{exp\left ( u_{o}^{T} v_{c}\right )}{\sum_{w=1}^{W}exp\left ( u_{w}^{T} v_{c}\right )}
 \end{equation}
 
 其中，${v_{c}}$是在skip-gram里中心词${c}$的词嵌入，${w}$则表示第${w}$个单词。
@@ -199,7 +199,7 @@ Skip-gram模型如图~\ref{fig:skip-gram}所示，是训练大量无标记语料
 单词${o}$是预期得到的词，${u_{o}}$则是它的词嵌入。
 在这个等式中，损失函数由交叉熵~\upcite{DBLP:journals/access/HaberBQH17}计算得到：
 \begin{equation}
-J\left ( o,v_{c},U \right )=CE\left ( y,\widehat{y} \right )
+    J\left ( o,v_{c},U \right )=CE\left ( y,\widehat{y} \right )
 \end{equation}
 
 \section{基于深度学习的情感分析方法}
@@ -260,17 +260,17 @@ Tomas等人在2010年提出了一种全新的基于循环神经网络的语言�
 目标是通过RNN来预测下一个单词。
 
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=280bp]{figures-atGRU/LMLM.pdf}
-	\caption{语言模型的详细结构}
-	\label{fig:LMLM}
+    \centering
+    \includegraphics[width=280bp]{figures-atGRU/LMLM.pdf}
+    \caption{语言模型的详细结构}
+    \label{fig:LMLM}
 \end{figure}
 
 首先，语言模型将句子中每个单词都转换成一个独热向量（one-hot vector），
 句子中第${i}$个单词用${x^{<i>}}$来表示，其中，${x^{<i>} \in \mathbb{R}^{\left | V \right |}}$。
 词嵌入${e^{<i>}}$的计算如下：
 \begin{equation}
-e^{i}=Ex^{<i>}
+    e^{i}=Ex^{<i>}
 \end{equation}
 
 之后，将词嵌入输入到RNN语言模型的隐藏层中，隐藏层状态如公式~\ref{eq:hidden}所示，
@@ -278,13 +278,13 @@ ${h^{<0>}}$表示初始的隐藏状态。
 句子中下一个单词根据前一个单词预测得到，由于RNN具有时序性的特性，
 所以预测单词${x^{<t>}}$的结果由隐藏状态${h^{<t-1}}$共同决定。
 \begin{equation}
-h^{<i>}=\sigma \left ( W_{h}h^{i-1} +W_{e}e^{i}+b_{1}\right )
-\label{eq:hidden}
+    h^{<i>}=\sigma \left ( W_{h}h^{i-1} +W_{e}e^{i}+b_{1}\right )
+    \label{eq:hidden}
 \end{equation}
 
 在最后一个时间步长中，隐藏单元输出最后要预测的单词\emph{books}，${b}$表示偏置单元，计算方式如下：
 \begin{equation}
-\widehat{y}^{<t>}=softmax\left (  Uh^{<t>}+b2\right ) \in \mathbb{R}^{\left | V \right |}
+    \widehat{y}^{<t>}=softmax\left (  Uh^{<t>}+b2\right ) \in \mathbb{R}^{\left | V \right |}
 \end{equation}
 
 基于RNN的语言模型在情感分析领域相较于传统神经网络模型具有很多优势，现详细罗列如下所示：
@@ -316,10 +316,10 @@ RNN语言模型也存在一些缺陷，比如，循环计算的过程比较缓�
 关于双向循环神经网络更进一步的研究，将会在本文第三章中阐述。
 
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=250bp]{figures-atGRU/BRNN.pdf}
-	\caption{浅层双向循环神经网络的详细结构}
-	\label{fig:brnn}
+    \centering
+    \includegraphics[width=250bp]{figures-atGRU/BRNN.pdf}
+    \caption{浅层双向循环神经网络的详细结构}
+    \label{fig:brnn}
 \end{figure}
 
 \subsection{门控制循环单元}
@@ -341,10 +341,10 @@ GRU比LSTM少了一个门控制单元，所以它也是LSTM的简化版，可以
 
 GRU的内部结构如图~\ref{fig:GRUunit}所示。
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=250bp]{figures-atGRU/GRUunit.pdf}
-	\caption{门控制循环单元的内部结构}
-	\label{fig:GRUunit}
+    \centering
+    \includegraphics[width=250bp]{figures-atGRU/GRUunit.pdf}
+    \caption{门控制循环单元的内部结构}
+    \label{fig:GRUunit}
 \end{figure}
 
 因此，在本文的框架中，首先设计了一个预注意力双向循环GRU网络层来学习从“语句”级别学习句子序列级的单词和语法依赖性。
@@ -378,16 +378,16 @@ NMT里面的注意力机制可以让解码器关注句源或词源的特定部�
 该相关性可以由概率计算得到，即是生成目标翻译语句中的单词${y_{i}}$的概率。
 计算过程是需要首先对当前上下文语境和每个源文本语句中单词的相关性进行计算，然后利用softmax分类器将相关程度转换成概率模型：
 \begin{equation}
-p\left ( y_{i}|y_{<i},x \right )=softmax\left ( W_{s}\widetilde{h}_{i} \right )
+    p\left ( y_{i}|y_{<i},x \right )=softmax\left ( W_{s}\widetilde{h}_{i} \right )
 \end{equation}
 单层的注意力模型中隐藏状态${\widetilde{h}_{i}}$则可以表示为：
 \begin{equation}
-\widetilde{h}_{i}=tanh\left ( W_{c}\left [ c_{i};z_{i} \right ] \right )
+    \widetilde{h}_{i}=tanh\left ( W_{c}\left [ c_{i};z_{i} \right ] \right )
 \end{equation}
 其中，${c_{i}}$是当前目标翻译端${y_{i}}$在句子中的上下文，${z_{i}}$是目标翻译端的隐藏层状态，由公式~\ref{eq:zi}计算得到：
 \begin{equation}
-z_{i}=f\left ( z_{i-1},y_{i-1},\widetilde{h}_{i-1} \right )
-\label{eq:zi}
+    z_{i}=f\left ( z_{i-1},y_{i-1},\widetilde{h}_{i-1} \right )
+    \label{eq:zi}
 \end{equation}
 
 接下来，需要获得对生成翻译，也就是预测目标的注意力贡献，它由相关性概率乘以源文本语句中的隐含层状态计算得到，
@@ -402,17 +402,17 @@ z_{i}=f\left ( z_{i-1},y_{i-1},\widetilde{h}_{i-1} \right )
 基于位置的注意力模型的原理是，对于问题语句中某一个单词，如果它也出现在了回答语句中，那么，回答语句中这个单词上下文语境之内的词语影响权重更大。
 这个影响权重呈高斯分布，随着距离的改变而改变。如下面的公式所示：
 \begin{equation}
-\alpha _{j}=\frac{exp\left ( e\left ( h_{j},p_{j} \right ) \right )}{\sum_{k=1}^{l}exp\left ( e\left ( h_{k},p_{k} \right ) \right )}
+    \alpha _{j}=\frac{exp\left ( e\left ( h_{j},p_{j} \right ) \right )}{\sum_{k=1}^{l}exp\left ( e\left ( h_{k},p_{k} \right ) \right )}
 \end{equation}
 通过拟合高斯分布，可以得到所有输入序列中单词的影响概率。这个影响概率就是上文所提到的影响权重，
 随后，将影响权重和输入语句中的所有单词词向量加权求和，得到基于位置的影响向量：
 \begin{equation}
-e\left ( h_{j},p_{j} \right )=v^{T}tanh\left ( W_{H}h_{j}+W_{p}p_{j}+b \right )
+    e\left ( h_{j},p_{j} \right )=v^{T}tanh\left ( W_{H}h_{j}+W_{p}p_{j}+b \right )
 \end{equation}
 基于位置的影响向量就是Potential Attention Model的输出，如公式~\ref{eq:ra}所示，它可以指定输入序列中所有单词的隐藏词向量和影响向量的相关程度。
 \begin{equation}
-r_{\alpha }=\sum_{j=1}^{l}\alpha _{j}h_{j}
-\label{eq:ra}
+    r_{\alpha }=\sum_{j=1}^{l}\alpha _{j}h_{j}
+    \label{eq:ra}
 \end{equation}
 
 \subsection{多级注意力机制}
@@ -427,10 +427,10 @@ r_{\alpha }=\sum_{j=1}^{l}\alpha _{j}h_{j}
 多级注意力机制的详细架构如图~\ref{fig:caan}所示。
 
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=300bp]{figures-atGRU/caan.pdf}
-	\caption{多级注意力模型的详细架构}
-	\label{fig:caan}
+    \centering
+    \includegraphics[width=300bp]{figures-atGRU/caan.pdf}
+    \caption{多级注意力模型的详细架构}
+    \label{fig:caan}
 \end{figure}
 
 多级注意力机制除了可以用在问答系统中，也有学者将其用在对文章的摘要提取~\upcite{DBLP:conf/sigir/RenCRWMR17}中。

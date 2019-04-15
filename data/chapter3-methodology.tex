@@ -7,10 +7,10 @@
 \section{文本预处理及词嵌入转换}
 本文提出的框架的整体结构如图~\ref{fig:fig1}所示。
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=380bp]{figures-atGRU/framework.pdf}
-	\caption{框架的整体架构}
-	\label{fig:fig1}
+    \centering
+    \includegraphics[width=380bp]{figures-atGRU/framework.pdf}
+    \caption{框架的整体架构}
+    \label{fig:fig1}
 \end{figure}
 
 一个文本在表述过程中会存在单词时态变换，表情符号，标签，
@@ -31,10 +31,10 @@
 该维度就是这个单词所在的词表汇总的位置。
 如图~\ref{fig:we}所示，本文将词嵌入可视化，更详细地阐述词嵌入的含义。
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=250bp]{figures-atGRU/we.pdf}
-	\caption{词嵌入可视化示例}
-	\label{fig:we}
+    \centering
+    \includegraphics[width=250bp]{figures-atGRU/we.pdf}
+    \caption{词嵌入可视化示例}
+    \label{fig:we}
 \end{figure}
 
 在这个示例中，单词“man”和“woman”都属于人类，除性别差异之外享有人类共享的特性，所以这两个单词距离相近，
@@ -42,15 +42,15 @@
 本文假设单词“man”和“woman”可以分别用${e_{A}}$和${e_{B}}$表示词索引，“king”和“queen”分别用${e_{C}}$和${e_{D}}$表示。
 那么，二者之间的关系为：
 \begin{equation}
-e_{A}-e_{B}\approx e_{C}-e_{D}
+    e_{A}-e_{B}\approx e_{C}-e_{D}
 \end{equation}
 其中，如果预测单词${D}$则可以通过如下公式计算：
 \begin{equation}
-Similarity=\left( e_{D}, e_{A}-e_{B}+e_{C} \right)
+    Similarity=\left( e_{D}, e_{A}-e_{B}+e_{C} \right)
 \end{equation}
 ${Similarity}$指的是相似度函数，它可以通过余弦公式计算得到：
 \begin{equation}
-Similarity=\frac{u^{T}v}{\left \| u \right \|_{2}\left \| v \right \|_{2}}
+    Similarity=\frac{u^{T}v}{\left \| u \right \|_{2}\left \| v \right \|_{2}}
 \end{equation}
 所以不难发现，相似的单词会集中分布在一起，这也就表明，由于这一特性，在将单词转换成词嵌入编码后，
 更有助于RNN模型的训练，尤其是通过已知一个单词来预测另一个单词。
@@ -60,14 +60,14 @@ GloVe对传统的word2vec模型进行了优化，它是在非零的全局单词�
 不止于此，GloVe在小数据集和语料库中也有着良好的表现能力。
 GloVe模型的主要算法是最小化下面的公式：
 \begin{equation}
-\sum_{i=1}^{dim}\sum_{j=1}^{dim}f\left ( x_{ij} \right )\left ( \theta _{i}^{T}e_{j} +b_{i}+b_{j}^{'}-logx_{ij}\right )^{2}
+    \sum_{i=1}^{dim}\sum_{j=1}^{dim}f\left ( x_{ij} \right )\left ( \theta _{i}^{T}e_{j} +b_{i}+b_{j}^{'}-logx_{ij}\right )^{2}
 \end{equation}
 其中，${x_{ij}}$代表单词${i}$，也就是语句中的目标，在前后文也就是目标语境${j}$中出现的次数。
 当${x_{ij}=0}$时，${f\left ( x_{ij} \right )=0}$，定义${0log0=0}$。
 GloVe模型的损失函数如公式~\ref{eq:glove}所示：
 \begin{equation}
-J\left ( \theta  \right )=\frac{1}{2}\sum_{i,j=1}^{W}f\left ( P_{ij} \right )\left ( u_{i}^{T}v_{j}-logP_{ij} \right )^{2}
-\label{eq:glove}
+    J\left ( \theta  \right )=\frac{1}{2}\sum_{i,j=1}^{W}f\left ( P_{ij} \right )\left ( u_{i}^{T}v_{j}-logP_{ij} \right )^{2}
+    \label{eq:glove}
 \end{equation}
 
 所以，在本文提出的框架中，本文采用的是GloVe模型将句子${x_{i}=\left[w_{i}^{1},w_{i}^{2},...,w_{i}^{m}\right]}$
@@ -79,10 +79,10 @@ J\left ( \theta  \right )=\frac{1}{2}\sum_{i,j=1}^{W}f\left ( P_{ij} \right )\le
 从“句子序列建模”层面来理解分析情感。图~\ref{fig:fig1}的底部展示了双向循环GRU的详细结构。
 为了更直观地展现这一部分，本文将其放大为如图~\ref{fig:BRNN-GRU}所示的详细结构。
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=350bp]{figures-atGRU/BRNN-GRU.pdf}
-	\caption{预注意力双向GRU的详细结构}
-	\label{fig:BRNN-GRU}
+    \centering
+    \includegraphics[width=350bp]{figures-atGRU/BRNN-GRU.pdf}
+    \caption{预注意力双向GRU的详细结构}
+    \label{fig:BRNN-GRU}
 \end{figure}
 
 “句子序列建模”部分由正向和反向的两个子层构成。
@@ -93,23 +93,23 @@ J\left ( \theta  \right )=\frac{1}{2}\sum_{i,j=1}^{W}f\left ( P_{ij} \right )\le
 其当前和上一个反向隐藏层状态分别是${\overleftarrow{h}_{t}}$和${\overleftarrow{h}_{t-1}}$。
 在预注意力双向循环GRU网络中，上面四个隐藏单元按照如下公式进行更新：
 \begin{equation}
-z_{t}=\sigma\left(W_{z}w_{t}+U_{z}h_{t-1}+b_{z}\right)
+    z_{t}=\sigma\left(W_{z}w_{t}+U_{z}h_{t-1}+b_{z}\right)
 \end{equation}
 \begin{equation}
-r_{t}=\sigma\left(W_{r}w_{t}+U_{r}h_{t-1}+b_{r}\right)
+    r_{t}=\sigma\left(W_{r}w_{t}+U_{r}h_{t-1}+b_{r}\right)
 \end{equation}
 \begin{equation}
-\overrightarrow{h}_{t}=tanh\left(W_{\overrightarrow{h}}w_{t}+ U_{\overrightarrow{h}}\overrightarrow{h}_{t-1}+b_{\overrightarrow{h}}\right)
+    \overrightarrow{h}_{t}=tanh\left(W_{\overrightarrow{h}}w_{t}+ U_{\overrightarrow{h}}\overrightarrow{h}_{t-1}+b_{\overrightarrow{h}}\right)
 \end{equation}
 \begin{equation}
-\overleftarrow{h}_{t}=tanh\left(W_{\overleftarrow{h}}w_{t}+ U_{\overleftarrow{h}}\overleftarrow{h}_{t+1}+b_{\overleftarrow{h}}\right)
+    \overleftarrow{h}_{t}=tanh\left(W_{\overleftarrow{h}}w_{t}+ U_{\overleftarrow{h}}\overleftarrow{h}_{t+1}+b_{\overleftarrow{h}}\right)
 \end{equation}
 \begin{equation}
-\widetilde{h}=g\left(V\left[\overrightarrow{h}_{t}:\overleftarrow{h}_{t}\right]+c\right)
-\label{eq:vc}
+    \widetilde{h}=g\left(V\left[\overrightarrow{h}_{t}:\overleftarrow{h}_{t}\right]+c\right)
+    \label{eq:vc}
 \end{equation}
 \begin{equation}
-h_{t}=z_{t}\odot h_{t-1}+\left(1-z_{t}\right)\odot\widetilde{h}
+    h_{t}=z_{t}\odot h_{t-1}+\left(1-z_{t}\right)\odot\widetilde{h}
 \end{equation}
 
 其中，${z}$和${r}$分别是更新门和重置门，它们决定了门控制单元更新或重置多少的激活或内容。
@@ -118,79 +118,79 @@ ${W_{z},W_{r},W_{\overrightarrow{h}},W_{\overleftarrow{h}},V \in \mathbb{R}^{d\t
 ${b_{z},b_{r},b_{\overrightarrow{h}},b_{\overleftarrow{h}},c \in \mathbb{R}^{d}}$则表示双向循环GRU网络层在训练过程中学习的偏置单元。
 候选记忆单元${\widetilde{h}}$由正向和反向隐藏层状态计算得到。
 ${h_{t}}$则表示新的记忆单元状态。
-接下来，便可以把隐藏层状态${\left[h^{1},h^{2},...,h^{m}\right]}$作为句子的最后词表示形式。
+接下来，便可以把隐藏层状态${\left[h^{1},h^{2},\dots,h^{m}\right]}$作为句子的最后词表示形式。
 
 为了更形象地阐明，本文放大了双向循环GRU中的内部单元结构，对框架预注意力双向循环GRU的优势进行详细地说明。
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=360bp]{figures-atGRU/GRUunit-2.pdf}
-	\caption{预注意力双向循环GRU单元的内部结构}
-	\label{fig:GRUunit-2}
+    \centering
+    \includegraphics[width=360bp]{figures-atGRU/GRUunit-2.pdf}
+    \caption{预注意力双向循环GRU单元的内部结构}
+    \label{fig:GRUunit-2}
 \end{figure}
 
 如图~\ref{fig:GRUunit-2}所示，单元内部的结构主要由三个门控制单元构成，它们的作用分别是：
 
 1）新记忆细胞生成：新的记忆细胞${\widetilde{h}_{t}}$是下一个输入单词${x_{t}}$和上一个隐藏状态${h_{t-1}}$的合并状态单元。
-	这个阶段将即将要被观察的新单词和前一个隐藏状态相结合，来总结出新的单词，并根据上下文生成新的词向量${\widetilde{h}_{t}}$。
+这个阶段将即将要被观察的新单词和前一个隐藏状态相结合，来总结出新的单词，并根据上下文生成新的词向量${\widetilde{h}_{t}}$。
 
 2）重置门：重置信号${r_{t}}$是负责来决定对于下一个预测的隐藏状态${\widetilde{h}_{t}}$，上一个已知的隐藏单元${h_{t-1}}$
-	的影响权重。如果发现前一个隐藏单元${h_{t-1}}$和新的记忆细胞的计算不相关，那么重置门可以完全减小掉上一个隐藏状态对下一个预测值的影响作用。
+的影响权重。如果发现前一个隐藏单元${h_{t-1}}$和新的记忆细胞的计算不相关，那么重置门可以完全减小掉上一个隐藏状态对下一个预测值的影响作用。
 
 3）更新门：更新信号${z_{t}}$是负责来决定上一个隐藏单元${h_{t-1}}$要携带多少控制流到下一状态。
-	例如，如果${z_{t}\approx1}$，那么${h_{t-1}}$所携带的信息就几乎全部复制给${h_{t}}$。
-	相反地，如果${z_{t}\approx0}$，那么新的记忆细胞单元${\widetilde{h}_{t}}$就被转发给下一个隐藏状态。
+例如，如果${z_{t}\approx1}$，那么${h_{t-1}}$所携带的信息就几乎全部复制给${h_{t}}$。
+相反地，如果${z_{t}\approx0}$，那么新的记忆细胞单元${\widetilde{h}_{t}}$就被转发给下一个隐藏状态。
 
 4）隐藏状态：隐藏状态${h_{t}}$是最后使用之前的隐藏输入${h_{t-1}}$和新的记忆细胞单元${\widetilde{h}_{t}}$，
-	在更新信号的建议之下。
+在更新信号的建议之下。
 
 需要注意的是，在训练预注意力双向循环GRU的时候，需要训练上述所有的权重参数，它们都遵循根据时间的反向传播算法进行训练。
 假设在预注意力双向循环GRU中，序列的每个状态位置的损失函数为：
 \begin{equation}
-L=\sum_{t=1}^{\tau }L^{<t>}
+    L=\sum_{t=1}^{\tau }L^{<t>}
 \end{equation}
 其中，公式~\ref{eq:vc}中的参数${V}$和${c}$的梯度计算如下：
 \begin{equation}
-\frac{\partial L}{\partial c}=\sum_{t=1}^{\tau }\frac{\partial L^{<t>}}{\partial c}=\sum_{t=1}^{\tau }\frac{\partial L^{<t>}}{\partial o^{<t>}}\frac{\partial o^{<t>}}{\partial c}=\sum_{t=1}^{\tau }\widehat{y}^{<t>}-y^{<t>}
+    \frac{\partial L}{\partial c}=\sum_{t=1}^{\tau }\frac{\partial L^{<t>}}{\partial c}=\sum_{t=1}^{\tau }\frac{\partial L^{<t>}}{\partial o^{<t>}}\frac{\partial o^{<t>}}{\partial c}=\sum_{t=1}^{\tau }\widehat{y}^{<t>}-y^{<t>}
 \end{equation}
 \begin{equation}
-\frac{\partial L}{\partial V}=\sum_{t=1}^{\tau }\frac{\partial L^{<t>}}{\partial V}=\sum_{t=1}^{\tau }\frac{\partial L^{<t>}}{\partial o^{<t>}}\frac{\partial o^{<t>}}{\partial V}=\sum_{t=1}^{\tau }\left ( \widehat{y}^{<t>}-y^{<t>} \right )\left ( h^{<t>} \right )^{T}
+    \frac{\partial L}{\partial V}=\sum_{t=1}^{\tau }\frac{\partial L^{<t>}}{\partial V}=\sum_{t=1}^{\tau }\frac{\partial L^{<t>}}{\partial o^{<t>}}\frac{\partial o^{<t>}}{\partial V}=\sum_{t=1}^{\tau }\left ( \widehat{y}^{<t>}-y^{<t>} \right )\left ( h^{<t>} \right )^{T}
 \end{equation}
 权重参数和偏置参数${W}$和${b}$的梯度由于预注意力双向循环GRU所具有的时序性特质，计算起来较为复杂。
 首先，假设权重参数${W}$在第${t}$个时间步长的隐藏单元的梯度为：
 \begin{equation}
-\delta ^{<t>}=\frac{\partial L}{\partial h^{<t>}}
+    \delta ^{<t>}=\frac{\partial L}{\partial h^{<t>}}
 \end{equation}
 那么，梯度${\delta ^{<t>}}$可以由梯度${\delta ^{<t+1>}}$反向推导出来：
 \begin{equation}
-	\begin{aligned}
-\delta ^{<t>} & =\frac{\partial L^{<t>}}{\partial o^{<t>}}\frac{\partial o^{<t>}}{\partial h^{<t>}}+\frac{\partial L}{\partial h^{<t+1>}}\frac{\partial h^{<t+1>}}{h^{<t>}} \\
-& =V^{<t>}\left ( \widehat{y}^{<t>}-y^{<t>} \right )+W^{T}\delta ^{<t+1>}diag\left ( 1-\left ( h^{<t+1>} \right )^{2} \right)
-	\end{aligned}
+    \begin{aligned}
+        \delta ^{<t>} & =\frac{\partial L^{<t>}}{\partial o^{<t>}}\frac{\partial o^{<t>}}{\partial h^{<t>}}+\frac{\partial L}{\partial h^{<t+1>}}\frac{\partial h^{<t+1>}}{h^{<t>}} \\
+        & =V^{<t>}\left ( \widehat{y}^{<t>}-y^{<t>} \right )+W^{T}\delta ^{<t+1>}diag\left ( 1-\left ( h^{<t+1>} \right )^{2} \right)
+    \end{aligned}
 \end{equation}
 \begin{equation}
-\delta ^{<t>}=\frac{\partial L}{\partial o^{<\tau >}}\frac{\partial o^{<\tau >}}{\partial h^{<\tau >}}=V^{T}\left ( \widehat{y}^{<\tau >}-y^{<\tau >} \right )
+    \delta ^{<t>}=\frac{\partial L}{\partial o^{<\tau >}}\frac{\partial o^{<\tau >}}{\partial h^{<\tau >}}=V^{T}\left ( \widehat{y}^{<\tau >}-y^{<\tau >} \right )
 \end{equation}
 在得到第${t}$个时间步长的隐藏单元的梯度之后，可以得到参数${W,U,b}$的梯度：
 \begin{equation}
-\frac{\partial L}{\partial W}=\sum_{t=1}^{\tau }\frac{\partial L}{\partial h^{<t>}}\frac{\partial h^{<t>}}{\partial W}=\sum_{t=1}^{\tau }diag\left ( 1-\left ( h^{<t>} \right )^{2} \right )\delta^{<t>} \left ( h^{<t-1>} \right )^{T}
+    \frac{\partial L}{\partial W}=\sum_{t=1}^{\tau }\frac{\partial L}{\partial h^{<t>}}\frac{\partial h^{<t>}}{\partial W}=\sum_{t=1}^{\tau }diag\left ( 1-\left ( h^{<t>} \right )^{2} \right )\delta^{<t>} \left ( h^{<t-1>} \right )^{T}
 \end{equation}
 \begin{equation}
-\frac{\partial L}{\partial b}=\sum_{t=1}^{\tau }\frac{\partial L}{\partial h^{<t>}}\frac{\partial h^{<t>}}{\partial b}=\sum_{t=1}^{\tau }diag\left ( 1-\left ( h^{<t>} \right )^{2} \right )\delta^{<t>}
+    \frac{\partial L}{\partial b}=\sum_{t=1}^{\tau }\frac{\partial L}{\partial h^{<t>}}\frac{\partial h^{<t>}}{\partial b}=\sum_{t=1}^{\tau }diag\left ( 1-\left ( h^{<t>} \right )^{2} \right )\delta^{<t>}
 \end{equation}
 \begin{equation}
-\frac{\partial L}{\partial U}=\sum_{t=1}^{\tau }\frac{\partial L}{\partial h^{<t>}}\frac{\partial h^{<t>}}{\partial U}=\sum_{t=1}^{\tau }diag\left ( 1-\left ( h^{<t>} \right )^{2} \right )\delta^{<t>}\left (x^{<t>} \right )^{2}
+    \frac{\partial L}{\partial U}=\sum_{t=1}^{\tau }\frac{\partial L}{\partial h^{<t>}}\frac{\partial h^{<t>}}{\partial U}=\sum_{t=1}^{\tau }diag\left ( 1-\left ( h^{<t>} \right )^{2} \right )\delta^{<t>}\left (x^{<t>} \right )^{2}
 \end{equation}
 
 预注意力双向GRU的主要优势和创新点如下：
 
 1）由于机器不具备人类独特的识读文本，感知理解的能力，所以本文设计从句子的两端起始分别进行平行双向吸收单词流。
-	这样通过对正向句子和反向句子的建模，可以完整地建立起理解句子的根本语义依赖性。
+这样通过对正向句子和反向句子的建模，可以完整地建立起理解句子的根本语义依赖性。
 
 2）在获得语义依赖性之后，本文的框架在模仿人类阅读文本时，
-	可以结合过去（前一个）和未来（后一个）的单词对句子整体进行建模，有效建立情感感知系统。
-	
+可以结合过去（前一个）和未来（后一个）的单词对句子整体进行建模，有效建立情感感知系统。
+
 3）GRU拥有调节单元内部信息流的门控单元~\upcite{DBLP:journals/corr/ChungGCB14}。
-	双向的网络结构将词汇信息从句子前端和后端更好地组合起来。
+双向的网络结构将词汇信息从句子前端和后端更好地组合起来。
 
 4）句子序列建模的关键作用是处理单词之间的复杂交互性，并且更好地控制语义流。
 
@@ -206,21 +206,21 @@ L=\sum_{t=1}^{\tau }L^{<t>}
 在句子理解之后，本文开始重点关注特定包含情感权重的单词或短语，更为有效地捕捉词特征，预测文本的情感倾向。
 
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=350bp]{figures-atGRU/attention.pdf}
-	\caption{注意力机制的详细结构}
-	\label{fig:fig2}
+    \centering
+    \includegraphics[width=350bp]{figures-atGRU/attention.pdf}
+    \caption{注意力机制的详细结构}
+    \label{fig:fig2}
 \end{figure}
 
 如图~\ref{fig:fig2}所示，注意力机制在第${k^{th}}$个时间步长生成的注意力分布${\alpha_{t}^{k}}$计算如下：
 \begin{equation}
-\alpha_{t}^{k}=\frac{exp\left( e_{t}^{k} \right)}{\sum_{i=1}^{m}exp\left( e_{t}^{i} \right)}
+    \alpha_{t}^{k}=\frac{exp\left( e_{t}^{k} \right)}{\sum_{i=1}^{m}exp\left( e_{t}^{i} \right)}
 \end{equation}
 
 其中，${e_{t}^{k}}$是在第${k^{th}}$个时间步长的记忆细胞的打分函数，它被定义为：
 \begin{equation}
-e_{t}^{k}=\left[s_{t-1}^{T}h_{1},s_{t-1}^{T}h_{2},...,s_{t-1}^{T}h_{m}\right]
-\label{eq:score}
+    e_{t}^{k}=\left[s_{t-1}^{T}h_{1},s_{t-1}^{T}h_{2},...,s_{t-1}^{T}h_{m}\right]
+    \label{eq:score}
 \end{equation}
 
 在公式~\ref{eq:score}中，${h_{k}}$是预注意力双向循环GRU的隐藏层，
@@ -228,7 +228,7 @@ ${s_{t-1}}$是在后注意力单向GRU在第${k^{th}}$个时间步长的记忆�
 
 然后，可以得到注意力层的输出为：
 \begin{equation}
-a_{t}=\sum_{k=1}^{m}\alpha_{t}^{k}h_{k}
+    a_{t}=\sum_{k=1}^{m}\alpha_{t}^{k}h_{k}
 \end{equation}
 
 \section{类解码器的后注意力单向GRU}
@@ -238,16 +238,16 @@ a_{t}=\sum_{k=1}^{m}\alpha_{t}^{k}h_{k}
 它模仿了译码器-解码器（encoder-decoder）中解码器的功能，来进一步提取预测的特征。
 后注意力单向GRU的主要表达式与框架的第一层类似，除了候选记忆单元的定义。
 \begin{equation}
-z_{t}=\sigma\left(W_{z}a_{t}+U_{z}s_{t-1}\right)
+    z_{t}=\sigma\left(W_{z}a_{t}+U_{z}s_{t-1}\right)
 \end{equation}
 \begin{equation}
-r_{t}=\sigma\left(W_{r}a_{t}+U_{r}s_{t-1}\right)
+    r_{t}=\sigma\left(W_{r}a_{t}+U_{r}s_{t-1}\right)
 \end{equation}
 \begin{equation}
-\widetilde{s}=tanh\left(W_{\widetilde{s}_{t}}a_{t} + r_{t}\odot U_{\widetilde{s}_{t}}s_{t-1}\right)
+    \widetilde{s}=tanh\left(W_{\widetilde{s}_{t}}a_{t} + r_{t}\odot U_{\widetilde{s}_{t}}s_{t-1}\right)
 \end{equation}
 \begin{equation}
-s_{t}=z_{t}\theta \odot s_{t-1}+\left( 1-z_{t} \right )\odot\widetilde{s}
+    s_{t}=z_{t}\theta \odot s_{t-1}+\left( 1-z_{t} \right )\odot\widetilde{s}
 \end{equation}
 
 其中，${z}$和${r}$分别是后注意力单向GRU的更新门和重置门。
@@ -256,10 +256,10 @@ ${\widetilde{s}}$表示新的记忆单元，${s_{t}}$表示在第${t}$个时间�
 为了更详尽地展现该层的结构，其内部结构展现在图~\ref{fig:insideGRU}中。
 
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=250bp]{figures-atGRU/insideGRU.pdf}
-	\caption{后注意力单向GRU的详细结构}
-	\label{fig:insideGRU}
+    \centering
+    \includegraphics[width=250bp]{figures-atGRU/insideGRU.pdf}
+    \caption{后注意力单向GRU的详细结构}
+    \label{fig:insideGRU}
 \end{figure}
 
 \section{基于softmax的情感分类预测}
@@ -267,7 +267,7 @@ ${\widetilde{s}}$表示新的记忆单元，${s_{t}}$表示在第${t}$个时间�
 获得情感文本中的预测类别标签${\left\{positive,negative\right\}}$。
 softmax分类器的计算如下：
 \begin{equation}
-\widehat{y_{i}}=softmax\left ( U_{p}s^{*}+b_{p} \right )
+    \widehat{y_{i}}=softmax\left ( U_{p}s^{*}+b_{p} \right )
 \end{equation}
 
 其中，${U_{p}}$是softmax层的权重矩阵，${b_{p}}$则是该层的偏置向量。
@@ -276,22 +276,22 @@ softmax分类器的计算如下：
 该算法是基于低价矩阵自适应估计的算法，它通过时间算法优化反向传播（back propagation）~\upcite{DBLP:journals/corr/KingmaB14}。
 Adam中参数${\theta_{t}}$的更新计算如下：
 \begin{equation}
-g_{t}=\nabla_{\theta }f\left ( \theta \right )
+    g_{t}=\nabla_{\theta }f\left ( \theta \right )
 \end{equation}
 \begin{equation}
-m_{t}=\mu \ast m_{t-1} +\left ( 1-\mu \right ) \ast g_{t}
+    m_{t}=\mu \ast m_{t-1} +\left ( 1-\mu \right ) \ast g_{t}
 \end{equation}
 \begin{equation}
-n_{t}=\gamma  \ast n_{t-1} +\left ( 1-\gamma  \ast g_{t} ^{2} \right )
+    n_{t}=\gamma  \ast n_{t-1} +\left ( 1-\gamma  \ast g_{t} ^{2} \right )
 \end{equation}
 \begin{equation}
-\widehat{m}_{t}=\frac{m_{t}}{1-\mu ^{t}}
+    \widehat{m}_{t}=\frac{m_{t}}{1-\mu ^{t}}
 \end{equation}
 \begin{equation}
-\widehat{n}_{t}=\frac{n_{t}}{1-\gamma  ^{t}}
+    \widehat{n}_{t}=\frac{n_{t}}{1-\gamma  ^{t}}
 \end{equation}
 \begin{equation}
-\Delta \theta =-\frac{\widehat{m}}{\sqrt{\widehat{n}}+\epsilon }\ast \eta 
+    \Delta \theta =-\frac{\widehat{m}}{\sqrt{\widehat{n}}+\epsilon }\ast \eta
 \end{equation}
 
 其中，${f\left ( \theta \right )}$是客观函数，${g_{t}}$是在第${t}$个时间步长的梯度${\theta}$。

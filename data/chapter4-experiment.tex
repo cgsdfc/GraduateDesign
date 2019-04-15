@@ -17,22 +17,22 @@
     \caption{四个标准数据集详细构成}
     \label{Table:datasets}
     \begin{tabular}{@{}ccc@{}}
-    \hline
-    数据集                & 实例个数  & 正向情感/负向情感 \\ \hline
-    IMDB               & 50000 & 0.5/0.5   \\
-    Customer Review    & 4530  & 0.64/0.36 \\
-    Movie Review       & 10624 & 0.5/0.5   \\
-    SemEval Restaurant & 3990  & 0.72/0.28 \\
-    SemEval Laptop     & 2333  & 0.57/0.43 \\ \hline
+        \hline
+        数据集 & 实例个数 & 正向情感/负向情感 \\ \hline
+        IMDB & 50000 & 0.5/0.5   \\
+        Customer Review & 4530 & 0.64/0.36 \\
+        Movie Review & 10624 & 0.5/0.5   \\
+        SemEval Restaurant & 3990 & 0.72/0.28 \\
+        SemEval Laptop & 2333 & 0.57/0.43 \\ \hline
     \end{tabular}
-    \end{table}
+\end{table}
 
 综上所述，本文选取了四个公共的标准数据集来对模型进行训练和评价。他们分别是：
 IMDB海量电影评论数据集(IMDB large movie review）\footnote{http://ai.stanford.edu/∼amaas/data/sentiment/}，
 亚马逊顾客评价数据集（Customer Review）\footnote{http://www.cs.uic.edu/∼liub/FBS/sentiment-analysis.html}，
 烂番茄电影评论数据集（Movie Review）\footnote{http://www.cs.cornell.edu/people/pabo/movie-review-data/}和
 SemEval 2014的任务四数据集\footnote{http://alt.qcri.org/semeval2014/task4/}。
-这四个标准数据集的具体参数如表 \ref{Table:datasets}所示。
+这四个标准数据集的具体参数如表~\ref{Table:datasets}所示。
 
 IMDB电影评论数据集，亚马逊顾客评价数据及和烂番茄电影评论数据集分别有50000，4530，10624个实例，
 他们被划分为两类情感极性：\emph{正极}和\emph{负极}。
@@ -55,7 +55,7 @@ SemEval数据集则包含两个子集，分别是：\emph{笔记本电脑购买�
 \emph{Accuracy}的定义如下：
 
 \begin{equation}
-\emph{Accuracy}=\frac{\sum_{i=1}^{n}1\left\{y_{i}=\widehat{y}_{i}\right\}}{N}
+    \emph{Accuracy}=\frac{\sum_{i=1}^{n}1\left\{y_{i}=\widehat{y}_{i}\right\}}{N}
 \end{equation}
 
 其中，${y_{i}}$是实例被被标记的真实情感极性，而${\widehat{y}_{i}}$是本文框架的预测情感极性。
@@ -72,20 +72,20 @@ ${N}$表示实例的总个数。
 下面本文将详细介绍本文的实验比较中采用的基准线。
 
 1）Bag-of-words：Bag-of-words也可以被称为“词袋”，这是一种传统的机器学习方法。
-    它采用词袋特征所训练出来的逻辑回归模型来对评论样例的情感极性进行分类。
+它采用词袋特征所训练出来的逻辑回归模型来对评论样例的情感极性进行分类。
 
 2）Vote by lexicon：在词典中投票的方法中，一个预先定义的情感词典被先用来在语句中对每一个单词进行评分。
-    因此，所有的情感评分都可以被计算出来。然后情感的极性则有评分决定。
+因此，所有的情感评分都可以被计算出来。然后情感的极性则有评分决定。
 
 3）Rule-based reversal：基于规则的反转方法根据判断从属子树的情感极性的规则来决定情感分类或主观句。
-    从属子树的根是短语${i}$，从属子树的极性决定于投票前的极性，或者词组${i}$和从属子树的极性, 其根节点是修饰符或词组${i}$。
+从属子树的根是短语${i}$，从属子树的极性决定于投票前的极性，或者词组${i}$和从属子树的极性, 其根节点是修饰符或词组${i}$。
 4）Tree-Based CRF：是一个基于依赖树，且具有隐藏变量的条件随机域的方法。
 
 5）LSA：在这种方法中，稀疏高维度的文本被映射到一个称作潜在语义空间（Latent Semantic Space）的低维度向量空间。
-    在此过程中，采用了奇异值分解（Singular Value Decomposition）的方法。
+在此过程中，采用了奇异值分解（Singular Value Decomposition）的方法。
 
 6）LDA：潜在狄利克雷分布（Latent Dirichlet Allocation）是一种生成文本陈述主题的无监督的机器学习方法。
-    该方法被用于从大量文本收集和语料库中识别潜在的主题信息。
+该方法被用于从大量文本收集和语料库中识别潜在的主题信息。
 
 7）MAAS Semantic：该方法是一个用于情感分析的经过语义相似性优化的概率模型。
 
@@ -100,7 +100,7 @@ ${N}$表示实例的总个数。
 本文采用了带有${L_{2}}$范式正则化的交叉熵函数，来作为本实验的损失函数，它的详细定义如下：
 
 \begin{equation}
-J\left(w,b\right)=-\frac{1}{m}\sum_{i=1}^{m}\left[y_{i}log\hat{y}_{i}+\left(1-y_{i} \right)log\left ( 1-\widehat{y}_{i} \right )\right] + \frac{\lambda }{2m}\sum_{l=1}^{m}\left\|\omega \right\|_{F}^{2}
+    J\left(w,b\right)=-\frac{1}{m}\sum_{i=1}^{m}\left[y_{i}log\hat{y}_{i}+\left(1-y_{i} \right)log\left ( 1-\widehat{y}_{i} \right )\right] + \frac{\lambda }{2m}\sum_{l=1}^{m}\left\|\omega \right\|_{F}^{2}
 \end{equation}
 
 其中，${y_{i}}$表示真实值，${\hat{y}_{i}}$ 表示每一个情感分类中的极性预测概率。
@@ -120,69 +120,69 @@ dropout可以有效地防止过拟合问题~\upcite{srivastava2014dropout}。
 表 \ref{Table:Table1}，\ref{Table:Table2}和 \ref{Table:Table3}展示了本文提出的框架在四个标准数据集上，相较于其他基准线的比较结果。
 
 \begin{table}
-\centering
-\caption{在Movie Review和Customer Review数据集上的准确率}
-\label{Table:Table1}
-\begin{tabular}{@{}ccc@{}}
-% \toprule
-\hline
-实验方法                    & Movie Rview    & Customer Review \\ \hline
-Bag-of-word               & 0.764          & 0.814           \\
-Voting by lexicon         & 0.631          & 0.742           \\
-Rule-based reversal       & 0.629          & 0.743           \\
-Tree-CRF                  & 0.773          & 0.814           \\
-Word Embedding based CNN  & 0.778          & 0.819           \\
-Word Embedding based RNN  & 0.781          & 0.821           \\
-Word Embedding based LSTM & 0.774          & 0.764           \\ 
-\textbf{本文的框架}    & \textbf{0.798} & \textbf{0.847}  \\ \hline
-\end{tabular}
+    \centering
+    \caption{在Movie Review和Customer Review数据集上的准确率}
+    \label{Table:Table1}
+    \begin{tabular}{@{}ccc@{}}
+        % \toprule
+        \hline
+        实验方法 & Movie Rview & Customer Review \\ \hline
+        Bag-of-word & 0.764 & 0.814           \\
+        Voting by lexicon & 0.631 & 0.742           \\
+        Rule-based reversal & 0.629 & 0.743           \\
+        Tree-CRF & 0.773 & 0.814           \\
+        Word Embedding based CNN & 0.778 & 0.819           \\
+        Word Embedding based RNN & 0.781 & 0.821           \\
+        Word Embedding based LSTM & 0.774 & 0.764           \\
+        \textbf{本文的框架}    & \textbf{0.798} & \textbf{0.847}  \\ \hline
+    \end{tabular}
 \end{table}
 
 \begin{table}
-\centering
-\caption{在IMDB数据集上的准确率}
-\label{Table:Table2}
-\begin{tabular}{@{}cc@{}}
-% \toprule
-\hline
-实验方法                    & IMDB           \\ \hline
-LSA                       & 0.839          \\
-LDA                       & 0.674          \\
-MAAS semantic             & 0.873          \\
-MAAS full                 & 0.874          \\
-Word Embedding based CNN  & 0.884          \\
-Word Embedding based RNN  & 0.829          \\
-Word Embedding based LSTM & 0.835          \\
-\textbf{本文的框架}    & \textbf{0.903} \\ \hline
-\end{tabular}
+    \centering
+    \caption{在IMDB数据集上的准确率}
+    \label{Table:Table2}
+    \begin{tabular}{@{}cc@{}}
+        % \toprule
+        \hline
+        实验方法 & IMDB           \\ \hline
+        LSA & 0.839          \\
+        LDA & 0.674          \\
+        MAAS semantic & 0.873          \\
+        MAAS full & 0.874          \\
+        Word Embedding based CNN & 0.884          \\
+        Word Embedding based RNN & 0.829          \\
+        Word Embedding based LSTM & 0.835          \\
+        \textbf{本文的框架}    & \textbf{0.903} \\ \hline
+    \end{tabular}
 \end{table}
 
 \begin{table}
-\centering
-\caption{在SemEval Laptop和SemEval Restaurant数据集上的准确率}
-\label{Table:Table3}
-\begin{tabular}{@{}ccc@{}}
-% \toprule
-\hline
-Method                       & SemEval Laptop & SemEval Restaurant \\ \hline
-Word Embedding based RNN     & 0.656          & 0.799              \\
-Word Embedding based LSTM    & 0.761          & 0.862              \\
-Word Embedding based GRU     & 0.783          & 0.844              \\
-Word Embedding based Bi-GRU  & 0.786          & 0.849              \\
-本文的框架（无注意力机制）       & 0.793          & 0.864              \\
-\textbf{本文的框架}       & \textbf{0.800} & \textbf{0.868}     \\ \hline
-\end{tabular}
+    \centering
+    \caption{在SemEval Laptop和SemEval Restaurant数据集上的准确率}
+    \label{Table:Table3}
+    \begin{tabular}{@{}ccc@{}}
+        % \toprule
+        \hline
+        Method & SemEval Laptop & SemEval Restaurant \\ \hline
+        Word Embedding based RNN & 0.656 & 0.799              \\
+        Word Embedding based LSTM & 0.761 & 0.862              \\
+        Word Embedding based GRU & 0.783 & 0.844              \\
+        Word Embedding based Bi-GRU & 0.786 & 0.849              \\
+        本文的框架（无注意力机制） & 0.793 & 0.864              \\
+        \textbf{本文的框架}       & \textbf{0.800} & \textbf{0.868}     \\ \hline
+    \end{tabular}
 \end{table}
 
 通过以上和基准线的比较结果，可以看出本文提出的框架表现得更好，具有更高的准确率。
 通过分析思考，其主要原因如下：
 
 1）采用预注意力双向循环GRU可以从句子序列建模的角度，
-    更好地自句子两端起处理词和词之间复杂的交互性，捕捉单词之间的基本关系，以学习在句子中长距离的语法依赖性。
+更好地自句子两端起处理词和词之间复杂的交互性，捕捉单词之间的基本关系，以学习在句子中长距离的语法依赖性。
 
 2）本文使用的注意力机制有助于重点关注句子的关键部分，比如包含情感态度的单词，转折词等。
-    并且，本文提出的框架可以进而利用这些内部关键词来从词特征捕捉的角度对情感极性进行分类。
-    
+并且，本文提出的框架可以进而利用这些内部关键词来从词特征捕捉的角度对情感极性进行分类。
+
 3）本文框架独特的结构不仅有助于情感分析的行为，而且还能有效地解决梯度消失和爆炸问题。
 
 同时，本文也分析了其他基准线效果不如本文框架的主要原因。传统的机器学习方法，比如：bag-of-word，voting by lexcion和Rule-based reversal等基准线无法在较大的时间间隔内学习单词和单词之间的潜在关系，
@@ -203,17 +203,17 @@ Word Embedding based Bi-GRU  & 0.786          & 0.849              \\
 由于IMDB数据集规模较大，经常被用于自然语言处理的研究和顶级会议论文中，且情感极性是正负参半的，所以图~\ref{fig:fig3}也是基于该数据集的调试过程。
 
 \begin{figure}[h!]
-%在\includegraphics后面删去了[width=2in]
-	\centering
-	\subfigure{
-		\label{fig:subfig:a} 
-		\includegraphics[width=.4\textwidth]{figures-atGRU/batch32.pdf}}
-%	\hspace{1in}
-	\subfigure{
-		\label{fig:subfig:b}
-		\includegraphics[width=.4\textwidth]{figures-atGRU/batch64.pdf}}
-	\caption{在不同批次大小和网络单元大小下的精准率}
-	\label{fig:fig3}
+    %在\includegraphics后面删去了[width=2in]
+    \centering
+    \subfigure{
+    \label{fig:subfig:a}
+    \includegraphics[width=.4\textwidth]{figures-atGRU/batch32.pdf}}
+    %	\hspace{1in}
+    \subfigure{
+    \label{fig:subfig:b}
+    \includegraphics[width=.4\textwidth]{figures-atGRU/batch64.pdf}}
+    \caption{在不同批次大小和网络单元大小下的精准率}
+    \label{fig:fig3}
 \end{figure}
 
 通过横向比较图~\ref{fig:subfig:a}和图~\ref{fig:subfig:b}，本文可以看出，当网络单元大小增加时，比如从32增加到256时，精准率也会随之上升。
@@ -226,10 +226,10 @@ IMDB是一个规模较大的数据集，通过适当地采用小批次训练，�
 
 \subsection{词嵌入的可视化}
 \begin{figure}[h!]
-	\centering
-	\includegraphics{figures-atGRU/IMDB-5000.pdf}
-	\caption{本文框架的词嵌入散点分布图}
-	\label{fig:fig4}
+    \centering
+    \includegraphics{figures-atGRU/IMDB-5000.pdf}
+    \caption{本文框架的词嵌入散点分布图}
+    \label{fig:fig4}
 \end{figure}
 
 本文还可视化了框架基于IMDB数据集所学习的词嵌入分布规模。

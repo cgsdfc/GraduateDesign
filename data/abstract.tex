@@ -1,0 +1,33 @@
+% !Mode:: "TeX:UTF-8"
+% Author: Zhengxi Tian
+% Email: zhengxi.tian@hotmail.com
+
+% 中英文摘要
+\begin{cabstract}
+文本情感分析是指用自然语言处理、文本挖掘等方法来识别和提取原素材中的主观信息，
+这一技术被广泛应用于分析互联网上众多评论的情感极性。
+随着机器学习特别是深度学习技术近年来的发展，研究者们提出了多种多样的方法用于分析文本的情感极性。
+本文提出了一个基于注意力机制和双向门控制循环单元的情感分析框架，从“句子序列建模”和“单词特征捕捉”两个层面对网络上的评论文本进行情感分析。
+框架的第一层由基于预注意力的双向门控制循环单元网络组成，该层的主要功能是结合词和词之间的复杂相互作用来对句子进行整体建模，
+有助于框架完整地理解句子的基本语义依赖，以及单词之间的潜在关系。
+接下来，该框架从“单词特征捕捉”的角度出发，引入注意力机制对输入序列中的特定情绪词汇进行特征捕捉，注意力机制不仅可以对句子中的关键信息进行捕捉和分析，
+还能在较长的序列中有良好表现。最后，该框架还设计了一个基于后注意力的门控制循环单元层来模仿解码器的功能，
+后注意力单向门控制循环单元的设计初衷是模仿人类的阅读习惯，在阅读较长较复杂的文本时，
+会对语句进行重复阅读来保证情感分类的准确性。
+本文框架在多个公开数据集进行了实验验证，实验结果表明本文提出的框架对于情感分类具有较高的潜力和优势。
+
+\end{cabstract}
+
+\begin{eabstract}
+Sentiment analysis is an effective technique and widely employed to analyze sentiment polarity of reviews and comments on the Internet. 
+A lot of advanced methods have been developed to solve this task. 
+In this paper, we propose an attention aware bidirectional GRU (Bi-GRU) framework to classify the sentiment polarity from the aspects of sentential-sequence modeling and word-feature seizing. 
+It is composed of a pre-attention Bi-GRU to incorporate the complicated interaction between words by sentence modeling, and an attention layer to capture the key words for sentiment apprehension. 
+which assist the framework to apprehend the basic syntax dependencies and underlying relationships between the words thorougly.
+Attention designed by our framework can not only seizing and analyzing the vital information in the sentences, 
+but also performances well in longer input sequences.
+Afterwards a post-attention GRU is added to imitate the function of decoder, aiming to extract the predicted features conditioned on the above parts. 
+We designed the post-attention GRU inspired by the habit of human reading, which has the advantage of repeating reading sentences when the documents
+are quite longer and complicated.  
+Experimental study on commonly used datasets has demonstrated the proposed framework's potential for sentiment classification.
+\end{eabstract}

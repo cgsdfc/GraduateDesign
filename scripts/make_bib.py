@@ -7,6 +7,7 @@ import pathlib
 
 from bibtexparser.bibdatabase import BibDatabase
 from bibtexparser.bwriter import BibTexWriter
+from bibtexparser.bparser import BibTexParser
 
 
 class EmptyBibFile(Exception):
@@ -45,9 +46,10 @@ def get_all_bib_files(prefix):
 
 
 def get_bib_from_file(filename, stop_at_empty: bool):
+    parser = BibTexParser(common_strings=True)
     with open(filename) as f:
         try:
-            bib_db: BibDatabase = bibtexparser.load(f)
+            bib_db: BibDatabase = bibtexparser.load(f, parser)
         except IndexError:
             if stop_at_empty:
                 # suppress the ugly str index out of range.
@@ -61,7 +63,7 @@ def get_bib_from_file(filename, stop_at_empty: bool):
 
     max_bib, max_matches = max([match_keys_against_white_list(bib) for bib in bib_db.entries],
                                key=operator.itemgetter(1))
-    logging.info('select %s with %d matches of white list keys', max_bib[ID], max_matches)
+    logging.info('extract %s from %s', max_bib[ID], filename)
     return max_bib
 
 

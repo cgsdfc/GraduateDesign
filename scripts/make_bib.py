@@ -74,12 +74,16 @@ def remove_black_list_keys(bib: dict):
     return bib
 
 
+def remove_keys_not_in_white_list(bib: dict):
+    excluded_keys = [key for key in bib.keys() if key.islower() and key not in WHITE_LIST]
+    for key in excluded_keys:
+        del bib[key]
+
+
 def normalize_values(bib: dict):
     if BOOKTITLE in bib:
         value = bib[BOOKTITLE]
-        logging.info('old: %s', value)
         value = value.split(',')[0]
-        logging.info('new: %s', value)
         bib[BOOKTITLE] = value
     return bib
 
@@ -87,11 +91,8 @@ def normalize_values(bib: dict):
 def cleanup(bib: dict, white_list_only: bool):
     bib = remove_black_list_keys(bib)
     bib = normalize_values(bib)
-
     if white_list_only:
-        excluded_keys = [key for key in bib.keys() if key.islower() and key not in WHITE_LIST]
-        for key in excluded_keys:
-            del bib[key]
+        remove_keys_not_in_white_list(bib)
     return bib
 
 

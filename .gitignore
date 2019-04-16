@@ -34,6 +34,7 @@
 *.thm
 *.pdf
 *.fls
+*.xdv
 .DS_Store
 
 # generated

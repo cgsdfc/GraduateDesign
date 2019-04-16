@@ -250,7 +250,7 @@ The LaTeX template for thesis of BUAA]
 %%%%%%%%%% reference %%%%%%%%%%
 % 参考文献
 
-\bibliographystyle{buaathesis} % 参考文献格式
+\bibliographystyle{abbrv} % 参考文献格式
 \RequirePackage[sort&compress]{natbib}
 \bibpunct{[}{]}{,}{n}{}{}
 \setlength{\bibsep}{0pt}

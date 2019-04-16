@@ -12,7 +12,6 @@
       <excludePattern pattern="*.blg" />
       <excludePattern pattern="*.fdb*" />
       <excludePattern pattern="*.toc" />
-      <excludePattern pattern="master" />
       <excludePattern pattern="*.xdv" />
       <excludePattern pattern="*.lof" />
       <excludePattern pattern="*.lot" />

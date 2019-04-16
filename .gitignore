@@ -33,4 +33,8 @@
 *.swp
 *.thm
 *.pdf
+*.fls
 .DS_Store
+
+# generated
+all.bib

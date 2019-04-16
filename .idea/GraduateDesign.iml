@@ -13,6 +13,9 @@
       <excludePattern pattern="*.fdb*" />
       <excludePattern pattern="*.toc" />
       <excludePattern pattern="master" />
+      <excludePattern pattern="*.xdv" />
+      <excludePattern pattern="*.lof" />
+      <excludePattern pattern="*.lot" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7 (base)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -87,7 +87,7 @@ def cleanup(bib: dict, white_list_only: bool):
     bib = normalize_values(bib)
 
     if white_list_only:
-        excluded_keys = [key for key in bib.keys() if key not in WHITE_LIST]
+        excluded_keys = [key for key in bib.keys() if key.islower() and key not in WHITE_LIST]
         for key in excluded_keys:
             del bib[key]
     return bib

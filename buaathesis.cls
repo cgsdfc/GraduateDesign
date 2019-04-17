@@ -39,7 +39,7 @@ The LaTeX template for thesis of BUAA]
 
 \RequirePackage{ifthen}
 
-%%%%%%%%%% font %%%%%%%%%%
+%%%%%%%%%% fonts %%%%%%%%%%
 % 数学相关和字体设置
 
 \RequirePackage{amsmath,amssymb,amsfonts,mathrsfs,bm}

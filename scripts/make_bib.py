@@ -1,5 +1,4 @@
 import operator
-
 import bibtexparser
 import argparse
 import logging
@@ -9,6 +8,8 @@ from bibtexparser.bibdatabase import BibDatabase
 from bibtexparser.bwriter import BibTexWriter
 from bibtexparser.bparser import BibTexParser
 
+
+# TODO: duplicate bib key?
 
 class EmptyBibFile(Exception):
     pass

@@ -23,6 +23,8 @@ such as Twitter and Reddit, giving rise to data-driven models.
 
 # What is a context
 - Linguistic context, *not* physical one.
+- past utterances.
+- encoded in a continuous context vector.
 
 # Benefits
 - Context is important: 
@@ -57,7 +59,7 @@ such as Twitter and Reddit, giving rise to data-driven models.
     * plausible
     * fluent
     * contextual relevant
-- proposer:[Mikolov 2010](../bib_db/basic/mikolov/MikolovKBCK10.bib), Recurrent neural network based language model.
+- proposer:[Mikolov 2010](../bib_db/classic/mikolov/MikolovKBCK10.bib), Recurrent neural network based language model.
     
 ## Multi-modular Dialog System
 * [Young 2002](../bib_db/model/traditional_dialog/young/Young02.bib) (Talking to machine)
@@ -85,18 +87,22 @@ such as Twitter and Reddit, giving rise to data-driven models.
 
 ## Application of word embeddings
 - IR:
-    * [Huang 2013]()
-    * [Shen 2014]()
+    * [Huang 2013](../bib_db/nlp_fields/HuangHGDAH13.bib)
+    * [Shen 2014](../bib_db/nlp_fields/ShenHGDM14.bib)
     * 
-- Online Recommendation: [Gao 2014b]()
+- Online Recommendation: [Gao 2014b](../bib_db/nlp_fields/GaoPGHD14.bib)
 - MT:
-    * [Auli 2013]()
-    * [Cho 2014]()
-    * [Kalchbrenner and Blunsom 2013]()
+    * [Auli 2013](../bib_db/nlp_fields/AuliGQZ13.bib)
+    * [Cho 2014](../bib_db/nlp_fields/ChoMGBBSB14.bib)
+    * [Kalchbrenner and Blunsom 2013](../bib_db/nlp_fields/KalchbrennerB13.bib)
     * [Sutskever 2014](../bib_db/model/sutskever/SutskeverVL14.bib)
     * 
 - Language Modeling LM:
-    * [Bengio 2003]()
-    * [Collobert and Weston 2008]()
+    * [Bengio 2003](../bib_db/classic/bengio/BengioDVJ03.bib)
+    * [Collobert and Weston 2008](../bib_db/classic/CollobertW08.bib)
 
-
+## Context Vector
+- learnt along with the RLM that generates the responses.
+- as opposed to [Mikolov 2012](../bib_db/classic/mikolov/MikolovZ12.bib), which uses a pre-trained topic model.
+- do not exclude stopwords.
+- stopwords carry discriminative power like `how are you?` are all stopwords.

@@ -245,3 +245,5 @@ fact that the context comes **before** the message.
 
 $[x,y]$ denotes the concatenation of $x$ and $y$ vectors.
 ```
+
+[Architecture illustration](../picture/DCGM/dcgm-2.svg)

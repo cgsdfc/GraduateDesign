@@ -106,3 +106,53 @@ such as Twitter and Reddit, giving rise to data-driven models.
 - as opposed to [Mikolov 2012](../bib_db/classic/mikolov/MikolovZ12.bib), which uses a pre-trained topic model.
 - do not exclude stopwords.
 - stopwords carry discriminative power like `how are you?` are all stopwords.
+
+
+# Overview
+## RNNLM
+*note:* the RNNLM described here seems not to use LSTM.
+
+```latex
+Given sentences $s=s_1,\cdots,s_T$, the model estimates:
+\begin{align}
+    p(s) = \prod_{t=1}^{T} p(s_t|s_1,\cdots,s_{t-1})
+\end{align}
+The model is parametrized by 3 matrices
+$\Theta_{RNN}=\left< W_{in}, W_{out}, W_{hh} \right> $.
+Input $s_t$ is a one-hot vector for a word in the vocabulary.
+It is projected to its embedding by the input matrix $W_{in} \in \mathcal{R}^{V \times K}$ via $s_t^T W_{in}$.
+The recurrent matrix $W_{hh} \in \mathcal{R}^{K \times K}$ keeps track of the history of the seen words.
+
+The output matrix $W_{out} \in \mathcal{R}^{K\times K}$ projects the hidden state to an output layer
+$o_t$, which is used to generate a probability for each word.
+
+The forward pass is:
+\begin{align}
+    h_t = \sigma \left( s_t^T W_{in} + h_{t-1}^T W_{hh} \right), o_t = h_t^T W_{out}
+\end{align}
+
+Apparently this does not make use of any gating like LSTM or GRU.
+It is the most basic (naive) form of RNN -- only a linear layer plus a sigmod activation is used. Won't it suffer from gradient vanishing or exploring?
+?
+
+$K$ is th$K$ is the vector dimension.
+$V$ is the vocab size.
+There is no hidden layer size.
+The recurrence seed is $h_0 = 0$, the zero vector.
+aThe probability of the next word is obtained by:
+\begin{align}
+    P(s_t = w|s_1,\cdots,s_{t-1}=\frac{\exp(o_{tw})}{\sum_{v=1}^{V}\exp(o_{tv})})
+\end{align}
+cThe objective function is:
+\begin{align}
+    L(s) = -\sum_{t=1}^{T}\log P(s_t = w|s_1,\cdots,s_{t-1})
+\end{align}
+tThis is the \textbf{negative log likehood of the training sentence s}
+```
+
+The backward pass is *unrolled backwards in time* using
+the _back-propagation through time_ (BPTT) algorithm.
+(This may be in common use for training RNN).
+Gradients are accumulated over multiple time-steps.
+[Rumelhart and Hinton](../bib_db/classic/BackProp.bib)
+

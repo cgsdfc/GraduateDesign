@@ -15,6 +15,7 @@ class EmptyBibFile(Exception):
     pass
 
 
+# Keys we *don't* need.
 BACK_LIST = (
     'crossref',
     'url',
@@ -25,6 +26,7 @@ BACK_LIST = (
     'archiveprefix',
 )
 
+# Keys we need.
 WHITE_LIST = {
     'author',
     'booktitle',
@@ -42,30 +44,59 @@ BOOKTITLE = 'booktitle'
 ID = 'ID'
 
 
-def get_all_bib_files(prefix):
-    return pathlib.Path(prefix).rglob('*.bib')
+def get_bib_from_file(filename):
+    """
+    Extract the main bib dict from a bib files.
+    Bib files downloaded from DBLP usually contains multiple entries for the same paper.
 
-
-def get_bib_from_file(filename, stop_at_empty: bool):
+    :param filename: the file containing one or more bib entries.
+    :return: dict the extracted bib.
+    """
     parser = BibTexParser(common_strings=True)
     with open(filename) as f:
         try:
             bib_db: BibDatabase = bibtexparser.load(f, parser)
         except IndexError:
-            if stop_at_empty:
-                # suppress the ugly str index out of range.
-                raise EmptyBibFile(filename) from None
-            else:
-                logging.warning('empty bib file: %s', filename)
-                return {}
+            raise EmptyBibFile(filename) from None
 
     def match_keys_against_white_list(bib: dict):
+        """
+        Count the matched keys of bib against the white list.
+        :param bib:
+        :return:
+        """
         return bib, sum(1 for key in bib.keys() if key in WHITE_LIST)
 
+    # The current criteria for selecting is the number of matches of keys in the white list.
     max_bib, max_matches = max([match_keys_against_white_list(bib) for bib in bib_db.entries],
                                key=operator.itemgetter(1))
     logging.info('extract %s from %s', max_bib[ID], filename)
     return max_bib
+
+
+def get_all_bibs(prefix, stop_at_empty):
+    def get_all_bib_files():
+        return pathlib.Path(prefix).rglob('*.bib')
+
+    files = get_all_bib_files()
+    bib_keys = set()
+    bib_list = []
+
+    for bib_file in files:
+        try:
+            bib = get_bib_from_file(bib_file)
+        except EmptyBibFile as e:
+            if stop_at_empty:
+                raise
+            logging.warning('empty bib file: %s', e.args[0])
+        else:
+            if not bib or bib[ID] in bib_keys:
+                logging.warning('duplicate bib entry: %s from %s', bib[ID], bib_file)
+                continue
+            bib_keys.add(bib[ID])
+            bib_list.append(bib)
+
+    return bib_list
 
 
 def remove_black_list_keys(bib: dict):
@@ -98,7 +129,7 @@ def cleanup(bib: dict, white_list_only: bool):
 
 
 def main(args):
-    all_bibs = [get_bib_from_file(filename, args.stop_at_empty) for filename in get_all_bib_files(args.prefix)]
+    all_bibs = get_all_bibs(args.prefix, args.stop_at_empty)
     all_bibs = [cleanup(bib, args.white_list_only) for bib in all_bibs]
     bib_db = BibDatabase()
     bib_db.entries = all_bibs

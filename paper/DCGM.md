@@ -3,12 +3,13 @@
 - author: Sordoni
 
 # Contribution
+**First Application of a neural network model to open-domain response generation.**
+
 - train end-to-end on unstructured Twitter data.
 - using NN to address sparsity problem when integrating context.
 - dynamic-context generative model.
 - data-driven.
 
-**First Application of a neural network model to open-domain response generation.**
 
 - a multi-reference extraction technique that shows promise for 
 automated evaluation. (Metrics)
@@ -46,7 +47,7 @@ such as Twitter and Reddit, giving rise to data-driven models.
 
 # Models
 - simple, context-sensitive, response-generation models.
-- first encode past info into continuous representation and then decode it using RLM.
+- first encode context into continuous representation and then decode it using RLM.
 - completely data-driven.
 - no human annotation is needed.
 - As opposed to: typical complex task-oriented multi-modular dialog system.
@@ -55,7 +56,7 @@ such as Twitter and Reddit, giving rise to data-driven models.
 *a line of though:* Although the training is nearly free of human annotation, the evaluation of such system relies heavily on human evaluation. The training of task-oriented system relies on human annotation but its evaluation is more supervised. One cannot gain both sides of goodness.
 
 ## Recurrent Language Model (RLM)
-- benefits of using an RLM:
+- benefits of using an RLM as NLG:
     * plausible
     * fluent
     * contextual relevant
@@ -81,15 +82,14 @@ such as Twitter and Reddit, giving rise to data-driven models.
 - labels and attributes defining dialog states.
 
 ## Previous uses of ML
-- response generation, [Walker 2003]()
+- response generation, [Walker 2003](../bib_db/dialog/walker/WalkerPS03.bib)
 - dialog state tracking,[Young 2010]()
-- user modeling, [Georgila 2006]()
+- user modeling, [Georgila 2006](../bib_db/dialog/georgila/GeorgilaHL06.bib)
 
 ## Application of word embeddings
 - IR:
     * [Huang 2013](../bib_db/nlp_fields/HuangHGDAH13.bib)
     * [Shen 2014](../bib_db/nlp_fields/ShenHGDM14.bib)
-    * 
 - Online Recommendation: [Gao 2014b](../bib_db/nlp_fields/GaoPGHD14.bib)
 - MT:
     * [Auli 2013](../bib_db/nlp_fields/AuliGQZ13.bib)

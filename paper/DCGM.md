@@ -51,7 +51,7 @@ such as Twitter and Reddit, giving rise to data-driven models.
 - completely data-driven.
 - no human annotation is needed.
 - As opposed to: typical complex task-oriented multi-modular dialog system.
-
+- *Important*: Based on RLM.
    
 *a line of though:* Although the training is nearly free of human annotation, the evaluation of such system relies heavily on human evaluation. The training of task-oriented system relies on human annotation but its evaluation is more supervised. One cannot gain both sides of goodness.
 
@@ -117,8 +117,10 @@ Given sentences $s=s_1,\cdots,s_T$, the model estimates:
 \begin{align}
     p(s) = \prod_{t=1}^{T} p(s_t|s_1,\cdots,s_{t-1})
 \end{align}
+
 The model is parametrized by 3 matrices
 $\Theta_{RNN}=\left< W_{in}, W_{out}, W_{hh} \right> $.
+
 Input $s_t$ is a one-hot vector for a word in the vocabulary.
 It is projected to its embedding by the input matrix $W_{in} \in \mathcal{R}^{V \times K}$ via $s_t^T W_{in}$.
 The recurrent matrix $W_{hh} \in \mathcal{R}^{K \times K}$ keeps track of the history of the seen words.
@@ -139,7 +141,8 @@ $K$ is th$K$ is the vector dimension.
 $V$ is the vocab size.
 There is no hidden layer size.
 The recurrence seed is $h_0 = 0$, the zero vector.
-aThe probability of the next word is obtained by:
+
+The probability of the next word is obtained by:
 \begin{align}
     P(s_t = w|s_1,\cdots,s_{t-1}=\frac{\exp(o_{tw})}{\sum_{v=1}^{V}\exp(o_{tv})})
 \end{align}
@@ -156,3 +159,89 @@ the _back-propagation through time_ (BPTT) algorithm.
 Gradients are accumulated over multiple time-steps.
 [Rumelhart and Hinton](../bib_db/classic/BackProp.bib)
 
+# Architecture
+```latex
+\begin{align}
+    p(r|c,m) = \prod_{t=1}^{T} p(r_t|r1,\cdots,r_{t-1},c,m)
+\end{align}
+```
+
+- Two users A and B.
+- c: a sequence of past dialog exchanges of any length (context)
+- m: a message given by B.
+- r: a response reacted by A.
+- Input: (c,m). Output: r.
+- Three models differ in the way they compose the context-messsage pair (c,m).
+
+## RLMT, Trippled Language Model
+concatenate c,m,r into a single *long* sentence s and train the RLM on s (predict each words in s).
+
+*Issue*: the input is overly long and modeling such long-range dependency is difficult and an open problem. (we don't have LSTM at the time yet). The RLMT is thus considered a baseline to other proposed models.
+
+It seems that we don't have Seq2Seq neither.
+
+## Dynamic-Context Generative Model, DCGM-I,-II
+
+Idea: context and message are encoded into a fixed-len vector that is used by the RLM to decode the response.
+
+It seems the *encoder-decoder* architecture is already here and it is obviously more early than Seq2Seq.
+
+### DCGM-I
+1. c and m are considered as *a single sentence* and combined by a single bag-of-words representation
+```latex
+\begin{align}
+    b_{cm} \in \mathcal{R}^V
+\end{align}
+```
+
+2. apply a feed-forward (FF) network to the b_cm to obtain a fixed-len rep.
+3. the rep is used as the bias term of the hidden state matrix W_hh.
+4. both the forward encoder and the RLM decoder are trained so at to minimize the NLL.
+
+Parameters of *DCGM-I*:
+```latex
+\begin{align}
+    \Theta_{\text{DCGM-I}} = \left< W_{in}, W_{hh}, W_{out}, \{W_f^l\}_{l=1}^L \right>
+\end{align}
+```
+
+The weights for L layers of feed-forward network and the context-message rep produced by it:
+```latex
+\begin{align}
+    k_1 = b_{cm}^T W_f^1 \\
+    k_l = \sigma (k_{l-1}^T W_f^l) \text{for} l=2,\cdots,L \\
+    k_L \in \mathcal{R}^{K \times K} \\
+\end{align}
+```
+- k_L is the fixed-len context vector.
+- b_cm is the BOW combination of the context and message.
+- W_f^1 is the embedding independent from those of RLM.
+
+The RLM decoder takes the form:
+```latex
+\begin{align}
+    h_t = \sigma (h_{t-1}^{T} W_{hh} + k_L + s_t^T W_{in}) \\
+    o_t = h_t^T W_{out} \\
+    p(s) = \prod_{t=1}^{T} p(s_t|s_1,\cdots,s_{t-1},c,m) = \text{softmax}(o_t)
+\end{align}
+```
+
+[Architecture illustration](../picture/DCGM/dcgm-1.svg)
+
+The context vector don't change through time.
+
+### DCGM-II
+The DCGM-I concatenates the message and context *sentences* before applying bag-of-word on them.
+In this way, the order information of context and message vanish.
+But order matters. So the DCGM-II addresses this by turning the message and the context into bag-of-word
+respectively and then concatenate a linear mapping of their BOW respectively, which preserves the
+fact that the context comes **before** the message.
+
+```latex
+\begin{align}
+    k_1=[b_c^T W_f^1, b_m^T W_f^1], \\
+    k_l=\sigma(k_{l-1}^T W_f^l) \  \text{for}\  l=2,\cdots,L
+\end{align}
+
+$[x,y]$ denotes the concatenation of $x$ and $y$ vectors.
+```

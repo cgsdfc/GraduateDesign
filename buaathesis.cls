@@ -10,6 +10,8 @@
 The LaTeX template for thesis of BUAA]
 \typeout{Document Class `buaathesis' v0.8 by BHOSC (2012/07)}
 
+\RequirePackage{float}
+
 %%%%%%%%%% class options %%%%%%%%%%
 % 模板选项
 

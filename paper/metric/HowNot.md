@@ -71,6 +71,20 @@ End-to-end training with neural networks:
     - [Moller 2006]()
     - [Jokinen and McTear 2009]()
     
+# Problem Formulation
+Given a dialogue context and a proposed response,
+our goal is to automatically evaluate how appropriate the proposed response is to the conversation.
+
+# Investigated Metrics
+## Word based similarity metrics
+Building block: the amount of _word-overlap_.
+
+### BLEU
+Studied by Galley in DeltaBLEU.
+
+
+## Word-embedding based similarity metrics
+
 # Statistical Analysis
 
 

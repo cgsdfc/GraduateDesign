@@ -1,5 +1,3 @@
-\usepackage{graphicx}
-
 % !Mode:: "TeX:UTF-8"
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
@@ -14,8 +12,7 @@
 \begin{figure}[H]
     \includegraphics[width=0.6\textwidth]{figure/context_message_response.png}
     \centering
-    \caption{上下文，消息和响应的关系
-    \upcite{DBLP:journals/corr/SordoniGABJMNGD15}}
+    \caption{上下文，消息和响应的关系\upcite{DBLP:journals/corr/SordoniGABJMNGD15}}
     \label{fig:context_message_response}
 \end{figure}
 
@@ -29,10 +26,17 @@ Ritter等人率先用统计机器翻译（Statistical Machine Translation，SMT�
 \end{figure}
 
 \section{课题研究意义}\label{sec:课题研究意义}
-
+这一节讲我们的课题如何能帮助人们更好的使用现有自动化指标（Use it wisely），
+避免出现这样一种情况：比如BLEU在Liu说它和人类评价不相关之前，大家都用它；Liu说了不行之后，
+大家就都不用了。我们的研究提供了这样一种方法，让你知道哪些指标可以用，该怎么用。
+我们的研究还有助于自动化指标的开发。一个好的自动化指标，我们认为，除了要和人类评价相关性高之外，
+还要具有比较光滑和平稳的分布，在理想状态下应该接近正态分布。
+最后，通过观察一个模型在不同数据集上的指标分布相关性，
+我们的方法可以客观全面的评价一个模型在不同数据集上的表现，从而使模型的鲁棒性大大增强。
 
 \section{课题研究内容}\label{sec:课题研究内容}
-
+这一节讲我们对问题的描述。把问题进行一个定性，就说是：对现有指标，模型和数据集的一个细致的考察，
+目的是捕捉可能存在的一致性或者不一致性，从中得到支持我们的结论的证据。
 
 \section{论文组织结构}\label{sec:论文组织结构}
 本文剩下的组织结构是这样的：第二章《相关工作》总结了领域内对自动化指标的使用和研究现状，主要列举了生成式对话系统最为常用的

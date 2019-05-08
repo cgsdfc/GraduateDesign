@@ -68,7 +68,7 @@ Seq2Seq框架在自然语言处理的多项任务上都超过了之前的方法�
 上训练的模型能回答简单的常识问题，
 并且比基于规则的系统CleverBot\footnote{http://www.cleverbot.com/}获得了更高的人类评价得分。
 % ------------------------------------- %
-Jiwei Li等人提出了一系列基于Seq2Seq框架的对话系统，包括
+Li等人提出了一系列基于Seq2Seq框架的对话系统，包括
 利用最大互信息（Maximum Mutual Information，MMI）增加输出多样性的目标函数\upcite{DBLP:conf/naacl/LiGBGD16}，
 在解码器端（Decoder）加入说话人身份信息（Speaker ID）以达到输出的人格一致性（Persona Coherence）
 \upcite{DBLP:journals/corr/LiGBGD16}以及利用对抗生成网络（Adversarial Generative Networks，GAN）
@@ -110,7 +110,7 @@ DBLP:conf/acl/LoweNSABP17}；
     Ritter:2011:DRG:2145432.2145500,
     DBLP:journals/corr/SordoniGABJMNGD15,
     DBLP:conf/aaai/SerbanSBCP16}。
-对于第一个难题，普遍认为，和机器翻译相比，对话生成的输出具有更高的熵（Entropy）。
+对于第一个难题普遍的观点是，和机器翻译相比，对话生成的输出具有更高的熵（Entropy）。
 在对话的场景下，给定一个消息，往往存在大量合理的响应，这些响应和参考响应（Ground Truth）的语义可能完全不一样，
 并且彼此之间在语义上各异。
 
@@ -134,13 +134,29 @@ DBLP:conf/acl/LoweNSABP17}；
         \bottomrule
     \end{tabular}
 \end{table}
-如表~\ref{tab:multiple_valid_responses}所示，合理的响应不唯一。
-这种固有的多样性决定了评价响应生成系统的困难程度。
+
+如表~\ref{tab:multiple_valid_responses}所示，合理的响应不唯一，这种固有的多样性决定了评价响应生成系统的困难。
 Liu等人在\cite{DBLP:conf/emnlp/LiuLSNCP16}中研究了两类指标，分别是基于词重叠的指标（Word Overlap Based）
 和基于词嵌入的指标（Embedding Based），并且发现这些指标在非技术性的Twitter数据集上和人类评价只有弱相关性，
 在技术性的Ubuntu Dialogue Corpus\upcite{DBLP:conf/sigdial/LowePSP15}没有相关性。
+Liu等人的工作为对话领域的自动评价指标的研究奠定了基础。
+% ------- ADEM ------------ %
+Lowe等人以自动化的图灵测试（Automatic Turing Test）为灵感，
+提出了一个以VHRED为编码器，根据消息、参考响应和模型响应预测人类评分的模型，
+称为自动化对话评价模型（Automatic Dialogue Evaluation Model，ADEM）\upcite{DBLP:conf/acl/LoweNSABP17}。
+他们在新的数据和Liu的数据上评估了ADEM模型，发现它和人类评价的相关性在句子水平和系统水平都达到了很高水平。
+% ------- AdverEval --------- %
+Kannan等人在\cite{DBLP:journals/corr/KannanV17}中初步尝试了把GAN的方法应用到对话系统的自动评价中。
+他们训练了一个鉴别器（Discriminator）来区分一个响应是来自系统还是来自人类，并且发现鉴别器能捕捉到基于Seq2Seq的模型
+倾向于生成短句子和通用句子的缺点。
+% ------ RUBER --------- %
+在国内，Tao等人提出了基于神经网络和词嵌入的RUBER指标\upcite{DBLP:conf/aaai/TaoMZY18}。
+该指标线性的结合了带参考的指标（Referenced Score）和不带参考的指标（Unreferenced Score），
+并采用无监督的负采样（Negative Sampling）来训练模型，
+在中文数据集豆瓣网\footnote{http://www.douban.com}上取得了很高的人类评价相关性。 % Correlation to Human Judgement
+这些研究进展的取得和Liu等人对自动化评价指标的实验和研究有着密切联系。
 
-本课题延续了Liu等人的工作，对自动评价指标进行深入研究。
+本课题延续Liu等人的工作，对自动评价指标进行深入研究。
 Liu等人已经研究了评价指标与人类评价的相关性，并且发现了它们的弱点；
 本文进一步研究了评价指标之间的相关性，以及模型性能在不同指标和数据集上的一致性。
 虽然，目前的评价指标尚不能和人类评价一样准确的衡量系统的性能，

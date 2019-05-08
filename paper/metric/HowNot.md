@@ -45,7 +45,7 @@ End-to-end training with neural networks:
 # Benefits
 - accelerate the deployment of unsupervised response generation systems.
 
-# Componetns
+# Components
 - Studied Metrics
     - statistical word-overlap similarity metrics such as BLEU, METEOR and ROUGE.
     - word embedding metrics derived from `Word2Vec` [Mikolov 2013](../../bib_db/classic/mikolov/word2vec.bib)

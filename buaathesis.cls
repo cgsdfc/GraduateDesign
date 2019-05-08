@@ -306,7 +306,7 @@ The LaTeX template for thesis of BUAA]
 \graphicspath{{figure/}}
 \RequirePackage{pifont} % “秘级”后的五角星
 \RequirePackage{subfigure}
-
+\usepackage[lofdepth,lotdepth]{subfig}
 %%%%%%%%%% list %%%%%%%%%%
 % 列表
 
@@ -402,7 +402,7 @@ The LaTeX template for thesis of BUAA]
 
 %%%%%%%%%% caption %%%%%%%%%%
 % 图表标题
-
+\RequirePackage{booktabs}
 \RequirePackage{caption}
 \DeclareCaptionFormat{bachelorfigure}{\songti\zihao{5}{#1\textrm{#2}#3}}
 \DeclareCaptionFormat{bachelortable}{\heiti\bf\zihao{5}{#1\textrm{#2}#3}}

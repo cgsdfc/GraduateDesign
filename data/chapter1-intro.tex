@@ -7,13 +7,13 @@
 
 \section{课题研究背景}\label{sec:课题研究背景}
 % Task-Oriented and Chat-Oriented.
-早期的对话系统的用途主要是帮助用户用自然语言使用某个系统，比如技术支持（Technical Support），预订机票、预订餐馆的座位、查询航班等。这一类系统又被称为任务导向的系统，其实现技术包括关键词匹配、规则和模板以及对话状态追踪等等，往往需要大量人工标注的数据。这些系统往往只能处理特定领域内的对话，不能回答开放性问题，用途局限于特定领域
+早期的对话系统的用途主要是帮助用户用自然语言完成某项任务，比如技术支持（Technical Support），预订机票、预订餐馆的座位、查询航班等。这一类系统又被称为任务导向的系统（Task-Oriented），其实现技术包括关键词匹配、规则和模板以及对话状态追踪等等，往往需要大量人工标注的数据。这些系统往往只能处理特定领域内的对话，不能回答开放性问题，用途局限于特定领域
 \upcite{
-    DBLP:journals/corr/SerbanLCP15,
-    DBLP:journals/corr/VinyalsL15,
-    DBLP:conf/acl/ShangLL15}。
+DBLP:journals/corr/SerbanLCP15,
+DBLP:journals/corr/VinyalsL15,
+DBLP:conf/acl/ShangLL15}。
 
-随着在线聊天的盛行，社交媒体和互联网论坛积累了大量的聊天语料数据，具有代表性的社交媒体和论坛有Twitter，Reddit和微博。大量的数据使人们可以构建数据驱动的(Data-Driven)，开放领域(Open-Domain)的对话系统\upcite{Ritter:2011:DRG:2145432.2145500}。这种系统能根据对话的上下文和用户的提问产生语义相关的回答，用途有娱乐、语言学习工具和陪伴\upcite{DBLP:conf/aaai/SerbanSBCP16}等等。该领域主要考察二人对话，两人聊天的历史记录称为上下文（context），记为$c$；当前说话的人说出的话语称为消息（message），记为$m$；另外一个人对该消息的回复称为响应（response），记为$r$。$c,m,r$三者的关系如图~\ref{fig:context_message_response}所示。系统的输入是$c,m$，输出是$r$，也就是把对话的上下文和消息映射为响应，这个问题被称为对话响应生成（Conversation Response Generation）。
+随着在线聊天的流行，社交媒体和互联网论坛积累了大量的聊天语料数据，具有代表性的社交媒体和论坛有Twitter，Reddit和微博。大量的数据使人们可以构建数据驱动的(Data-Driven)，开放领域(Open-Domain)的对话系统\upcite{Ritter:2011:DRG:2145432.2145500}。这种系统能根据对话的上下文和用户的提问产生语义相关的回答，用途有娱乐、语言学习工具和陪伴\upcite{DBLP:conf/aaai/SerbanSBCP16}等等。该领域主要考察二人对话，两人聊天的历史记录称为上下文（context），记为$c$；当前说话的人说出的话语称为消息（message），记为$m$；另外一个人对该消息的回复称为响应（response），记为$r$。$c,m,r$三者的关系如图~\ref{fig:context_message_response}所示。系统的输入是$c,m$，输出是$r$，也就是把对话的上下文和消息映射为响应，这个问题被称为对话响应生成（Conversation Response Generation）。
 
 \begin{figure}[H]
     \includegraphics[width=0.6\textwidth]{figure/context_message_response.png}
@@ -23,49 +23,52 @@
 \end{figure}
 
 % Retrieval and Generative.
-对话系统又可以分为生成式对话系统（Generative）和检索式对话系统（Retrieval-based）\upcite{DBLP:journals/corr/SerbanLCP15}。它们的区别在于：生成式系统以输入句子为条件，把条件概率最大的句子作为输出。
+对话系统又可以分为生成式对话系统（Generative System）和检索式对话系统（Retrieval-Based System）\upcite{DBLP:journals/corr/SerbanLCP15}。
+如果一个系统能生成训练集里没有的句子，就把它称为“生成式系统”\upcite{DBLP:conf/emnlp/LiuLSNCP16}。
+两种系统的区别在于：生成式系统以输入句子为条件，把条件概率最大的句子作为输出。
 由于搜索空间过于庞大，在实际中通常采用某种启发式搜索方法，如集束搜索（Beam Search），贪婪搜索（Greedy Search）
 和随机取样（Random Sample）。
-设$X$为输入句子，$Y$为输出句子，$U$是全部句子的集合，生成式模型从输出获取输出句子的数学表述为：
+设$X$为输入句子，$Y$为输出句子，$U$是全部句子的集合，生成式模型的一般表示为：
 \begin{align}
     Y = \text{argmax}_{Y\in U} \left(p(Y|X)\right)
 \end{align}
 检索式系统根据输入句子从一个数据库$D$中检索输出句子。
 $D$通常由人类撰写的语句组成，并且足够大，使得输出句子不容易重复。
-系统通过某种打分机制对数据库中的候选句子进行打分，并把得分较高的候选作为输出：
+系统通过某种打分机制，如词频-逆文档频率（Term Frequency-Inverse Document Frequency，TF-IDF）
+对数据库中的候选句子进行打分，并把得分较高的候选作为输出：
 \begin{align}
     Y = \text{argmax}_{Y\in D} Score(Y, X)
 \end{align}
 可见，生成式系统和检索式系统的根本区别在于获得输出句子的机制不同。
-在实际环境中，这两种方法各有千秋，检索式模型的输出没有语法错误且和输入的相关度比较高，
-生成式的模型能针对输入生成个性化的输出且系统高度灵活\upcite{DBLP:conf/acl/ShangLL15}。
-通常将它们作为模型联合体（Model Ensemble）使用\upcite{DBLP:journals/corr/SongYLZZ16}。
-而检索式系统也经常作为生成式系统的基线系统
-\upcite{
-    DBLP:conf/acl/ShangLL15,
-    DBLP:journals/corr/SordoniGABJMNGD15}。
+这两种方法各有优劣：检索式模型的输出没有语法错误且和输入的相关度比较高，但是不能生成新句子；
+生成式的模型能针对输入生成个性化的输出且系统高度灵活\upcite{DBLP:conf/acl/ShangLL15}，但是容易生成过短的句子\upcite{
+DBLP:journals/corr/KannanV17}。
+在实际环境中，通常将它们作为模型联合体（Model Ensemble）使用\upcite{DBLP:journals/corr/SongYLZZ16}，
+而检索式系统也经常作为生成式系统的基线系统与之比较\upcite{
+DBLP:conf/acl/ShangLL15,
+DBLP:journals/corr/SordoniGABJMNGD15}。
 
 % RNN, Seq2Seq and Embedding
 生成式模型的流行得益于自然语言处理领域发展的一系列基础技术，包括
-为单词提供平滑特征（Smoothing Features）的词嵌入（Word Embedding）\upcite{
-    DBLP:journals/jmlr/BengioDVJ03,
-    DBLP:journals/corr/abs-1301-3781,
-    DBLP:conf/emnlp/PenningtonSM14}；
+为单词提供平滑特征的词嵌入（Word Embedding）\upcite{
+DBLP:journals/jmlr/BengioDVJ03,
+DBLP:journals/corr/abs-1301-3781,
+DBLP:conf/emnlp/PenningtonSM14}；
 能对变长序列建模的循环神经网络语言模型（Recurrent Neural Networks Language Model，RNNLM）\upcite{DBLP:conf/interspeech/MikolovKBCK10}；
 易于训练，能避免梯度消失问题的循环门单元，如长短期记忆单元（Long Short Term Memory，LSTM）
 \upcite{DBLP:journals/neco/HochreiterS97}和门循环单元（Gated Recurrent Unit，GRU）\upcite{DBLP:conf/emnlp/ChoMGBBSB14}；
-以及基于上述技术的序列到序列框架（Sequence to Sequence Framework，Seq2Seq）\upcite{
+以及基于编解码器结构和RNN的序列到序列框架（Sequence to Sequence Framework，Seq2Seq）\upcite{
 DBLP:conf/nips/SutskeverVL14,
-DBLP:conf/emnlp/ChoMGBBSB14}，图~\ref{fig:Seq2Seq}是Sutskever等人提出的Seq2Seq模型结构图。
+DBLP:conf/emnlp/ChoMGBBSB14}，图~\ref{fig:Seq2Seq}是Seq2Seq的模型结构图。
 
 % Chatbot in Seq2Seq.
 Seq2Seq框架在自然语言处理的多项任务上都超过了之前的方法，因此被广泛应用到对话生成领域。
 最早把Seq2Seq用到对话生成领域的是Vinyals等人\upcite{DBLP:journals/corr/VinyalsL15}，
 他们在OpenSubtitles\upcite{DBLP:conf/lrec/LisonT16}
 上训练的模型能回答简单的常识问题，
-并且比基于规则的系统CleverBot\footnote{http://www.cleverbot.com/}获得了更高的人类评价。
+并且比基于规则的系统CleverBot\footnote{http://www.cleverbot.com/}获得了更高的人类评价得分。
 % ------------------------------------- %
-Jiwei Li等人在2015至2016期间，提出了一系列基于Seq2Seq框架的对话系统，包括
+Jiwei Li等人提出了一系列基于Seq2Seq框架的对话系统，包括
 利用最大互信息（Maximum Mutual Information，MMI）增加输出多样性的目标函数\upcite{DBLP:conf/naacl/LiGBGD16}，
 在解码器端（Decoder）加入说话人身份信息（Speaker ID）以达到输出的人格一致性（Persona Coherence）
 \upcite{DBLP:journals/corr/LiGBGD16}以及利用对抗生成网络（Adversarial Generative Networks，GAN）
@@ -84,8 +87,6 @@ Serban等人把Sordoni等人提出的用于查询建议（Query Suggestion）的
 Chen Xing等人向Seq2Seq加入了从预训练LDA模型中获取的主题词（Topic Words）并提出了Topic-Aware Seq2Seq
 \upcite{DBLP:conf/aaai/XingWWLHZM17}。由于篇幅有限，不能一一介绍。
 
-
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figure/Seq2Seq.png}
@@ -94,17 +95,63 @@ Chen Xing等人向Seq2Seq加入了从预训练LDA模型中获取的主题词（T
 \end{figure}
 
 \section{课题研究意义}\label{sec:课题研究意义}
-这一节讲我们的课题如何能帮助人们更好的使用现有自动化指标（Use it wisely），
-避免出现这样一种情况：比如BLEU在Liu说它和人类评价不相关之前，大家都用它；Liu说了不行之后，
-大家就都不用了。我们的研究提供了这样一种方法，让你知道哪些指标可以用，该怎么用。
-我们的研究还有助于自动化指标的开发。一个好的自动化指标，我们认为，除了要和人类评价相关性高之外，
-还要具有比较光滑和平稳的分布，在理想状态下应该接近正态分布。
-最后，通过观察一个模型在不同数据集上的指标分布相关性，
-我们的方法可以客观全面的评价一个模型在不同数据集上的表现，从而使模型的鲁棒性大大增强。
+% 存在的问题：1. 评估模型的困难性。2. 容易生成Naive响应。
+% A long-standing problem in this field is the difficulty of evaluating the generated responses.
+生成式对话系统目前有两个难题：一是评价系统生成的响应的困难性\upcite{
+DBLP:conf/emnlp/LiuLSNCP16,
+DBLP:conf/acl/ShangLL15,
+DBLP:conf/emnlp/LiMRJGG16,
+DBLP:conf/acl/GalleyBSJAQMGD15,
+DBLP:conf/acl/LoweNSABP17}；
+二是如何避免生成无意义的响应（the Problem of Generic Responses）
+\upcite{
+    DBLP:conf/naacl/LiGBGD16,
+    DBLP:journals/corr/LiMJ17a,
+    Ritter:2011:DRG:2145432.2145500,
+    DBLP:journals/corr/SordoniGABJMNGD15,
+    DBLP:conf/aaai/SerbanSBCP16}。
+对于第一个难题，普遍认为，和机器翻译相比，对话生成的输出具有更高的熵（Entropy）。
+在对话的场景下，给定一个消息，往往存在大量合理的响应，这些响应和参考响应（Ground Truth）的语义可能完全不一样，
+并且彼此之间在语义上各异。
+
+\begin{table}[H]
+    \centering
+    \caption{合理的响应不唯一\upcite{DBLP:conf/aaai/TaoMZY18}}
+    \label{tab:multiple_valid_responses}
+    \begin{tabular}{rl}
+        \toprule
+        \textbf{Query:} & 为什么不领养一个？ \\
+        & Why not adopt one? \\
+        \textbf{Groundtruth:} & 我也想领养，但是不好找 \\
+        & I hope so, but it's hard to find one \\
+        \midrule
+        \textbf{Candidate 1:} & 恩,我已经在朋友中找了 \\
+        & I'm looking for one from my friends \\
+        \textbf{Candidate 2:} & 巴比伦是稀有品种 \\
+        & Pappilon is a rare breed \\
+        \textbf{Candidate 3:} & 可以哈,谢谢你的建议 \\
+        & OK, thank you for your advice \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+如表~\ref{tab:multiple_valid_responses}所示，合理的响应不唯一。
+这种固有的多样性决定了评价响应生成系统的困难程度。
+Liu等人在\cite{DBLP:conf/emnlp/LiuLSNCP16}中研究了两类指标，分别是基于词重叠的指标（Word Overlap Based）
+和基于词嵌入的指标（Embedding Based），并且发现这些指标在非技术性的Twitter数据集上和人类评价只有弱相关性，
+在技术性的Ubuntu Dialogue Corpus\upcite{DBLP:conf/sigdial/LowePSP15}没有相关性。
+
+本课题延续了Liu等人的工作，对自动评价指标进行深入研究。
+Liu等人已经研究了评价指标与人类评价的相关性，并且发现了它们的弱点；
+本文进一步研究了评价指标之间的相关性，以及模型性能在不同指标和数据集上的一致性。
+虽然，目前的评价指标尚不能和人类评价一样准确的衡量系统的性能，
+但是对它们性质的研究将有助于开发和人类评价相关度更高的新指标。
+% Merits of Auto Metric:
+评价指标的准确度的提高将有助于客观的评价对话系统，提高开发速度和降低成本\upcite{
+
+}
 
 \section{课题研究内容}\label{sec:课题研究内容}
-这一节讲我们对问题的描述。把问题进行一个定性，就说是：对现有指标，模型和数据集的一个细致的考察，
-目的是捕捉可能存在的一致性或者不一致性，从中得到支持我们的结论的证据。
+
 
 \section{论文组织结构}\label{sec:论文组织结构}
 本文剩下的组织结构是这样的：第二章《相关工作》总结了领域内对自动化指标的使用和研究现状，主要列举了生成式对话系统最为常用的

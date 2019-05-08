@@ -5,7 +5,7 @@
 \chapter{绪论}\label{ch:绪论}
 % \footnote{http://www.opensubtitles.org}
 
-\section{课题研究背景}\label{sec:课题研究背景}
+\section{课题研究背景}\label{sec:research_background}
 % Task-Oriented and Chat-Oriented.
 早期的对话系统的用途主要是帮助用户用自然语言完成某项任务，比如技术支持（Technical Support），预订机票、预订餐馆的座位、查询航班等。这一类系统又被称为任务导向的系统（Task-Oriented），其实现技术包括关键词匹配、规则和模板以及对话状态追踪等等，往往需要大量人工标注的数据。这些系统往往只能处理特定领域内的对话，不能回答开放性问题，用途局限于特定领域
 \upcite{
@@ -94,7 +94,7 @@ Chen Xing等人向Seq2Seq加入了从预训练LDA模型中获取的主题词（T
     \label{fig:Seq2Seq}
 \end{figure}
 
-\section{课题研究意义}\label{sec:课题研究意义}
+\section{课题研究意义}\label{sec:research_meaning}
 % 存在的问题：1. 评估模型的困难性。2. 容易生成Naive响应。
 % A long-standing problem in this field is the difficulty of evaluating the generated responses.
 生成式对话系统目前有两个难题：一是评价系统生成的响应的困难性\upcite{
@@ -160,16 +160,13 @@ Kannan等人在\cite{DBLP:journals/corr/KannanV17}中初步尝试了把GAN的方
 Liu等人已经研究了评价指标与人类评价的相关性，并且发现了它们的弱点；
 本文进一步研究了评价指标之间的相关性，以及模型性能在不同指标和数据集上的一致性。
 虽然，目前的评价指标尚不能和人类评价一样准确的衡量系统的性能，
-但是对它们性质的研究将有助于开发和人类评价相关度更高的新指标。
-% Merits of Auto Metric:
-评价指标的准确度的提高将有助于客观的评价对话系统，提高开发速度和降低成本\upcite{
+但是对它们性质的研究将有助于理解现有指标的弱点，理解为什么对话生成问题如此困难。
+基于本课题的研究工作，我们希望看到更多高质量的评价指标的出现。
 
-}
-
-\section{课题研究内容}\label{sec:课题研究内容}
+\section{课题研究内容}\label{sec:reseach_content}
 
 
-\section{论文组织结构}\label{sec:论文组织结构}
+\section{论文组织结构}\label{sec:paper_organization}
 本文剩下的组织结构是这样的：第二章《相关工作》总结了领域内对自动化指标的使用和研究现状，主要列举了生成式对话系统最为常用的
 几个自动化指标：BLEU，困惑度（Perplexity，PPL），基于词嵌入的指标（Embedding Based）和研究者为了衡量对话的多样性而提出的
 指标，如DeltaBLEU，ADEM，RUBER和LSDSCC等。本文的第三章《研究方法》介绍了本次实验所使用的框架，包括对涉及到的模型、数据集和

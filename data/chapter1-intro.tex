@@ -3,10 +3,15 @@
 % Email: zhengxi.tian@hotmail.com
 
 \chapter{绪论}\label{ch:绪论}
+% \footnote{http://www.opensubtitles.org}
 
 \section{课题研究背景}\label{sec:课题研究背景}
 % Task-Oriented and Chat-Oriented.
-早期的对话系统的用途主要是帮助用户用自然语言使用某个系统，比如技术支持（Technical Support），预订机票、预订餐馆的座位、查询航班等。这一类系统又被称为任务导向的系统，其实现技术包括关键词匹配、规则和模板以及对话状态追踪等等，往往需要大量人工标注的数据。这些系统往往只能处理特定领域内的对话，不能回答开放性问题，用途局限于特定领域\upcite{DBLP:journals/corr/SerbanLCP15,DBLP:journals/corr/VinyalsL15,DBLP:conf/acl/ShangLL15}。
+早期的对话系统的用途主要是帮助用户用自然语言使用某个系统，比如技术支持（Technical Support），预订机票、预订餐馆的座位、查询航班等。这一类系统又被称为任务导向的系统，其实现技术包括关键词匹配、规则和模板以及对话状态追踪等等，往往需要大量人工标注的数据。这些系统往往只能处理特定领域内的对话，不能回答开放性问题，用途局限于特定领域
+\upcite{
+    DBLP:journals/corr/SerbanLCP15,
+    DBLP:journals/corr/VinyalsL15,
+    DBLP:conf/acl/ShangLL15}。
 
 随着在线聊天的盛行，社交媒体和互联网论坛积累了大量的聊天语料数据，具有代表性的社交媒体和论坛有Twitter，Reddit和微博。大量的数据使人们可以构建数据驱动的(Data-Driven)，开放领域(Open-Domain)的对话系统\upcite{Ritter:2011:DRG:2145432.2145500}。这种系统能根据对话的上下文和用户的提问产生语义相关的回答，用途有娱乐、语言学习工具和陪伴\upcite{DBLP:conf/aaai/SerbanSBCP16}等等。该领域主要考察二人对话，两人聊天的历史记录称为上下文（context），记为$c$；当前说话的人说出的话语称为消息（message），记为$m$；另外一个人对该消息的回复称为响应（response），记为$r$。$c,m,r$三者的关系如图~\ref{fig:context_message_response}所示。系统的输入是$c,m$，输出是$r$，也就是把对话的上下文和消息映射为响应，这个问题被称为对话响应生成（Conversation Response Generation）。
 
@@ -18,23 +23,68 @@
 \end{figure}
 
 % Retrieval and Generative.
-对话系统又可以分为生成式对话系统（Generative）和检索式对话系统（Retrieval）\upcite{DBLP:journals/corr/SerbanLCP15}。它们的区别在于：生成式系统以输入句子为条件，把条件概率最大的句子作为输出。
-由于搜索空间是一个全部句子，过于庞大，在实际中通常采用某种启发式搜索方法，如Beam Search，Greedy Search和Random Sample。
+对话系统又可以分为生成式对话系统（Generative）和检索式对话系统（Retrieval-based）\upcite{DBLP:journals/corr/SerbanLCP15}。它们的区别在于：生成式系统以输入句子为条件，把条件概率最大的句子作为输出。
+由于搜索空间过于庞大，在实际中通常采用某种启发式搜索方法，如集束搜索（Beam Search），贪婪搜索（Greedy Search）
+和随机取样（Random Sample）。
 设$X$为输入句子，$Y$为输出句子，$U$是全部句子的集合，生成式模型从输出获取输出句子的数学表述为：
 \begin{align}
     Y = \text{argmax}_{Y\in U} \left(p(Y|X)\right)
 \end{align}
-
-检索式系统根据输入句子从一个数据库$D$中检索输出句子。$D$通常足够大，使得输出句子不容易重复。
-系统通过某种打分机制$Score(X, Y)$对数据库中的候选句子进行打分，并把得分较高的候选作为输出：
+检索式系统根据输入句子从一个数据库$D$中检索输出句子。
+$D$通常由人类撰写的语句组成，并且足够大，使得输出句子不容易重复。
+系统通过某种打分机制对数据库中的候选句子进行打分，并把得分较高的候选作为输出：
 \begin{align}
     Y = \text{argmax}_{Y\in D} Score(Y, X)
 \end{align}
 可见，生成式系统和检索式系统的根本区别在于获得输出句子的机制不同。
-在实际环境中，这两种方法各有千秋，通常将它们作为模型联合体（Model Ensemble）使用\upcite{DBLP:journals/corr/SongYLZZ16}。
+在实际环境中，这两种方法各有千秋，检索式模型的输出没有语法错误且和输入的相关度比较高，
+生成式的模型能针对输入生成个性化的输出且系统高度灵活\upcite{DBLP:conf/acl/ShangLL15}。
+通常将它们作为模型联合体（Model Ensemble）使用\upcite{DBLP:journals/corr/SongYLZZ16}。
+而检索式系统也经常作为生成式系统的基线系统
+\upcite{
+    DBLP:conf/acl/ShangLL15,
+    DBLP:journals/corr/SordoniGABJMNGD15}。
 
-生成式对话系统最早在2011年开始被研究。
-Ritter等人率先用统计机器翻译（Statistical Machine Translation，SMT）的方法\upcite{Ritter:2011:DRG:2145432.2145500}解决响应生成问题。他们没有考虑上下文，而是把一个消息直接翻译为响应。Sordoni等人首次把神经网络用于响应生成，用神经网络对SMT输出的响应进行重现排序\upcite{DBLP:journals/corr/SordoniGABJMNGD15}。他们的模型属于在机器翻译中非常有效的编码器-解码器架构（Encoder-Decoder），对输入的上下文和消息进行词袋化（Bag-of-Word）后，用一个前馈神经网络（Feed-Forward Neural Network）进行编码，再用一个朴素的\footnote{称其为朴素的是因为它没有使用LSTM或者GRU，仅用了$\sigma$激活函数。}（Recurrent Neural Network，RNN）构成的语言模型（Language Model，LM）\upcite{DBLP:conf/interspeech/MikolovKBCK10}进行解码，根据上下文和消息的特征组合方式不同，他们提出了三个模型：RLM，DCGM-1和DCGM-2。Sutskever等人于2014年提出了基于RNN的编解码器，也就是序列到序列架构（Seq2Seq）\upcite{DBLP:conf/nips/SutskeverVL14}。
+% RNN, Seq2Seq and Embedding
+生成式模型的流行得益于自然语言处理领域发展的一系列基础技术，包括
+为单词提供平滑特征（Smoothing Features）的词嵌入（Word Embedding）\upcite{
+    DBLP:journals/jmlr/BengioDVJ03,
+    DBLP:journals/corr/abs-1301-3781,
+    DBLP:conf/emnlp/PenningtonSM14}；
+能对变长序列建模的循环神经网络语言模型（Recurrent Neural Networks Language Model，RNNLM）\upcite{DBLP:conf/interspeech/MikolovKBCK10}；
+易于训练，能避免梯度消失问题的循环门单元，如长短期记忆单元（Long Short Term Memory，LSTM）
+\upcite{DBLP:journals/neco/HochreiterS97}和门循环单元（Gated Recurrent Unit，GRU）\upcite{DBLP:conf/emnlp/ChoMGBBSB14}；
+以及基于上述技术的序列到序列框架（Sequence to Sequence Framework，Seq2Seq）\upcite{
+DBLP:conf/nips/SutskeverVL14,
+DBLP:conf/emnlp/ChoMGBBSB14}，图~\ref{fig:Seq2Seq}是Sutskever等人提出的Seq2Seq模型结构图。
+
+% Chatbot in Seq2Seq.
+Seq2Seq框架在自然语言处理的多项任务上都超过了之前的方法，因此被广泛应用到对话生成领域。
+最早把Seq2Seq用到对话生成领域的是Vinyals等人\upcite{DBLP:journals/corr/VinyalsL15}，
+他们在OpenSubtitles\upcite{DBLP:conf/lrec/LisonT16}
+上训练的模型能回答简单的常识问题，
+并且比基于规则的系统CleverBot\footnote{http://www.cleverbot.com/}获得了更高的人类评价。
+% ------------------------------------- %
+Jiwei Li等人在2015至2016期间，提出了一系列基于Seq2Seq框架的对话系统，包括
+利用最大互信息（Maximum Mutual Information，MMI）增加输出多样性的目标函数\upcite{DBLP:conf/naacl/LiGBGD16}，
+在解码器端（Decoder）加入说话人身份信息（Speaker ID）以达到输出的人格一致性（Persona Coherence）
+\upcite{DBLP:journals/corr/LiGBGD16}以及利用对抗生成网络（Adversarial Generative Networks，GAN）
+\upcite{DBLP:journals/corr/GoodfellowPMXWOCB14}使系统输出和人类输出难以分辨\upcite{DBLP:conf/emnlp/LiMSJRJ17}
+等等。
+% ------------------------------------- %
+Serban等人把Sordoni等人提出的用于查询建议（Query Suggestion）的
+层级循环编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{DBLP:conf/cikm/SordoniBVLSN15}应用到对话生成领域， 提出了能捕捉对话的层级结构的HRED模型\upcite{DBLP:conf/aaai/SerbanSBCP16}。
+基于HRED，Serban等人又提出了利用随机潜变量（Stochastic Latent Variable）增加对话多样性的Variational Hierarchical Recurrent Encoder-Decoder，即VHRED；
+以及加入了多层次抽象信息（Multiple Levels of Abstraction）的多精度循环网络（Multiresolution Recurrent Neural Networks，MultiRNN）
+\upcite{DBLP:conf/aaai/SerbanKTTZBC17}。
+% --------- China's researches ----------- %
+国内，Shang等人研究了微博数据集上的短文本对话生成问题（Short-Text-Conversation，STC），
+提出了以GRU为门单元的编解码器模型（Neural Response Machine，NRM）\upcite{DBLP:conf/acl/ShangLL15}，
+并在人类评价上取得了比检索式系统和基于SMT的翻译式系统更好的成绩。
+Chen Xing等人向Seq2Seq加入了从预训练LDA模型中获取的主题词（Topic Words）并提出了Topic-Aware Seq2Seq
+\upcite{DBLP:conf/aaai/XingWWLHZM17}。由于篇幅有限，不能一一介绍。
+
+
 
 \begin{figure}[H]
     \centering

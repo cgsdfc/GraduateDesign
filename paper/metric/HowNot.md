@@ -20,7 +20,7 @@ Note: these metrics generally compare a model's response to a single target resp
 
 # Unsupervised Model
 End-to-end training with neural networks:
-- [Serban 2016](../../bib_db/model/serban/SerbanSBCP16.bib)
+- [Serban 2016](../../bib_db/model/serban/SerbanSBCP16%20HRED.bib)
 - [Sordoni 2015](../../bib_db/model/sordoni/SordoniGABJMNGD15.bib)
 - [Vinyals 2015](../../bib_db/model/vinyals/VinyalsL15.bib)
 

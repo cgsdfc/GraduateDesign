@@ -4,6 +4,10 @@
 
 \chapter{相关工作}\label{ch:相关工作}
 \section{自动化指标的使用情况}
+%
+生成式对话系统最早在2011年开始被研究。
+Ritter等人率先用统计机器翻译（Statistical Machine Translation，SMT）的方法\upcite{Ritter:2011:DRG:2145432.2145500}解决响应生成问题。他们没有考虑上下文，而是把一个消息直接翻译为响应。Sordoni等人首次把神经网络用于响应生成，用神经网络对SMT输出的响应进行重现排序\upcite{DBLP:journals/corr/SordoniGABJMNGD15}。他们的模型属于在机器翻译中非常有效的编码器-解码器架构（Encoder-Decoder），对输入的上下文和消息进行词袋化（Bag-of-Word）后，用一个前馈神经网络（Feed-Forward Neural Network）进行编码，再用一个朴素的\footnote{称其为朴素的是因为它没有使用LSTM或者GRU，仅用了$\sigma$激活函数。}（Recurrent Neural Network，RNN）构成的语言模型（Language Model，LM）\upcite{DBLP:conf/interspeech/MikolovKBCK10}进行解码，根据上下文和消息的特征组合方式不同，他们提出了三个模型：RLM，DCGM-1和DCGM-2。Sutskever等人于2014年提出了基于RNN的编解码器，也就是序列到序列架构（Seq2Seq）\upcite{DBLP:conf/nips/SutskeverVL14}。
+
 %这一节讲哪些人的模型用了哪些指标去测评，以及它们对指标的看法是怎么样的。
 
 \section{自动化指标的开发情况}

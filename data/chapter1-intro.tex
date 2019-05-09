@@ -90,7 +90,7 @@ Chen Xing等人向Seq2Seq加入了从预训练LDA模型中获取的主题词（T
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figure/Seq2Seq.png}
-    \caption{Seq2Seq架构图\upcite{DBLP:conf/nips/SutskeverVL14}}
+    \caption{Seq2Seq框架图\upcite{DBLP:conf/nips/SutskeverVL14}}
     \label{fig:Seq2Seq}
 \end{figure}
 
@@ -165,8 +165,12 @@ Liu等人已经研究了评价指标与人类评价的相关性，并且发现�
 \section{课题研究内容}\label{sec:reseach_content}
 本课题以\cite{DBLP:journals/corr/SerbanSLCPCB16}的实验中使用的三个模型LSTM，HRED，VHRED为基线，
 扩展了\cite{DBLP:conf/emnlp/LiuLSNCP16}中考察的两类指标，
-并在三个具有代表性的公开数据集：UbuntuDialogueCorpus\upcite{}，OpenSubtitles\upcite{}和LSDSCC\upcite{}上进行了实验。
-尽管没有人类监督信号，但是我们对指标之间和模型之间的一致性分析还是取得有意义的结论。
+并在三个具有代表性的公开数据集：Ubuntu Dialogue Corpus，OpenSubtitles和LSDSCC\upcite{DBLP:conf/naacl/XuJLRWWWW18}上进行了实验。
+尽管没有人类监督信号，但是我们对指标之间和模型之间的一致性分析还是取得了有意义的结论。
 
 \section{论文组织结构}\label{sec:paper_organization}
-
+本文的组织结构如下：
+第~\ref{ch:related_work}~章相关工作介绍了生成式对话领域中自动化指标的使用情况和研究现状；
+第~\ref{ch:method}~章研究方法介绍了我们的实验方法以及实验涉及的指标、模型和数据集；
+第~\ref{ch:experiment_result_and_disscusion}~章实验结果与讨论详细展示了我们的实验配置、实验数据以及结论；
+第~\ref{ch:conclusion}~章结论总结了本课题的研究成果，并展现了若干未来的研究方向。

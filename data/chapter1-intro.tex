@@ -77,7 +77,7 @@ Li等人提出了一系列基于Seq2Seq框架的对话系统，包括
 % ------------------------------------- %
 Serban等人把Sordoni等人提出的用于查询建议（Query Suggestion）的
 层级循环编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{DBLP:conf/cikm/SordoniBVLSN15}应用到对话生成领域， 提出了能捕捉对话的层级结构的HRED模型\upcite{DBLP:conf/aaai/SerbanSBCP16}。
-基于HRED，Serban等人又提出了利用随机潜变量（Stochastic Latent Variable）增加对话多样性的Variational Hierarchical Recurrent Encoder-Decoder，即VHRED；
+基于HRED，Serban等人又提出了利用随机潜变量（Stochastic Latent Variable）增加对话多样性的Variational Hierarchical Recurrent Encoder-Decoder，即VHRED\upcite{DBLP:journals/corr/SerbanSLCPCB16}；
 以及加入了多层次抽象信息（Multiple Levels of Abstraction）的多精度循环网络（Multiresolution Recurrent Neural Networks，MultiRNN）
 \upcite{DBLP:conf/aaai/SerbanKTTZBC17}。
 % --------- China's researches ----------- %
@@ -163,14 +163,10 @@ Liu等人已经研究了评价指标与人类评价的相关性，并且发现�
 但是对它们性质的研究将有助于理解现有指标的弱点，进而有助于自动评价生成式对话系统的发展。
 
 \section{课题研究内容}\label{sec:reseach_content}
-本课题以\cite{DBLP:journals/corr/SerbanSLCPCB16}的实验中使用的三个模型为基线，
-扩展了\cite{DBLP:conf/emnlp/LiuLSNCP16}中考察的指标，并在三个具有代表性的公开数据集上进行了实验。
+本课题以\cite{DBLP:journals/corr/SerbanSLCPCB16}的实验中使用的三个模型LSTM，HRED，VHRED为基线，
+扩展了\cite{DBLP:conf/emnlp/LiuLSNCP16}中考察的两类指标，
+并在三个具有代表性的公开数据集：UbuntuDialogueCorpus\upcite{}，OpenSubtitles\upcite{}和LSDSCC\upcite{}上进行了实验。
 尽管没有人类监督信号，但是我们对指标之间和模型之间的一致性分析还是取得有意义的结论。
 
 \section{论文组织结构}\label{sec:paper_organization}
-本文剩下的组织结构是这样的：第二章《相关工作》总结了领域内对自动化指标的使用和研究现状，主要列举了生成式对话系统最为常用的
-几个自动化指标：BLEU，困惑度（Perplexity，PPL），基于词嵌入的指标（Embedding Based）和研究者为了衡量对话的多样性而提出的
-指标，如DeltaBLEU，ADEM，RUBER和LSDSCC等。本文的第三章《研究方法》介绍了本次实验所使用的框架，包括对涉及到的模型、数据集和
-指标的简介，框架的运行流程，以及实验设计的数学依据。本文的第四章《实验结果与讨论》详细的介绍了所有实验的细节，包括模型训练的参数，数据集的预处理，
-最重要的是，实验数据的分析和呈现。我们将从数据中分析得出几个重要的结论。最后一章是《总结》，我们总结实验所得出的结论并给出了
-生成式模型的自动化指标的几个发展方向。
+

@@ -2,7 +2,7 @@
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
 
-\chapter{绪论}\label{ch:绪论}
+\chapter{绪论}\label{ch:introduction}
 % \footnote{http://www.opensubtitles.org}
 
 \section{课题研究背景}\label{sec:research_background}
@@ -110,7 +110,7 @@ DBLP:conf/acl/LoweNSABP17}；
     Ritter:2011:DRG:2145432.2145500,
     DBLP:journals/corr/SordoniGABJMNGD15,
     DBLP:conf/aaai/SerbanSBCP16}。
-对于第一个难题普遍的观点是，和机器翻译相比，对话生成的输出具有更高的熵（Entropy）。
+对于第一个难题的一个普遍的解释是，和机器翻译相比，对话生成的输出具有更高的熵（Entropy）。
 在对话的场景下，给定一个消息，往往存在大量合理的响应，这些响应和参考响应（Ground Truth）的语义可能完全不一样，
 并且彼此之间在语义上各异。
 
@@ -158,13 +158,14 @@ Kannan等人在\cite{DBLP:journals/corr/KannanV17}中初步尝试了把GAN的方
 
 本课题延续Liu等人的工作，对自动评价指标进行深入研究。
 Liu等人已经研究了评价指标与人类评价的相关性，并且发现了它们的弱点；
-本文进一步研究了评价指标之间的相关性，以及模型性能在不同指标和数据集上的一致性。
-虽然，目前的评价指标尚不能和人类评价一样准确的衡量系统的性能，
-但是对它们性质的研究将有助于理解现有指标的弱点，理解为什么对话生成问题如此困难。
-基于本课题的研究工作，我们希望看到更多高质量的评价指标的出现。
+本文进一步研究了评价指标之间的相关性，以及模型的性能在不同数据集上的一致性。
+虽然，目前大多数评价指标尚不能和人类评价一样准确的衡量系统的性能，
+但是对它们性质的研究将有助于理解现有指标的弱点，进而有助于自动评价生成式对话系统的发展。
 
 \section{课题研究内容}\label{sec:reseach_content}
-
+本课题以\cite{DBLP:journals/corr/SerbanSLCPCB16}的实验中使用的三个模型为基线，
+扩展了\cite{DBLP:conf/emnlp/LiuLSNCP16}中考察的指标，并在三个具有代表性的公开数据集上进行了实验。
+尽管没有人类监督信号，但是我们对指标之间和模型之间的一致性分析还是取得有意义的结论。
 
 \section{论文组织结构}\label{sec:paper_organization}
 本文剩下的组织结构是这样的：第二章《相关工作》总结了领域内对自动化指标的使用和研究现状，主要列举了生成式对话系统最为常用的

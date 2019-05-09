@@ -9,4 +9,6 @@ bib_index = {
     'Seq2Seq': 'DBLP:journals/corr/VinyalsL15',
     'LSDSCC': 'DBLP:conf/naacl/XuJLRWWWW18',
     'Ritter11': 'Ritter:2011:DRG:2145432.2145500',
+    'NNLM': 'DBLP:journals/jmlr/BengioDVJ03',
+    'RNNLM': 'DBLP:conf/interspeech/MikolovKBCK10',
 }

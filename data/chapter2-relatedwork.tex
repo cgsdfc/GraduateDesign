@@ -3,17 +3,39 @@
 % Email: zhengxi.tian@hotmail.com
 
 \chapter{相关工作}\label{ch:related_work}
-\section{自动化指标的使用情况}
-%
-生成式对话系统最早在2011年开始被研究。
-Ritter等人率先用统计机器翻译（Statistical Machine Translation，SMT）的方法\upcite{Ritter:2011:DRG:2145432.2145500}解决响应生成问题。他们没有考虑上下文，而是把一个消息直接翻译为响应。Sordoni等人首次把神经网络用于响应生成，用神经网络对SMT输出的响应进行重现排序\upcite{DBLP:journals/corr/SordoniGABJMNGD15}。他们的模型属于在机器翻译中非常有效的编码器-解码器架构（Encoder-Decoder），对输入的上下文和消息进行词袋化（Bag-of-Word）后，用一个前馈神经网络（Feed-Forward Neural Network）进行编码，再用一个朴素的\footnote{称其为朴素的是因为它没有使用LSTM或者GRU，仅用了$\sigma$激活函数。}（Recurrent Neural Network，RNN）构成的语言模型（Language Model，LM）\upcite{DBLP:conf/interspeech/MikolovKBCK10}进行解码，根据上下文和消息的特征组合方式不同，他们提出了三个模型：RLM，DCGM-1和DCGM-2。Sutskever等人于2014年提出了基于RNN的编解码器，也就是序列到序列架构（Seq2Seq）\upcite{DBLP:conf/nips/SutskeverVL14}。
+\section{生成式模型}\label{sec:generative_model}
+一个生成式模型定义了给定输入序列$X = x_1, x_2, \cdots, x_n$，
+任意输出序列$Y = y_1, y_2, \cdots, y_m$的条件概率$p(Y|X)$。
+模型的训练目标就是在数据集$S$上最大化给定$X$，$Y$的对数概率（Log Probability）：
+\begin{align}
+    \mathit{L} = \frac{1}{|S|} \sum_{(Y, X) \in S} \log p(Y|X)
+\end{align}
+从这个角度来看，语言模型\upcite{
+    DBLP:journals/jmlr/BengioDVJ03,
+    DBLP:conf/interspeech/MikolovKBCK10}（Language Model）和编解码器都属于生成式模型，
+因为它们都定义了条件概率$p(Y|X)$。不管什么样的实现，生成式模型都要解决对序列建模的问题，
+即把一个长度可变的序列$X$映射到另一个长度可变的序列$Y$，且$X$和$Y$的长度可以不相等。
+循环神经网络（RNN）为这个问题提供了天然的解决方案。
+% 介绍RNN，unrolled
+RNN的基本思想是，序列由有序的元素组成，每一个元素用一个时刻（Time Step）来描述，
+在某一个时刻$t_i$，RNN接受输入序列$X$中的某个元素$x_i$，并输出一个元素$y_i$；
+在下一个时刻$t_{i+1}$，RNN接受输入元素$x_{i+1}$，并输出一个元素$y_{i+1}$。
+让RNN与普通神经网络不同的是，RNN在一系列时刻的输入输出中不断更新同一个权重矩阵$W_{h}$，
+它又被称为循环矩阵（Recurrent Matrix）。
+循环矩阵的作用是记忆输入序列的位置信息，并把当前时刻的输入序列编码成一个定长向量。
+图~\ref{fig:RNN_unrolled}\footnote{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
+描述了简化的RNN结构。
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figure/RNN-unrolled.png}
+    \caption{RNN的一般表示和展开表示}
+    \label{fig:RNN_unrolled}
+\end{figure}
 
-%这一节讲哪些人的模型用了哪些指标去测评，以及它们对指标的看法是怎么样的。
+\section{自动化评价指标}\label{sec:automatic_metric}
 
-\section{自动化指标的开发情况}
-%这一节讲有哪些人提出了针对生成式对话的特点提出了新指标。
-%以及哪些人作了指标方面的实证研究。
+\section{公开的对话数据集}\label{sec:public_dataset}
 
-\section{本章小结}\label{sec:本章小结}
+\section{本章小结}\label{sec:rw_conclusion}
 %这一节总结所有提及的指标，给它们分一下类，然后简要说明每一类
 %指标的特点，或者是它考察的方面。

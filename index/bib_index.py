@@ -8,4 +8,5 @@ bib_index = {
     'opensub': 'DBLP:conf/lrec/LisonT16',
     'Seq2Seq': 'DBLP:journals/corr/VinyalsL15',
     'LSDSCC': 'DBLP:conf/naacl/XuJLRWWWW18',
+    'Ritter11': 'Ritter:2011:DRG:2145432.2145500',
 }

@@ -7,7 +7,7 @@
 
 \section{课题研究背景}\label{sec:research_background}
 % Task-Oriented and Chat-Oriented.
-早期的对话系统的用途主要是帮助用户用自然语言完成某项任务，比如技术支持（Technical Support），预订机票、预订餐馆的座位、查询航班等。这一类系统又被称为任务导向的系统（Task-Oriented），其实现技术包括关键词匹配、规则和模板以及对话状态追踪等等，往往需要大量人工标注的数据。这些系统往往只能处理特定领域内的对话，不能回答开放性问题，用途局限于特定领域
+早期的对话系统的用途主要是帮助用户用自然语言完成某项任务，比如技术支持（Technical Support），预订机票、预订餐馆的座位、查询航班等。这一类系统又被称为任务导向的系统（Task-Oriented），其实现技术包括关键词匹配、规则和模板以及对话状态追踪（Dialogue State Tracking）等等，往往需要大量人工标注的数据。这些系统只能处理特定领域内的对话，不能回答开放性问题，用途局限于特定领域
 \upcite{
 DBLP:journals/corr/SerbanLCP15,
 DBLP:journals/corr/VinyalsL15,
@@ -71,19 +71,19 @@ Seq2Seq框架在自然语言处理的多项任务上都超过了之前的方法�
 Li等人提出了一系列基于Seq2Seq框架的对话系统，包括
 利用最大互信息（Maximum Mutual Information，MMI）增加输出多样性的目标函数\upcite{DBLP:conf/naacl/LiGBGD16}，
 在解码器端（Decoder）加入说话人身份信息（Speaker ID）以达到输出的人格一致性（Persona Coherence）
-\upcite{DBLP:journals/corr/LiGBGD16}以及利用对抗生成网络（Adversarial Generative Networks，GAN）
+\upcite{DBLP:journals/corr/LiGBGD16}以及利用对抗生成网络（Generative Adversarial Networks，GAN）
 \upcite{DBLP:journals/corr/GoodfellowPMXWOCB14}使系统输出和人类输出难以分辨\upcite{DBLP:conf/emnlp/LiMSJRJ17}
 等等。
 % ------------------------------------- %
 Serban等人把Sordoni等人提出的用于查询建议（Query Suggestion）的
 层级循环编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{DBLP:conf/cikm/SordoniBVLSN15}应用到对话生成领域， 提出了能捕捉对话的层级结构的HRED模型\upcite{DBLP:conf/aaai/SerbanSBCP16}。
 基于HRED，Serban等人又提出了利用随机潜变量（Stochastic Latent Variable）增加对话多样性的Variational Hierarchical Recurrent Encoder-Decoder，即VHRED\upcite{DBLP:journals/corr/SerbanSLCPCB16}；
-以及加入了多层次抽象信息（Multiple Levels of Abstraction）的多精度循环网络（Multiresolution Recurrent Neural Networks，MultiRNN）
+以及加入了多层次抽象信息的多精度循环网络（Multiresolution Recurrent Neural Networks，MultiRNN）
 \upcite{DBLP:conf/aaai/SerbanKTTZBC17}。
 % --------- China's researches ----------- %
-国内，Shang等人研究了微博数据集上的短文本对话生成问题（Short-Text-Conversation，STC），
+在国内，Shang等人研究了微博数据集上的短文本对话生成问题（Short-Text-Conversation，STC），
 提出了以GRU为门单元的编解码器模型（Neural Response Machine，NRM）\upcite{DBLP:conf/acl/ShangLL15}，
-并在人类评价上取得了比检索式系统和基于SMT的翻译式系统更好的成绩。
+并在人类评价上取得了比检索式系统和翻译式系统\upcite{Ritter:2011:DRG:2145432.2145500}更好的成绩。
 Chen Xing等人向Seq2Seq加入了从预训练LDA模型中获取的主题词（Topic Words）并提出了Topic-Aware Seq2Seq
 \upcite{DBLP:conf/aaai/XingWWLHZM17}。由于篇幅有限，不能一一介绍。
 
@@ -103,16 +103,16 @@ DBLP:conf/acl/ShangLL15,
 DBLP:conf/emnlp/LiMRJGG16,
 DBLP:conf/acl/GalleyBSJAQMGD15,
 DBLP:conf/acl/LoweNSABP17}；
-二是如何避免生成无意义的响应（the Problem of Generic Responses）
+二是如何避免生成单调的响应
 \upcite{
     DBLP:conf/naacl/LiGBGD16,
     DBLP:journals/corr/LiMJ17a,
     Ritter:2011:DRG:2145432.2145500,
     DBLP:journals/corr/SordoniGABJMNGD15,
     DBLP:conf/aaai/SerbanSBCP16}。
-对于第一个难题的一个普遍的解释是，和机器翻译相比，对话生成的输出具有更高的熵（Entropy）。
+对第一个难题的一个普遍解释是，和机器翻译相比，对话生成的输出具有更高的熵（Entropy）。
 在对话的场景下，给定一个消息，往往存在大量合理的响应，这些响应和参考响应（Ground Truth）的语义可能完全不一样，
-并且彼此之间在语义上各异。
+并且彼此有着各异的语义。
 
 \begin{table}[H]
     \centering
@@ -139,7 +139,8 @@ DBLP:conf/acl/LoweNSABP17}；
 Liu等人在\cite{DBLP:conf/emnlp/LiuLSNCP16}中研究了两类指标，分别是基于词重叠的指标（Word Overlap Based）
 和基于词嵌入的指标（Embedding Based），并且发现这些指标在非技术性的Twitter数据集上和人类评价只有弱相关性，
 在技术性的Ubuntu Dialogue Corpus\upcite{DBLP:conf/sigdial/LowePSP15}没有相关性。
-Liu等人的工作为对话领域的自动评价指标的研究奠定了基础。
+Liu等人的工作为对话领域的自动评价指标的研究开辟了新的方向。
+
 % ------- ADEM ------------ %
 Lowe等人以自动化的图灵测试（Automatic Turing Test）为灵感，
 提出了一个以VHRED为编码器，根据消息、参考响应和模型响应预测人类评分的模型，
@@ -154,7 +155,7 @@ Kannan等人在\cite{DBLP:journals/corr/KannanV17}中初步尝试了把GAN的方
 该指标线性的结合了带参考的指标（Referenced Score）和不带参考的指标（Unreferenced Score），
 并采用无监督的负采样（Negative Sampling）来训练模型，
 在中文数据集豆瓣网\footnote{http://www.douban.com}上取得了很高的人类评价相关性。 % Correlation to Human Judgement
-这些研究进展的取得和Liu等人对自动化评价指标的实验和研究有着密切联系。
+%这些研究进展的取得和Liu等人对自动化评价指标的实验和研究有着密切联系。
 
 本课题延续Liu等人的工作，对自动评价指标进行深入研究。
 Liu等人已经研究了评价指标与人类评价的相关性，并且发现了它们的弱点；
@@ -167,10 +168,12 @@ Liu等人已经研究了评价指标与人类评价的相关性，并且发现�
 扩展了\cite{DBLP:conf/emnlp/LiuLSNCP16}中考察的两类指标，
 并在三个具有代表性的公开数据集：Ubuntu Dialogue Corpus，OpenSubtitles和LSDSCC\upcite{DBLP:conf/naacl/XuJLRWWWW18}上进行了实验。
 尽管没有人类监督信号，但是我们对指标之间和模型之间的一致性分析还是取得了有意义的结论。
+% 具体是什么结论，现在还不是很清楚。到时候实验一章写完之后，这里再修改。
 
 \section{论文组织结构}\label{sec:paper_organization}
 本文的组织结构如下：
 第~\ref{ch:related_work}~章相关工作介绍了生成式对话领域中自动化指标的使用情况和研究现状；
 第~\ref{ch:method}~章研究方法介绍了我们的实验方法以及实验涉及的指标、模型和数据集；
-第~\ref{ch:experiment_result_and_disscusion}~章实验结果与讨论详细展示了我们的实验配置、实验数据以及结论；
+第~\ref{ch:experiment}~章实验结果与讨论详细展示了我们的实验配置、实验数据以及结论；
 第~\ref{ch:conclusion}~章结论总结了本课题的研究成果，并展现了若干未来的研究方向。
+% 某些写的笼统的地方，等实验结论出来之后，可以改的具体一些。

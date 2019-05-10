@@ -107,8 +107,10 @@ Seq2Seq把公式~\ref{eqn:generative_conditional_probability}~
 \end{align}
 因为各个$y_i$的概率都不是独立的，而是受之前输出的单词的影响，贪心搜索不能保证得到概率最大的输出序列。
 随机取样（Random Sampling）在每一时刻都从模型生成的全体词汇的概率分布中随机选取一个单词。
-这样输出就带有一点不确定性，在一定程度上增加了输出的多样性。
-最为常用的是集束搜索（Beam Search），它在生成整个句子的过程中维护一个大小为$B$的列表，称为集束（Beam）。
+这样就使输出就带有不确定性，在一定程度上增加了输出的多样性。
+Serban等人曾发现随机取样的输出能避免单调响应的问题，并且能产生多样化的，
+主题相关的输出\upcite{DBLP:conf/aaai/SerbanSBCP16}。
+最为常用的方法是集束搜索（Beam Search），它在生成整个句子的过程中维护一个大小为$B$的列表，称为集束（Beam）。
 算法开始时，集束初始化为模型生成的$B$个概率最高的单词。
 在每一个时刻开始时，集束中都有$B$个部分生成的句子，它们称为候选$Y_c$。
 在每一个时刻，算法对集束中的每一个候选都生成$B$个概率最大的下一个单词$w_{i+1, c}$，从而形成$B \times B$个部分生成的句子$Y_{ex}$，
@@ -132,7 +134,33 @@ METEOR\upcite{DBLP:conf/acl/BanerjeeL05}，
 BEER\upcite{DBLP:conf/wmt/StanojevicS14}，
 CHRF\upcite{DBLP:conf/wmt/Popovic15}，
 TER\upcite{Snover2005ASO}等等。
-自动摘要领域的ROUGE指标\upcite{W04-1013}也和人类评价具有较好的相关性。
+然而，适用于开放领域的，面向闲聊的对话系统的指标要少得多。
+% Ritter -- MT-chat
+Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter:2011:DRG:2145432.2145500}，
+因为不清楚面向任务的指标能不能用到面向生成的领域，他们就用了基于Amazon Mechanical Turk的人类评价。
+他们利用人类评价的数据考察了BLEU在这方面的适用性，并发现系统BLEU得分非常低，和人类评价的相关性也不是很高，
+因此他们认为不能直接应用到本领域。
+
+% Shang -- NRM
+% We use abbreviation hereby. Remember to introduce their fullname before!
+Shang等人在评价他们的NRM模型时分析了几种流行指标在本领域的适用性。
+他们认为BLEU并不适用，因为合理的响应的范围实在是太大了，参考响应不可能完全覆盖到；
+而常用于概率语言模型的指标困惑度（Perplexity，PPL）也不适用，因为它不能测量响应的自然程度及其对消息的相关程度。
+最后他们选择了人类评价。
+
+% Sordoni -- DCGM-1-2
+Sordoni在DCGM的评价时采用了BLEU和METEOR两种自动指标
+\upcite{DBLP:journals/corr/SordoniGABJMNGD15}。
+为了处理庞大而且多样的响应空间，他们用信息检索（Information Retrieval，IR）的方法从数据集中挖掘可能的响应，
+并让人类评估员对其合适度（Appropriateness）打分，
+从而构造了一个符合BLEU最佳使用条件的多重参考评测集（Multiple-Responses Benchmark Dataset）。
+在这样的评测集上，他们发现BLEU对系统的排名和人类评价非常一致。
+这种构建多重响应测评集的方法也见于LSDSCC\upcite{DBLP:conf/naacl/XuJLRWWWW18}的测评集的构造方法，
+以及DeltaBLEU\upcite{DBLP:conf/acl/GalleyBSJAQMGD15}指标的设计思路。
+
+% Serban -- HRED
+
+%自动摘要领域的ROUGE指标\upcite{W04-1013}也和人类评价具有较好的相关性。
 
 
 \section{公开的对话数据集}\label{sec:public_dataset}

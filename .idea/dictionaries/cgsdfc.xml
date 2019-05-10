@@ -2,6 +2,7 @@
   <dictionary name="cgsdfc">
     <words>
       <w>argmin</w>
+      <w>bleu</w>
       <w>chatbot</w>
       <w>dataset</w>
       <w>datasets</w>

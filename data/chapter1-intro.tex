@@ -23,7 +23,7 @@ DBLP:conf/acl/ShangLL15}。
 \end{figure}
 
 % Retrieval and Generative.
-对话系统又可以分为生成式对话系统（Generative System）和检索式对话系统（Retrieval-Based System）\upcite{DBLP:journals/corr/SerbanLCP15}。
+对话系统又可以分为生成式对话系统（Generative System）和检索式对话系统（Retrieval-Based System）\upcite{DBLP:journals/corr/SerbanLCP15,DBLP:conf/sigdial/LoweSNCP16}。
 如果一个系统能生成训练集里没有的句子，就把它称为“生成式系统”\upcite{DBLP:conf/emnlp/LiuLSNCP16}。
 两种系统的区别在于：生成式系统以输入句子为条件，把条件概率最大的句子作为输出。
 由于搜索空间过于庞大，在实际中通常采用某种启发式搜索方法，如集束搜索（Beam Search），贪婪搜索（Greedy Search）
@@ -40,7 +40,7 @@ $D$通常由人类撰写的语句组成，并且足够大，使得输出句子�
     Y = \argmax_{Y\in D} Score(Y, X)
 \end{align}
 可见，生成式系统和检索式系统的根本区别在于获得输出句子的机制不同。
-这两种方法各有优劣：检索式模型的输出没有语法错误且和输入的相关度比较高，但是不能生成新句子；
+这两种方法各有优劣：检索式模型的输出没有语法错误并且可以限制输出的范围\upcite{DBLP:conf/sigdial/LoweSNCP16}，但是不能生成新句子；
 生成式的模型能针对输入生成个性化的输出且系统高度灵活\upcite{DBLP:conf/acl/ShangLL15}，但是容易生成过短的句子\upcite{
 DBLP:journals/corr/KannanV17}。
 在实际环境中，通常将它们作为模型联合体（Model Ensemble）使用\upcite{DBLP:journals/corr/SongYLZZ16}，

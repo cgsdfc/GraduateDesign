@@ -9,11 +9,11 @@ from bibtexparser.bwriter import BibTexWriter
 from bibtexparser.bparser import BibTexParser
 
 
-# TODO: duplicate bib key?
-
 class EmptyBibFile(Exception):
     pass
 
+
+IGNORE_SUBDIR = 'misc'
 
 # Keys we *don't* need.
 BACK_LIST = (
@@ -76,7 +76,8 @@ def get_bib_from_file(filename):
 
 def get_all_bibs(prefix, stop_at_empty):
     def get_all_bib_files():
-        return pathlib.Path(prefix).rglob('*.bib')
+        bibs = pathlib.Path(prefix).rglob('*.bib')
+        return bibs
 
     files = get_all_bib_files()
     bib_keys = set()

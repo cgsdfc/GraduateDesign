@@ -10,26 +10,23 @@
     p(Y|X) = P(y_1, y_2, \cdots, y_m|x_1, x_2, \cdots, x_n)
     \label{eqn:generative_conditional_probability}
 \end{align}
-
 模型的训练目标就是在数据集$S$上最大化给定$X$，$Y$的对数概率（Log Probability）：
 \begin{align}
     \mathit{L} = \frac{1}{|S|} \sum_{(Y, X) \in S} \log p(Y|X)
 \end{align}
 从这个角度来看，语言模型\upcite{
 DBLP:journals/jmlr/BengioDVJ03,
-DBLP:conf/interspeech/MikolovKBCK10}（Language Model）和编解码器都属于生成式模型，
-因为它们都定义了条件概率$p(Y|X)$。不管什么样的实现，生成式模型都要解决对序列建模的问题，
-即把一个长度可变的序列$X$映射到另一个长度可变的序列$Y$，且$X$和$Y$的长度可以不相等。
-循环神经网络（RNN）为这个问题提供了天然的解决方案。
-% 介绍RNN，unrolled
-RNN的基本思想是，序列由有序的元素组成，每一个元素用一个时刻（Time Step）来描述，
-在某一个时刻$t_i$，RNN接受输入序列$X$中的某个元素$x_i$，并输出一个元素$y_i$；
-在下一个时刻$t_{i+1}$，RNN接受输入元素$x_{i+1}$，并输出一个元素$y_{i+1}$。
-让RNN与普通神经网络不同的是，RNN在一系列时刻的输入输出中不断更新同一个权重矩阵$W_{h}$，
-它又被称为循环矩阵（Recurrent Matrix）。
-循环矩阵的作用是记忆输入序列的位置信息，并把当前时刻的输入序列编码成一个定长向量。
+DBLP:conf/interspeech/MikolovKBCK10}（Language Model）和编解码器（Encoder-Decoder）都属于生成式模型，
+因为它们都定义了条件概率$p(Y|X)$。
+生成式模型把一个长度可变的序列$X$映射到另一个长度可变的序列$Y$，且$X$和$Y$的长度可以不相等。
+循环神经网络（RNN）为这个问题提供了自然的解决方案。
+% RNN
+RNN的基本思想是：序列由有序的元素组成，每一个时刻（Time Step）输入并输出一个元素，同时更新内部的隐层状态（Hidden State）。
+在时间轴上展开的RNN和一般的前馈神经网络（Feed Forward Neural Networks）很像，不过每一个时刻的权重矩阵都是共享的。
+这个共享的权重矩阵$A$又被称为循环矩阵（Recurrent Matrix）。
+循环矩阵的作用是保存输入序列的顺序信息，并把当前时刻的输入序列编码成一个定长向量。
 图~\ref{fig:RNN_unrolled}\footnote{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
-描述了简化的RNN结构。
+描绘了简化的RNN结构。
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{figure/RNN-unrolled.png}
@@ -37,12 +34,15 @@ RNN的基本思想是，序列由有序的元素组成，每一个元素用一�
     \label{fig:RNN_unrolled}
 \end{figure}
 
+% RNN细分
 根据是否使用了某种门单元，RNN可分为普通RNN\upcite{DBLP:conf/interspeech/MikolovKBCK10}，
 LSTM\upcite{DBLP:journals/neco/HochreiterS97}和GRU\upcite{DBLP:conf/emnlp/ChoMGBBSB14}。
-根据是否对反向序列（Reversed Sequence）建模，RNN可分为单向RNN（Unidirectional）和双向RNN（Bidirectional）。
+根据是否对反向序列（Reversed Sequence）建模，RNN可分为单向RNN（Unidirectional RNN）
+和双向RNN（Bidirectional RNN）\upcite{DBLP:journals/tsp/SchusterP97}。
 由于普通RNN受到梯度消失的影响，目前学界普遍采用LSTM或者GRU；
 尽管后者受到梯度爆炸的影响，但是可以通过梯度剪裁（Gradient~Clipping）
 \upcite{DBLP:journals/corr/VinyalsL15}解决。
+采用多层RNN组成的深度神经网络比单层RNN能获得更好的性能\upcite{DBLP:journals/corr/VinyalsL15}。
 
 % RNNLM
 RNN语言模型可以给出序列$X=x_1, x_2, \cdots, x_n$的概率分布：
@@ -51,7 +51,8 @@ RNN语言模型可以给出序列$X=x_1, x_2, \cdots, x_n$的概率分布：
     \label{eqn:language_model_probability}
 \end{align}
 
-RNN语言模型通过神经网络中的参数来估计公式~\ref{eqn:language_model_probability}乘积中的一项：
+RNN语言模型\footnote{为了简洁起见，我们描述了普通RNN。LSTM和GRU有着更复杂的数学表达式。}
+通过神经网络中的参数来估计公式~\ref{eqn:language_model_probability}~乘积中的一项：
 \begin{align}
     p(x_i = w|x_1, x_2, \cdots, x_{i-1}) = \frac{\exp{o_{tw}}}{\sum_{v=1}^V \exp{o_{tv}}}
     \label{eqn:language_model_estimation}
@@ -74,6 +75,7 @@ RNN语言模型在训练时最大化训练集上的句子的对数概率：
 
 % Seq2Seq
 Seq2Seq框架使用两个拥有独立参数的RNN分别作为编码器和解码器。
+尽管编解码器不一定都使用RNN\upcite{DBLP:journals/corr/BahdanauCB14}，本文仅关注使用RNN的Seq2Seq变体。
 首先，编码器把输入序列$X$编码成一个定长向量$v$。
 该向量又称为思考向量（Though Vector），是编码器完全读取输入序列后的隐层状态（Last Hidden State）。
 接着，解码器以$v$为初始隐层状态（Initial Hidden State），像一个RNN语言模型一样对输出序列进行预测。
@@ -89,6 +91,22 @@ Seq2Seq把公式~\ref{eqn:generative_conditional_probability}~
     c &= h_n
 \end{align}
 编码器和解码器以同一个目标函数同时训练。
+为了更好的处理长序列，Seq2Seq一般引入注意力机制（Attention Mechanism）
+\upcite{
+    DBLP:journals/corr/BahdanauCB14,
+    DBLP:conf/emnlp/LuongPM15}，使输入序列的信息不必全部通过固定长度的向量$v$传递。
+解码器能自动关注和当前输出最相关的输入部分，实现输入序列与输出序列的对齐（Alignment）。
+注意力机制使传统Seq2Seq模型对较长输入也具有鲁棒性。
+
+% Beam Search，Greedy & Random Sample
+生成式模型仅仅定义了条件概率$p(Y|X)$，在推理阶段（Inference），需要采用某种启发式搜索算法从概率分布中
+生成输出$Y$。最简单的搜索算法是贪心搜索（Greedy Search）：在每一时刻都输出条件概率最大的单词：
+\begin{align}
+    y_i = \argmax p(y_i|y_1, y_2, \cdots, y_{i-1}|X)
+\end{align}
+因为各个$y_i$的概率都不是独立的，而是受之前输出的单词的影响，贪心搜索不能保证得到概率最大的输出序列。
+
+% Hierarchical
 
 \section{自动化评价指标}\label{sec:automatic_metric}
 

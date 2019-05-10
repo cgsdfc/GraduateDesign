@@ -16,4 +16,5 @@ bib_index = {
     'B-Attention': 'DBLP:journals/corr/BahdanauCB14',
     'L-Attention': 'DBLP:conf/emnlp/LuongPM15',
     'BiRNN': 'DBLP:journals/tsp/SchusterP97',
+    'DiverseBeam': 'DBLP:journals/corr/LiMJ16',
 }

@@ -5,14 +5,19 @@
 \chapter{相关工作}\label{ch:related_work}
 \section{生成式模型}\label{sec:generative_model}
 一个生成式模型定义了给定输入序列$X = x_1, x_2, \cdots, x_n$，
-任意输出序列$Y = y_1, y_2, \cdots, y_m$的条件概率$p(Y|X)$。
+任意输出序列$Y = y_1, y_2, \cdots, y_m$的条件概率：
+\begin{align}
+    p(Y|X) = P(y_1, y_2, \cdots, y_m|x_1, x_2, \cdots, x_n)
+    \label{eqn:generative_conditional_probability}
+\end{align}
+
 模型的训练目标就是在数据集$S$上最大化给定$X$，$Y$的对数概率（Log Probability）：
 \begin{align}
     \mathit{L} = \frac{1}{|S|} \sum_{(Y, X) \in S} \log p(Y|X)
 \end{align}
 从这个角度来看，语言模型\upcite{
-    DBLP:journals/jmlr/BengioDVJ03,
-    DBLP:conf/interspeech/MikolovKBCK10}（Language Model）和编解码器都属于生成式模型，
+DBLP:journals/jmlr/BengioDVJ03,
+DBLP:conf/interspeech/MikolovKBCK10}（Language Model）和编解码器都属于生成式模型，
 因为它们都定义了条件概率$p(Y|X)$。不管什么样的实现，生成式模型都要解决对序列建模的问题，
 即把一个长度可变的序列$X$映射到另一个长度可变的序列$Y$，且$X$和$Y$的长度可以不相等。
 循环神经网络（RNN）为这个问题提供了天然的解决方案。
@@ -31,6 +36,59 @@ RNN的基本思想是，序列由有序的元素组成，每一个元素用一�
     \caption{RNN的一般表示和展开表示}
     \label{fig:RNN_unrolled}
 \end{figure}
+
+根据是否使用了某种门单元，RNN可分为普通RNN\upcite{DBLP:conf/interspeech/MikolovKBCK10}，
+LSTM\upcite{DBLP:journals/neco/HochreiterS97}和GRU\upcite{DBLP:conf/emnlp/ChoMGBBSB14}。
+根据是否对反向序列（Reversed Sequence）建模，RNN可分为单向RNN（Unidirectional）和双向RNN（Bidirectional）。
+由于普通RNN受到梯度消失的影响，目前学界普遍采用LSTM或者GRU；
+尽管后者受到梯度爆炸的影响，但是可以通过梯度剪裁（Gradient~Clipping）
+\upcite{DBLP:journals/corr/VinyalsL15}解决。
+
+% RNNLM
+RNN语言模型可以给出序列$X=x_1, x_2, \cdots, x_n$的概率分布：
+\begin{align}
+    p(X) = \prod_{i=1}^{n} p(x_i|x_1, x_2, \cdots, x_{i-1})
+    \label{eqn:language_model_probability}
+\end{align}
+
+RNN语言模型通过神经网络中的参数来估计公式~\ref{eqn:language_model_probability}乘积中的一项：
+\begin{align}
+    p(x_i = w|x_1, x_2, \cdots, x_{i-1}) = \frac{\exp{o_{tw}}}{\sum_{v=1}^V \exp{o_{tv}}}
+    \label{eqn:language_model_estimation}
+\end{align}
+$o_t$是RNN的在$t$时刻的输出向量，$V$是词汇表的大小。
+公式~\ref{eqn:language_model_estimation}~的右边本质上是对一个长度为$V$的向量进行softmax运算。
+$t$时刻的输出向量是由输出矩阵$W_{out}$和$t$时刻隐层状态$h_i$相乘得到的：
+\begin{align}
+    o_i &= h_i^T W_{out}
+\end{align}
+而$h_i$则是当前输入$x_i$和上一时刻的隐层状态$h_{i-1}$在输入矩阵$W_{in}$和循环矩阵$W_{hh}$分别作用后再相加的结果：
+\begin{align}
+    h_i &= \sigma \left( x_i^T W_{in} + h_{i-1}^T W_{hh} \right)
+\end{align}
+RNN语言模型在训练时最大化训练集上的句子的对数概率：
+\begin{align}
+    \mathit{L(X)} = \sum_{i=1}^n \log p(x_i|x_1, x_2, \cdots, x_{i-1})
+\end{align}
+在预测时，对模型输入消息$m$，从模型的给出的概率分布中用某种搜索方法，如Beam Search可得出响应$r$。
+
+% Seq2Seq
+Seq2Seq框架使用两个拥有独立参数的RNN分别作为编码器和解码器。
+首先，编码器把输入序列$X$编码成一个定长向量$v$。
+该向量又称为思考向量（Though Vector），是编码器完全读取输入序列后的隐层状态（Last Hidden State）。
+接着，解码器以$v$为初始隐层状态（Initial Hidden State），像一个RNN语言模型一样对输出序列进行预测。
+整个过程可以描述为：编码器把输入序列$X$变换成某种压缩编码$v$，再由解码器把$v$还原为另一个序列$Y$，
+Seq2Seq把公式~\ref{eqn:generative_conditional_probability}~
+作了如下转化：
+\begin{align}
+    p(y_1, y_2, \cdots, y_m|x_1, x_2, \cdots, x_n) = \prod_{i=1}^m p(y_i|v, y_1, y_2, \cdots, y_{i-1})
+\end{align}
+其中$v$是以$f$为门单元的编码器的最后一个隐层状态：
+\begin{align}
+    h_i &= f(x_i ,h_{i-1}) \\
+    c &= h_n
+\end{align}
+编码器和解码器以同一个目标函数同时训练。
 
 \section{自动化评价指标}\label{sec:automatic_metric}
 

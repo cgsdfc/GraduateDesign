@@ -11,4 +11,9 @@ bib_index = {
     'Ritter11': 'Ritter:2011:DRG:2145432.2145500',
     'NNLM': 'DBLP:journals/jmlr/BengioDVJ03',
     'RNNLM': 'DBLP:conf/interspeech/MikolovKBCK10',
+    'LSTM': 'DBLP:journals/neco/HochreiterS97',
+    'GRU': 'DBLP:conf/emnlp/ChoMGBBSB14',
+    'B-Attention': 'DBLP:journals/corr/BahdanauCB14',
+    'L-Attention': 'DBLP:conf/emnlp/LuongPM15',
+    'BiRNN': 'DBLP:journals/tsp/SchusterP97',
 }

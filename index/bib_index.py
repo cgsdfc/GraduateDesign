@@ -26,7 +26,10 @@ bib_index = {
     'BEER': 'DBLP:conf/wmt/StanojevicS14',
     'NUC': 'DBLP:conf/sigdial/LoweSNCP16',
     'DCGM': 'DBLP:journals/corr/SordoniGABJMNGD15',
-    'deltaBLEU': 'DBLP:conf/acl/GalleyBSJAQMGD15'
+    'deltaBLEU': 'DBLP:conf/acl/GalleyBSJAQMGD15',
+    'distributed_hypothesis': 'harris54',
+    'MMI': 'DBLP:conf/naacl/LiGBGD16',
+    'Distill': 'DBLP:journals/corr/LiMJ17a',
 
 }
 

@@ -95,7 +95,7 @@ Seq2Seq把公式~\ref{eqn:generative_conditional_probability}~
 \upcite{
     DBLP:journals/corr/BahdanauCB14,
     DBLP:conf/emnlp/LuongPM15}，使输入序列的信息不必全部通过固定长度的向量$v$传递。
-解码器能自动关注和当前输出最相关的输入部分，实现输入序列与输出序列的对齐（Alignment）。
+解码器能自动关注和当前输出最相关的输入部分，实现输入序列与输出序列的对自动对齐（Alignment）。
 注意力机制使传统Seq2Seq模型对较长输入也具有鲁棒性。
 
 % Beam Search，Greedy & Random Sample
@@ -103,13 +103,13 @@ Seq2Seq把公式~\ref{eqn:generative_conditional_probability}~
 生成输出$Y$，这个过程又称为解码（Decode）。
 最简单的搜索算法是贪心搜索（Greedy Search）：在每一时刻都输出条件概率最大的单词：
 \begin{align}
-    y_i = \argmax p(y_i|y_1, y_2, \cdots, y_{i-1}|X)
+    y_i = \argmax p(y_i|y_1, y_2, \cdots, y_{i-1}, X)
 \end{align}
 因为各个$y_i$的概率都不是独立的，而是受之前输出的单词的影响，贪心搜索不能保证得到概率最大的输出序列。
 随机取样（Random Sampling）在每一时刻都从模型生成的全体词汇的概率分布中随机选取一个单词。
 这样就使输出就带有不确定性，在一定程度上增加了输出的多样性。
 Serban等人曾发现随机取样的输出能避免单调响应的问题，并且能产生多样化的，
-主题相关的输出\upcite{DBLP:conf/aaai/SerbanSBCP16}。
+话题相关的输出\upcite{DBLP:conf/aaai/SerbanSBCP16}。
 最为常用的方法是集束搜索（Beam Search），它在生成整个句子的过程中维护一个大小为$B$的列表，称为集束（Beam）。
 算法开始时，集束初始化为模型生成的$B$个概率最高的单词。
 在每一个时刻开始时，集束中都有$B$个部分生成的句子，它们称为候选$Y_c$。
@@ -118,15 +118,19 @@ Serban等人曾发现随机取样的输出能避免单调响应的问题，并�
 算法不断迭代直到在某次对候选集的扩展中，某些候选中产生了句子结束符号（End-of-Sentence，EOS），
 于是概率最大而且完成了的候选句子将作为输出。
 
-% Diverse Beam
-为了增加模型输出的多样性，不少学者提出了改进的解码算法。
-Li等人提出在标准集束搜索中，对来自相同父节点的候选加以惩罚，换句话说，鼓励来自不同父节点的候选\upcite{DBLP:journals/corr/LiMJ16}。
-%Li等人还提出了用最大互信息（MMI）对
+% Diverse Beam, MMI, Stochastic Greedy Sampling.
+为了增加模型输出的多样性，学者们提出了许多改进的解码算法。
+Li等人在\cite{DBLP:journals/corr/LiMJ16}中提出在标准集束搜索中，对来自相同父节点的候选加以惩罚，即鼓励来自不同父节点的候选。
+他们在\upcite{DBLP:conf/naacl/LiGBGD16}中提出用最大互信息（MMI）对标准集束搜索生成的候选列表进行重新排序，
+从而提高候选输出的反向概率（Backward Probability），
+即给定输出$Y$，输入$X$的条件概率$p(Y|X)$，使输出对输入更有针对性。
+他们在\cite{DBLP:journals/corr/LiMJ17a}中提出了一种名为随机贪心取样（Stochastic Greedy Sampling）的解码算法，
+以求在随机取样和贪心搜索之间找到一个平衡点。与传统的随机取样不同，他们的算法只在条件概率最高的前$K$个候选单词中取样，
+参数$K$控制了随机取样和贪心搜索之间的比例：$K$越大，算法越接近随机取样，$K$越小，算法越接近贪心搜索。
+这些改进的解码算法在不同程度上提高了响应的多样性。
 
-% Hierarchical
 
 \section{自动化评价指标}\label{sec:automatic_metric}
-%生成式对话系统的评价指标一直是个公开的难题。
 机器翻译领域已有大量和人类评价相关性较高的指标，例如
 BLEU\upcite{DBLP:conf/acl/PapineniRWZ02}，
 NIST\upcite{Doddington:2002:AEM:1289189.1289273}，
@@ -138,27 +142,43 @@ TER\upcite{Snover2005ASO}等等。
 % Ritter -- MT-chat
 Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter:2011:DRG:2145432.2145500}，
 因为不清楚面向任务的指标能不能用到面向生成的领域，他们就用了基于Amazon Mechanical Turk的人类评价。
-他们利用人类评价的数据考察了BLEU在这方面的适用性，并发现系统BLEU得分非常低，和人类评价的相关性也不是很高，
-因此他们认为不能直接应用到本领域。
+他们利用人类评价的数据考察了BLEU在这方面的适用性，并发现系统的BLEU得分非常低，和人类评价的相关性也不是很高，
+因此他们认为BLEU不能直接应用到本领域。
 
 % Shang -- NRM
 % We use abbreviation hereby. Remember to introduce their fullname before!
-Shang等人在评价他们的NRM模型时分析了几种流行指标在本领域的适用性。
+Shang等人在评价他们的NRM模型时分析了几种指标在本领域的适用性。
 他们认为BLEU并不适用，因为合理的响应的范围实在是太大了，参考响应不可能完全覆盖到；
-而常用于概率语言模型的指标困惑度（Perplexity，PPL）也不适用，因为它不能测量响应的自然程度及其对消息的相关程度。
+而常用于语言模型的指标困惑度（Perplexity，PPL）也不适用，因为它不能测量响应的自然程度及其对消息的相关程度。
 最后他们选择了人类评价。
 
 % Sordoni -- DCGM-1-2
 Sordoni在DCGM的评价时采用了BLEU和METEOR两种自动指标
 \upcite{DBLP:journals/corr/SordoniGABJMNGD15}。
-为了处理庞大而且多样的响应空间，他们用信息检索（Information Retrieval，IR）的方法从数据集中挖掘可能的响应，
+为了处理庞大而且多样的响应空间，他们用信息检索（Information Retrieval，IR）的方法从数据集中挖掘潜在的合理响应，
 并让人类评估员对其合适度（Appropriateness）打分，
-从而构造了一个符合BLEU最佳使用条件的多重参考评测集（Multiple-Responses Benchmark Dataset）。
+从而构造了一个多重参考评测集（Multiple-Responses Benchmark Dataset）。
 在这样的评测集上，他们发现BLEU对系统的排名和人类评价非常一致。
 这种构建多重响应测评集的方法也见于LSDSCC\upcite{DBLP:conf/naacl/XuJLRWWWW18}的测评集的构造方法，
 以及DeltaBLEU\upcite{DBLP:conf/acl/GalleyBSJAQMGD15}指标的设计思路。
 
 % Serban -- HRED
+Serban等人在HRED模型的评价中使用了困惑度和单词分类错误（Word Classification Error，WCE）\upcite{DBLP:conf/aaai/SerbanSBCP16}。
+低的困惑度表示模型对数据的概率分布的拟合程度好。
+Serban等人认为困惑度是适用的，因为在存在多个合理输出的情况下，困惑度总是衡量生成单一参考输出的概率，
+这意味着它能可靠的衡量模型的质量。
+WCE计算模型的输出中正确预测的单词占整个数据集单词数量的比例，正确预测的单词要求单词在
+句子中的顺序都要正确，所以它是一个比困惑度更严苛的指标。
+尽管使用了自动化指标，Serban等人指出：这些指标和他们想要衡量的语法正确度（Grammatical Correctness）
+和语义连贯性（Semantic Coherence）之间的相关性并不明朗。值得注意的是，他们并没有使用人类评价。
+
+% Serban -- VHRED
+在Serban等人在VHRED模型的评价中主要使用了基于词嵌入的指标。
+这是一类建立在分布式假设\upcite{harris54,DBLP:books/lib/Harris68}（Distributed Hypothesis）上，
+用分布式语义（Distributed Semantic）来衡量两个句子的相似程度的指标，
+常被用于句子文本相似性（Sentence Textual Similarity）和学生输入自动打分\upcite{DBLP:conf/bea/RusL12}等任务中。
+Serban等人认为，虽然这些基于词嵌入的指标和人类评价的相关度不强，但是它们可以用于测量话题相似性（Topic Similarity），
+也就是模型的输出和参考输出的语义内容是否相似。
 
 %自动摘要领域的ROUGE指标\upcite{W04-1013}也和人类评价具有较好的相关性。
 

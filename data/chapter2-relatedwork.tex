@@ -239,7 +239,26 @@ $C(\cdot, \cdot)$为组合数。摘要层面的ROUGE-S相当于把摘要看作�
 ROUGE-SU是ROUGE-S加入了Unigram的扩展。
 
 % ----------------- METEOR ----------------- %
-METEOR，Metric for Evaluation of Translation with Explicit ORdering\upcite{METEOR}
+METEOR，Metric for Evaluation of Translation with Explicit ORdering
+\upcite{METEOR}是针对BLEU的一些弱点提出的机器翻译的指标。
+与BLEU相比，METEOR在句子水平上与人类评价有更好的相关性。
+METEOR首先计算系统输出和参考输出之间的Unigram匹配，这些匹配由多个可配置的模块组成，
+包括Exact，Porter-stem，WordNet-synonymy，分别表示严格匹配，Porter词根匹配和WordNet同义词匹配。
+接着，METEOR在Unigram匹配上计算一个对齐，并得到基于Unigram匹配的准确率和召回率，进而得到二者的加权调和平均值：
+\begin{align}
+    \textit{Fmean} = \frac{10PR}{R + 9P}
+\end{align}
+METEOR还包括对较短的n-gram匹配的惩罚系数：
+\begin{align}
+    \textit{Penalty} = 0.5 * \left( \frac{\#chunks}{\#unigrams\_matched} \right)
+\end{align}
+$\#unigrams\_matched$是所有匹配的Unigram的数量；
+一个Unigram匹配越短，$\#chunks$就越大。
+METEOR的最终公式为：
+\begin{align}
+    \textit{METEOR} = \textit{Fmean} * (1 - \textit{Penalty})
+\end{align}
+
 
 % Ritter -- MT-chat
 Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter11}。

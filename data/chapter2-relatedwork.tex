@@ -151,25 +151,82 @@ BLEU由在整个数据集上计算的各阶n-gram准确率的几何平均值（G
 n-gram准确率的计算公式为：
 \begin{align}
     p_n = \frac{
-    \sum_{S \in C} \sum_{ngram \in S} count_{matched}(ngrams)
+    \sum_{\mathcal{C} \in \{\textit{Candidates}\}
+    \sum_{\textit{n-gram} \in \mathcal{C}}}
+    \textit{Count}_{\textit{clip}} (\textit{n-gram})
     }{
-    \sum_{S \in C} \sum_{ngram \in S} count(ngrams)
+    \sum_{\mathcal{C'} \in \{\textit{Candidates}\}}
+    \sum_{\textit{n-gram}' \in \mathcal{C'}}
+    \textit{Count}(\textit{n-gram}')
     }
 \end{align}
 其中$C$为测试集，$S$为测试集中的参考句子，$count_{matched}(ngrams)$以$S$中的n-gram总数为上限。
 简短惩罚系数BP的计算公式为
 \begin{align}
-    BP = \begin{cases}
-             \ 1 \ \text{if} \  g > r \\
-             \ e^{1 - r/g} \  g \leq r \\
+    \textit{BP} = \begin{cases}
+                      \ 1 \ \text{if} \  g > r \\
+                      \ e^{1 - r/g} \  g \leq r \\
     \end{cases}
 \end{align}
 其中$g$是模型输出句子的长度，$r$是参考输出句子的长度。
 BLEU的最终公式为：
 \begin{align}
-    BLEU = BP \exp\left( \sum_{n=1}^N \frac{1}{N} \log p_n \right)
+    \textit{BLEU} = \textit{BP} \exp\left( \sum_{n=1}^N \frac{1}{N} \log p_n \right)
 \end{align}
-传统的BLEU比较粗糙，容易在句子层面给出0分，人们提出了各种平滑方案，
+原始的BLEU容易在句子层面给出0分，人们提出了各种平滑处理\upcite{DBLP:conf/wmt/ChenC14}。
+本文在使用BLEU时也采用了一种平滑处理。
+
+% ROUGE
+ROUGE，Recall-Oriented Understudy for Gisting Evaluation\upcite{W04-1013}是一种基于召回率（Recall） 的自动摘要领域的指标。
+它有多个变体：ROUGE-N，ROUGE-L，ROUGE-W，以及ROUGE-SU，
+分别使用了不同的表征，如n-gram共现数、最长公共子序列（Longest Common Subsequence，LCS）和二元跳词（Skip-Bigram）等等。
+这些指标的基础是信息检索领域常用的F-measure，即准确率$P$和召回率$R$的加权调和平均值：
+\begin{align}
+    \textit{F-measure} = \frac{(1 + \beta^2) RP}{R + \beta^2 P}
+\end{align}
+其中$\beta$控制准确率和回调的相对重要性。
+以下无特殊说明，$n$是系统输出的句子的长度，$m$是参考输出的句子的长度。
+
+ROUGE-N利用了n-gram共现数，其公式为：
+\begin{align}
+    \textit{ROUGE-N} = \frac{
+    \sum_{S \in \{\textit{ReferenceSummaries}\}}
+    \sum_{\textit{gram}_n \in S}
+    \textit{Count}_\textit{matched}(\textit{gram}_n)
+    }{
+    \sum_{S \in \{\textit{ReferenceSummaries}\}}
+    \sum_{\textit{gram}_n \in S}
+    \textit{Count}(\textit{gram}_n)
+    }
+\end{align}
+摘要层面的ROUGE-N具有相同的形式。
+
+句子层面（Sentence Level）的ROUGE-L的公式为：
+\begin{align}
+    R_{lcs} &= \frac{\textit{LCS}(X, Y)}{m} \\
+    P_{lcs} &= \frac{\textit{LCS}(X, Y)}{n} \\
+    \textit{ROUGE-L} &= \frac{(1 + \beta^2) R_{lcs}P_{lcs}}
+    {R_{lcs} + \beta^2 P_{lcs}}
+\end{align}
+$LCS$是计算两个序列的最长公共子序列的长度的函数。
+摘要层面（Summary Level）的ROUGE-L的公式为：
+\begin{align}
+    R_{lcs} &= \frac{\sum_{i=1}^\mu \textit{LCS}_\cup(r_i, C)}{m} \\
+    P_{lcs} &= \frac{\sum_{i=1}^\mu \textit{LCS}_\cup(r_i, C)}{n} \\
+    \textit{ROUGE-L} &= \frac{(1 + \beta^2) R_{lcs}P_{lcs}}{R_{lcs} + \beta^2 P_{lcs}}
+\end{align}
+$\mu$是系统输出的摘要的句子的数量， $\textit{LCS}_\cup(r_i, C)$计算了参考句子$r_i$和候选摘要$C$（由多个句子组成）的LCS的并集。
+$m$是参考摘要的总词数，$n$是系统摘要的总次数。
+
+句子层面的ROUGE-W的公式为：
+\begin{align}
+    R_{wlcs} &= f^{-1} \left( \frac{\textit{WLCS}(X, Y)}{f(m)} \right) \\
+    P_{wlcs} &= f^{-1} \left( \frac{\textit{WLCS}(X, Y)}{f(n)} \right) \\
+    \textit{ROUGE-W} &= \frac{(1 + \beta^2) R_{wlcs}P_{wlcs}}{R_{wlcs} + \beta^2 P_{wlcs}}
+\end{align}
+其中$\textit{WLCS}$是一个计算两个序列的加权LCS的算法，该算法奖励较长的连续的LCS。
+摘要层面的ROUGE-W与摘要层面的ROUGE-L类似。
+
 
 % Ritter -- MT-chat
 Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter:2011:DRG:2145432.2145500}，

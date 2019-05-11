@@ -39,7 +39,7 @@ $D$通常由人类撰写的语句组成，并且足够大，使得输出句子�
 系统通过某种打分机制，如词频-逆文档频率（Term Frequency-Inverse Document Frequency，TF-IDF）
 对数据库中的候选句子进行打分，并把得分较高的候选作为输出：
 \begin{align}
-    Y = \argmax_{Y\in D} Score(Y, X)
+    Y = \argmax_{Y\in D} \textit{Score}(Y, X)
 \end{align}
 可见，生成式系统和检索式系统的根本区别在于获得输出句子的机制不同。
 这两种方法各有优劣：检索式模型的输出没有语法错误并且可以限制输出的范围\upcite{DBLP:conf/sigdial/LoweSNCP16}，但是不能生成新句子；

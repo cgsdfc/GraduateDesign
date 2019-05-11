@@ -31,10 +31,7 @@ bib_index = {
     'distributed_hypothesis': 'harris54',
     'MMI': 'DBLP:conf/naacl/LiGBGD16',
     'Distill': 'DBLP:journals/corr/LiMJ17a',
-    'BLEU-Smooth': [
-
-    ]
-
+    'BLEU-Smooth': 'DBLP:conf/wmt/ChenC14',
 }
 
 urls = {

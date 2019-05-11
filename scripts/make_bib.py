@@ -1,4 +1,6 @@
 import operator
+import re
+
 import bibtexparser
 import argparse
 import logging
@@ -45,9 +47,10 @@ class BibMaker:
         'archiveprefix',
     }
 
-    def __init__(self, stop_at_empty=False, white_list_only=True):
+    def __init__(self, stop_at_empty=False, white_list_only=True, rename_entry=False):
         self.stop_at_empty = stop_at_empty
         self.white_list_only = white_list_only
+        self.rename_entry = rename_entry
 
     def count_matched_keys(self, bib: dict):
         """
@@ -78,9 +81,7 @@ class BibMaker:
         return entry
 
     def make_bibs(self, prefix, output):
-        all_bibs = self.find_all_bibs(prefix)
-        all_bibs = [self.cleanup(bib) for bib in all_bibs]
-
+        all_bibs = self.get_all_bibs(prefix)
         bib_db = BibDatabase()
         bib_db.entries = all_bibs
         writer = BibTexWriter()
@@ -96,10 +97,26 @@ class BibMaker:
         files = filter(lambda p: self.IGNORED_DIR not in p.parent.parts, files)
         return list(files)
 
-    def find_all_bibs(self, src_dir):
+    def get_all_bibs(self, src_dir):
         files = self.find_all_files(src_dir)
         bib_keys = set()
+        bib_names = set()
         bib_list = []
+
+        def get_name_for(file: pathlib.Path):
+            name = file.stem
+            name = re.sub(r'\s+', '_', name)
+            if name not in bib_names:
+                bib_names.add(name)
+                return name
+
+            import itertools
+            name += '_{}'
+            for i in itertools.count(start=1):
+                new = name.format(i)
+                if new not in bib_names:
+                    bib_names.add(new)
+                    return new
 
         for file in files:
             bib = self.extract_bib_entry(file)
@@ -111,8 +128,14 @@ class BibMaker:
                 if bib[K_ID] in bib_keys:
                     logging.warning('duplicate bib entry: %s from %s', bib[K_ID], file)
                     continue
-                bib_keys.add(bib[K_ID])
-                bib_list.append(bib)
+                name = bib[K_ID]
+                bib_keys.add(name)
+                if self.rename_entry:
+                    old_name = name
+                    name = get_name_for(file)
+                    bib[K_ID] = name
+                    logging.info('renaming entry from {} to {}'.format(old_name, name))
+                bib_list.append(self.cleanup(bib))
 
         return bib_list
 
@@ -149,11 +172,13 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output', help='output file of the merged and cleaned single file')
     parser.add_argument('-white-list-only', action='store_true', help='only keep those keys in the white list')
     parser.add_argument('-stop-at-empty', action='store_true', help='stop when an empty bib file was found')
+    parser.add_argument('-rename-entry', action='store_true', help='rename entry key to their filename')
     args = parser.parse_args()
 
     maker = BibMaker(
         stop_at_empty=args.stop_at_empty,
         white_list_only=args.white_list_only,
+        rename_entry=args.rename_entry,
     )
     maker.make_bibs(
         prefix=args.prefix,

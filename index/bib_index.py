@@ -7,6 +7,7 @@ bib_index = {
     'HowNOT': 'DBLP:conf/emnlp/LiuLSNCP16',
     'opensub': 'DBLP:conf/lrec/LisonT16',
     'Seq2Seq': 'DBLP:journals/corr/VinyalsL15',
+    'GoogleChatbot': 'DBLP:journals/corr/VinyalsL15',
     'LSDSCC': 'DBLP:conf/naacl/XuJLRWWWW18',
     'Ritter11': 'Ritter:2011:DRG:2145432.2145500',
     'NNLM': 'DBLP:journals/jmlr/BengioDVJ03',
@@ -30,6 +31,9 @@ bib_index = {
     'distributed_hypothesis': 'harris54',
     'MMI': 'DBLP:conf/naacl/LiGBGD16',
     'Distill': 'DBLP:journals/corr/LiMJ17a',
+    'BLEU-Smooth': [
+
+    ]
 
 }
 

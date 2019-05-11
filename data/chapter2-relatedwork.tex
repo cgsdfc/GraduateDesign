@@ -93,8 +93,8 @@ Seq2Seq把公式~\ref{eqn:generative_conditional_probability}~
 编码器和解码器以同一个目标函数同时训练。
 为了更好的处理长序列，Seq2Seq一般引入注意力机制（Attention Mechanism）
 \upcite{
-    DBLP:journals/corr/BahdanauCB14,
-    DBLP:conf/emnlp/LuongPM15}，使输入序列的信息不必全部通过固定长度的向量$v$传递。
+DBLP:journals/corr/BahdanauCB14,
+DBLP:conf/emnlp/LuongPM15}，使输入序列的信息不必全部通过固定长度的向量$v$传递。
 解码器能自动关注和当前输出最相关的输入部分，实现输入序列与输出序列的对自动对齐（Alignment）。
 注意力机制使传统Seq2Seq模型对较长输入也具有鲁棒性。
 
@@ -138,7 +138,39 @@ METEOR\upcite{DBLP:conf/acl/BanerjeeL05}，
 BEER\upcite{DBLP:conf/wmt/StanojevicS14}，
 CHRF\upcite{DBLP:conf/wmt/Popovic15}，
 TER\upcite{Snover2005ASO}等等。
-然而，适用于开放领域的，面向闲聊的对话系统的指标要少得多。
+然而，适用于开放领域的，面向闲聊的对话系统的指标要少得多；
+在考察本领域对自动指标的使用情况之前，先对各种指标作一个简要介绍。
+
+% BLEU
+BLEU，Bilingual Evaluation Understudy\upcite{DBLP:conf/acl/PapineniRWZ02}是Papineni在2002年提出的，
+用于机器翻译的自动评价指标。它是一个系统层面的评价指标，即评价一个系统在整个测试集上的性能。
+BLEU指标只有一个参数$N$，表示要计算的各阶n-gram准确率的最大值；例如$N = 4$表示要计算1-gram到4-gram的准确率。
+准确率指的是系统输出和参考输出之间的n-gram重叠数占系统输出总的n-gram的比例。
+BLEU由在整个数据集上计算的各阶n-gram准确率的几何平均值（Geometric Mean）和简短惩罚系数（Brevity Penalty）相乘得到。
+引入简短惩罚系数的原因是，较短的系统输出句子的准确率较高，需要矫正。
+n-gram准确率的计算公式为：
+\begin{align}
+    p_n = \frac{
+    \sum_{S \in C} \sum_{ngram \in S} count_{matched}(ngrams)
+    }{
+    \sum_{S \in C} \sum_{ngram \in S} count(ngrams)
+    }
+\end{align}
+其中$C$为测试集，$S$为测试集中的参考句子，$count_{matched}(ngrams)$以$S$中的n-gram总数为上限。
+简短惩罚系数BP的计算公式为
+\begin{align}
+    BP = \begin{cases}
+             \ 1 \ \text{if} \  g > r \\
+             \ e^{1 - r/g} \  g \leq r \\
+    \end{cases}
+\end{align}
+其中$g$是模型输出句子的长度，$r$是参考输出句子的长度。
+BLEU的最终公式为：
+\begin{align}
+    BLEU = BP \exp\left( \sum_{n=1}^N \frac{1}{N} \log p_n \right)
+\end{align}
+传统的BLEU比较粗糙，容易在句子层面给出0分，人们提出了各种平滑方案，
+
 % Ritter -- MT-chat
 Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter:2011:DRG:2145432.2145500}，
 因为不清楚面向任务的指标能不能用到面向生成的领域，他们就用了基于Amazon Mechanical Turk的人类评价。
@@ -179,6 +211,11 @@ WCE计算模型的输出中正确预测的单词占整个数据集单词数量�
 常被用于句子文本相似性（Sentence Textual Similarity）和学生输入自动打分\upcite{DBLP:conf/bea/RusL12}等任务中。
 Serban等人认为，虽然这些基于词嵌入的指标和人类评价的相关度不强，但是它们可以用于测量话题相似性（Topic Similarity），
 也就是模型的输出和参考输出的语义内容是否相似。
+
+% Google Chatbot
+Vinyals等人在\cite{DBLP:journals/corr/VinyalsL15}也使用了困惑度为评价指标。
+他们基于Seq2Seq的模型NCM（Neural Conversation Model）在OpenSubtitles上取得了17的困惑度，而5-gram模型取得了28。
+除了困惑度，他们还让用让人类评价员对比了NCM和CleverBot，并通过亲自和模型互动（Manual Inspection）来评估它。
 
 %自动摘要领域的ROUGE指标\upcite{W04-1013}也和人类评价具有较好的相关性。
 

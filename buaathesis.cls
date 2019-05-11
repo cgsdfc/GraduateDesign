@@ -308,7 +308,6 @@ The LaTeX template for thesis of BUAA]
 \graphicspath{{figure/}}
 \RequirePackage{pifont} % “秘级”后的五角星
 \RequirePackage{subfigure}
-\usepackage[lofdepth,lotdepth]{subfig}
 %%%%%%%%%% list %%%%%%%%%%
 % 列表
 

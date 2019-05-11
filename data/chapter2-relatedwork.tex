@@ -3,6 +3,7 @@
 % Email: zhengxi.tian@hotmail.com
 
 \chapter{相关工作}\label{ch:related_work}
+% ------------------ Models ------------------ %
 \section{生成式模型}\label{sec:generative_model}
 一个生成式模型定义了给定输入序列$X = x_1, x_2, \cdots, x_n$，
 任意输出序列$Y = y_1, y_2, \cdots, y_m$的条件概率：
@@ -34,7 +35,7 @@ RNN的基本思想是：序列由有序的元素组成，每一个时刻（Time 
     \label{fig:RNN_unrolled}
 \end{figure}
 
-% RNN细分
+% ------------------ RNN types ------------------ %
 根据是否使用了某种门单元，RNN可分为普通RNN\upcite{DBLP:conf/interspeech/MikolovKBCK10}，
 LSTM\upcite{DBLP:journals/neco/HochreiterS97}和GRU\upcite{DBLP:conf/emnlp/ChoMGBBSB14}。
 根据是否对反向序列（Reversed Sequence）建模，RNN可分为单向RNN（Unidirectional RNN）
@@ -44,7 +45,7 @@ LSTM\upcite{DBLP:journals/neco/HochreiterS97}和GRU\upcite{DBLP:conf/emnlp/ChoMG
 \upcite{DBLP:journals/corr/VinyalsL15}解决。
 采用多层RNN组成的深度神经网络比单层RNN能获得更好的性能\upcite{DBLP:journals/corr/VinyalsL15}。
 
-% RNNLM
+% ---------------- RNNLM ------------------ %
 RNN语言模型可以给出序列$X=x_1, x_2, \cdots, x_n$的概率分布：
 \begin{align}
     p(X) = \prod_{i=1}^{n} p(x_i|x_1, x_2, \cdots, x_{i-1})
@@ -73,7 +74,7 @@ RNN语言模型在训练时最大化训练集上的句子的对数概率：
 \end{align}
 在预测时，对模型输入消息$m$，从模型的给出的概率分布中用某种搜索方法，如Beam Search可得出响应$r$。
 
-% Seq2Seq
+% ------------------ Seq2Seq ------------------ %
 Seq2Seq框架使用两个拥有独立参数的RNN分别作为编码器和解码器。
 尽管编解码器不一定都使用RNN\upcite{DBLP:journals/corr/BahdanauCB14}，本文仅关注使用RNN的Seq2Seq变体。
 首先，编码器把输入序列$X$编码成一个定长向量$v$。
@@ -98,7 +99,7 @@ DBLP:conf/emnlp/LuongPM15}，使输入序列的信息不必全部通过固定长
 解码器能自动关注和当前输出最相关的输入部分，实现输入序列与输出序列的对自动对齐（Alignment）。
 注意力机制使传统Seq2Seq模型对较长输入也具有鲁棒性。
 
-% Beam Search，Greedy & Random Sample
+% ------------------ Decoding ------------------ %
 生成式模型仅仅定义了条件概率$p(Y|X)$，在推理阶段（Inference），需要采用某种启发式搜索算法从概率分布中
 生成输出$Y$，这个过程又称为解码（Decode）。
 最简单的搜索算法是贪心搜索（Greedy Search）：在每一时刻都输出条件概率最大的单词：
@@ -118,7 +119,7 @@ Serban等人曾发现随机取样的输出能避免单调响应的问题，并�
 算法不断迭代直到在某次对候选集的扩展中，某些候选中产生了句子结束符号（End-of-Sentence，EOS），
 于是概率最大而且完成了的候选句子将作为输出。
 
-% Diverse Beam, MMI, Stochastic Greedy Sampling.
+% ------ Diverse Beam, MMI, Stochastic Greedy Sampling ------ %
 为了增加模型输出的多样性，学者们提出了许多改进的解码算法。
 Li等人在\cite{DBLP:journals/corr/LiMJ16}中提出在标准集束搜索中，对来自相同父节点的候选加以惩罚，即鼓励来自不同父节点的候选。
 他们在\upcite{DBLP:conf/naacl/LiGBGD16}中提出用最大互信息（MMI）对标准集束搜索生成的候选列表进行重新排序，
@@ -129,7 +130,7 @@ Li等人在\cite{DBLP:journals/corr/LiMJ16}中提出在标准集束搜索中，�
 参数$K$控制了随机取样和贪心搜索之间的比例：$K$越大，算法越接近随机取样，$K$越小，算法越接近贪心搜索。
 这些改进的解码算法在不同程度上提高了响应的多样性。
 
-
+% ------------------ Metrics ------------------ %
 \section{自动化评价指标}\label{sec:automatic_metric}
 机器翻译领域已有大量和人类评价相关性较高的指标，例如
 BLEU\upcite{DBLP:conf/acl/PapineniRWZ02}，
@@ -141,7 +142,7 @@ TER\upcite{Snover2005ASO}等等。
 然而，适用于开放领域的，面向闲聊的对话系统的指标要少得多；
 在考察本领域对自动指标的使用情况之前，先对各种指标作一个简要介绍。
 
-% BLEU
+% --------------- BLEU ------------------ %
 BLEU，Bilingual Evaluation Understudy\upcite{DBLP:conf/acl/PapineniRWZ02}是Papineni在2002年提出的，
 用于机器翻译的自动评价指标。它是一个系统层面的评价指标，即评价一个系统在整个测试集上的性能。
 BLEU指标只有一个参数$N$，表示要计算的各阶n-gram准确率的最大值；例如$N = 4$表示要计算1-gram到4-gram的准确率。
@@ -153,39 +154,43 @@ n-gram准确率的计算公式为：
     p_n = \frac{
     \sum_{\mathcal{C} \in \{\textit{Candidates}\}
     \sum_{\textit{n-gram} \in \mathcal{C}}}
-    \textit{Count}_{\textit{clip}} (\textit{n-gram})
+    \textit{Count}_{\textit{clip}}(\textit{n-gram})
     }{
     \sum_{\mathcal{C'} \in \{\textit{Candidates}\}}
     \sum_{\textit{n-gram}' \in \mathcal{C'}}
     \textit{Count}(\textit{n-gram}')
     }
 \end{align}
-其中$C$为测试集，$S$为测试集中的参考句子，$count_{matched}(ngrams)$以$S$中的n-gram总数为上限。
+Candidates为系统输出的句子集合，$\textit{Count}_{\textit{clip}}(\textit{n-gram})$为截断的n-gram共现数，
+$\textit{Count}(\textit{n-gram}')$是Candidates中的总n-gram数。
 简短惩罚系数BP的计算公式为
 \begin{align}
-    \textit{BP} = \begin{cases}
-                      \ 1 \ \text{if} \  g > r \\
-                      \ e^{1 - r/g} \  g \leq r \\
+    \textit{BP} =
+    \begin{cases}
+        \ 1 \ & \text{if} \  c > r \\
+        \ e^{1 - r/c} \ & \text{if} \  c \leq r \\
     \end{cases}
 \end{align}
-其中$g$是模型输出句子的长度，$r$是参考输出句子的长度。
+其中$c$是模型输出句子的长度，$r$是参考输出句子的长度。
 BLEU的最终公式为：
 \begin{align}
-    \textit{BLEU} = \textit{BP} \exp\left( \sum_{n=1}^N \frac{1}{N} \log p_n \right)
+    \textit{BLEU} = \textit{BP} \cdot \exp \left( \sum_{n=1}^N w_n \log p_n \right)
 \end{align}
+实际使用中一般取$N = 4$，$w_n = 1 / N$。
 原始的BLEU容易在句子层面给出0分，人们提出了各种平滑处理\upcite{DBLP:conf/wmt/ChenC14}。
 本文在使用BLEU时也采用了一种平滑处理。
 
-% ROUGE
-ROUGE，Recall-Oriented Understudy for Gisting Evaluation\upcite{W04-1013}是一种基于召回率（Recall） 的自动摘要领域的指标。
-它有多个变体：ROUGE-N，ROUGE-L，ROUGE-W，以及ROUGE-SU，
-分别使用了不同的表征，如n-gram共现数、最长公共子序列（Longest Common Subsequence，LCS）和二元跳词（Skip-Bigram）等等。
+% ------------ ROUGE -------------- %
+ROUGE，Recall-Oriented Understudy for Gisting Evaluation\upcite{W04-1013}是一种基于召回率的自动摘要领域的指标。
+它有多个变体：ROUGE-N，ROUGE-L，ROUGE-W，ROUGE-S，以及ROUGE-SU，
+分别使用了不同的计数单元（Counting Unit），如n-gram共现数、最长公共子序列（Longest Common Subsequence，LCS）和二元跳词（Skip-Bigram）等等。
 这些指标的基础是信息检索领域常用的F-measure，即准确率$P$和召回率$R$的加权调和平均值：
 \begin{align}
     \textit{F-measure} = \frac{(1 + \beta^2) RP}{R + \beta^2 P}
 \end{align}
-其中$\beta$控制准确率和回调的相对重要性。
-以下无特殊说明，$n$是系统输出的句子的长度，$m$是参考输出的句子的长度。
+$\beta$控制准确率和召回率的相对重要性。
+以下无特殊说明时，当指标是句子层面的时候，$n$是系统输出的句子的长度，$m$是参考输出的句子的长度；
+当指标是摘要层面的时候，$n$是系统输出的摘要的总单词数，$m$是参考输出的摘要的总单词数。
 
 ROUGE-N利用了n-gram共现数，其公式为：
 \begin{align}
@@ -209,14 +214,13 @@ ROUGE-N利用了n-gram共现数，其公式为：
     {R_{lcs} + \beta^2 P_{lcs}}
 \end{align}
 $LCS$是计算两个序列的最长公共子序列的长度的函数。
-摘要层面（Summary Level）的ROUGE-L的公式为：
+摘要层面的ROUGE-L的公式为：
 \begin{align}
     R_{lcs} &= \frac{\sum_{i=1}^\mu \textit{LCS}_\cup(r_i, C)}{m} \\
     P_{lcs} &= \frac{\sum_{i=1}^\mu \textit{LCS}_\cup(r_i, C)}{n} \\
     \textit{ROUGE-L} &= \frac{(1 + \beta^2) R_{lcs}P_{lcs}}{R_{lcs} + \beta^2 P_{lcs}}
 \end{align}
-$\mu$是系统输出的摘要的句子的数量， $\textit{LCS}_\cup(r_i, C)$计算了参考句子$r_i$和候选摘要$C$（由多个句子组成）的LCS的并集。
-$m$是参考摘要的总词数，$n$是系统摘要的总次数。
+$\mu$是系统输出的摘要句子的数量， $\textit{LCS}_\cup(r_i, C)$计算了参考句子$r_i$和候选摘要$C$（由多个句子组成）的LCS的并集。
 
 句子层面的ROUGE-W的公式为：
 \begin{align}
@@ -227,6 +231,14 @@ $m$是参考摘要的总词数，$n$是系统摘要的总次数。
 其中$\textit{WLCS}$是一个计算两个序列的加权LCS的算法，该算法奖励较长的连续的LCS。
 摘要层面的ROUGE-W与摘要层面的ROUGE-L类似。
 
+二元跳词是句子中保持句中顺序的一对单词，两个单词之间可以有任意数量的其他单词。基于二元跳词的句子层面ROUGE-S定义为：
+\begin{align}
+    R_{skip2} &= \frac{\textit{SKIP2}(X, Y)}{C(m, 2)} \\
+    P_{skip2} &= \frac{\textit{SKIP2}(X, Y)}{C(n, 2)} \\
+    \textit{ROUGE-S} &= \frac{(1 + \beta^2) R_{skip2}P_{skip2}}{R_{skip2} + \beta^2 P_{skip2}}
+\end{align}
+$C(\cdot, \cdot)$为组合数。摘要层面的ROUGE-S相当于把摘要看作首尾相连的句子来计算。
+ROUGE-SU是ROUGE-S加入了Unigram的扩展。
 
 % Ritter -- MT-chat
 Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter:2011:DRG:2145432.2145500}，

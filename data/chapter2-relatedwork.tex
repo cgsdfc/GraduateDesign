@@ -259,6 +259,27 @@ METEOR的最终公式为：
     \textit{METEOR} = \textit{Fmean} * (1 - \textit{Penalty})
 \end{align}
 
+% --------- Perplexity ------------ %
+困惑度（Perplexity，PPL）是一种衡量统计语言模型性能的指标。
+困惑度$P$可以形象的表述为：一个语言模型在预测一个词的时候，平均需要从$P$个词中等可能的选出一个,
+因此，困惑度越低，语言模型在选择一个词时就越不“困惑”。
+困惑度的计算公式为：
+\begin{align}
+    \textit{PPL} = b^{-\frac{1}{N} \sum_{i=1}^N \log_b p(x_i)}
+\end{align}
+$b$是常量，通常取自然对数、10或者2。
+$N$是测试集的样本数，$x_i$是一个样本，在语言模型中它是一个句子，
+在生成式模型中它是一对输入输出序列$(X, Y)$。
+$p(x_i)$是模型赋给样本的概率。
+一个好的模型应该给测试集的样本赋予较高概率，
+所以好的模型PPL较低。
+实际在自然语言处理中使用的PPL还要除以文本中的总单词数，得到平均每个词的困惑度（Perplexity per-word）：
+\begin{align}
+    \textit{PPL-w} = \frac{1}{\#\textit{words}} \exp(-\frac{1}{N} \sum_{i=1}^N \log p(x_i))
+\end{align}
+
+% --------- embedding based ------------ %
+
 
 % Ritter -- MT-chat
 Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter11}。
@@ -305,11 +326,9 @@ Vinyals等人在\cite{GoogleChatbot}也使用了困惑度为评价指标。
 他们基于Seq2Seq的模型NCM（Neural Conversation Model）在OpenSubtitles上取得了17的困惑度，而5-gram模型取得了28。
 除了困惑度，他们还让用让人类评价员对比了NCM和CleverBot，并通过亲自和模型互动（Manual Inspection）来评估它。
 
-%自动摘要领域的ROUGE指标\upcite{ROUGE}也和人类评价具有较好的相关性。
-
 
 \section{公开的对话数据集}\label{sec:public_dataset}
-
+生成式对话领域需要的数据集一般是
 \section{本章小结}\label{sec:rw_conclusion}
 %这一节总结所有提及的指标，给它们分一下类，然后简要说明每一类
 %指标的特点，或者是它考察的方面。

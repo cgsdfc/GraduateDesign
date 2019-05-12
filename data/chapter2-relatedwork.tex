@@ -279,7 +279,47 @@ $p(x_i)$是模型赋给样本的概率。
 \end{align}
 
 % --------- embedding based ------------ %
-
+词嵌入（Word Embedding）指标是一类建立在分布式假设
+\upcite{distributed_hypothesis,Mathematical_structures_of_language}（Distributed Hypothesis）上，
+用分布式语义（Distributed Semantic）来衡量两个句子的相似程度的指标，
+常被用于句子文本相似性（Sentence Textual Similarity）和学生输入自动打分\upcite{GreedyAndOptimal}等任务中。
+这类指标一般用某种组合方式从单词的向量表示得到句子的向量表示，
+再用余弦相似度（Cosine Similarity）测量两个句子向量的相似程度\upcite{VectorCompose}。
+\begin{align}
+    \text{cos}(x, y) = \frac{x\cdot y}
+    {\left\| x \right\| \cdot \left\| y \right\|} \\
+\end{align}
+最常见组合方式是对单词向量取平均值，这类似于词袋表示（Bag-of-Words），对应的指标就是向量平均值（Vector Average）：
+\begin{align}
+    \bar{e_r} = \frac{\sum_{w \in r} e_w}{|\sum_{w' \in r} e_{w'}|} \\
+    \textit{Vector-Average} = \cos(\bar{e_r}, \bar{e}_{\hat{r}})
+\end{align}
+$r$是参考输出，$\hat{r}$是系统输出，$w$是句子中的一个单词。
+另外一种组合方式被称为向量极值（Vector Extrema），它把单词向量每个维度上最极端的值作为句子向量在该维度上的值\upcite{Vector_Extrema}：
+\begin{align}
+    \text{extrema}(d_i) =
+    \begin{cases}
+        \ \max d_i & \text{if}\ \max d_i \geq |\min d_i| \\
+        \ \min d_i & \text{otherwise}
+    \end{cases} \\
+    e_r^{ex} = [\text{extrema}(d_1), \cdots, \text{extrema}(d_n)] \\
+    \textit{Vector-Extrema} = \cos( e_r^{ex}, e_{\hat{r}}^{ex} )
+\end{align}
+$e_r^{ex}$是参考输出的向量极值表示，$e_{\hat{r}}^{ex}$是系统输出的向量极值表示，
+$[\cdot, \cdot]$表示连接多个标量形成一个向量。
+最后一种方法是贪心匹配（Greedy Matching），
+它得名于边加权的二部图（Weighted Bipartite Graph）的最大匹配问题\upcite{GreedyAndOptimal}。
+把两个句子的单词看做二部图的节点，任意两个节点之间有一条边，边的权重定义为两个单词的余弦相似度，一个匹配
+定义为一对点，问如何构造一个匹配的集合，使其权重之和最大？贪心匹配给出了一种贪心方法：
+\begin{align}
+G(r, \hat{r}) = \frac{
+\sum_{w \in r} \max_{\hat{w} \in \hat{r}} \cos(e_w, e_{\hat{w}})
+}{ |r| } \\
+    \textit{Greedy-Matching} = \frac{
+G(r, \hat{r}) + G(\hat{r}, r)
+}{2}
+\end{align}
+除了上述三种方法外，还有很多其他方法\upcite{VectorCompose}。
 
 % Ritter -- MT-chat
 Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter11}。
@@ -315,9 +355,6 @@ WCE计算模型的输出中正确预测的单词占整个数据集单词数量�
 
 % Serban -- VHRED
 在Serban等人在VHRED模型的评价中主要使用了基于词嵌入的指标\upcite{VHRED}。
-这是一类建立在分布式假设\upcite{distributed_hypothesis,Mathematical_structures_of_language}（Distributed Hypothesis）上，
-用分布式语义（Distributed Semantic）来衡量两个句子的相似程度的指标，
-常被用于句子文本相似性（Sentence Textual Similarity）和学生输入自动打分\upcite{GreedyAndOptimal}等任务中。
 Serban等人认为，虽然这些基于词嵌入的指标和人类评价的相关度不强，但是它们可以用于测量话题相似性（Topic Similarity），
 也就是模型的输出和参考输出的语义内容是否相似。
 

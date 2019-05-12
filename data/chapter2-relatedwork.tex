@@ -43,6 +43,7 @@ LSTM\upcite{LSTM}和GRU\upcite{GRU}。
 \upcite{GoogleChatbot}解决。
 采用多层RNN组成的深度神经网络比单层RNN能获得更好的性能\upcite{GoogleChatbot}。
 
+\subsection{RNN语言模型}\label{subsec:RNNLM}
 % ---------------- RNNLM ------------------ %
 RNN语言模型可以给出序列$X=x_1, x_2, \cdots, x_n$的概率分布：
 \begin{align}
@@ -72,6 +73,7 @@ RNN语言模型在训练时最大化训练集上的句子的对数概率：
 \end{align}
 在预测时，对模型输入消息$m$，从模型的给出的概率分布中用某种搜索方法，如Beam Search可得出响应$r$。
 
+\subsection{Seq2Seq框架}\label{subsec:Seq2Seq}
 % ------------------ Seq2Seq ------------------ %
 Seq2Seq框架使用两个拥有独立参数的RNN分别作为编码器和解码器。
 尽管编解码器不一定都使用RNN\upcite{JointTransAlign}，本文仅关注使用RNN的Seq2Seq变体。
@@ -97,6 +99,7 @@ EffectiveAttention}，使输入序列的信息不必全部通过固定长度的�
 解码器能自动关注和当前输出最相关的输入部分，实现输入序列与输出序列的对自动对齐（Alignment）。
 注意力机制使传统Seq2Seq模型对较长输入也具有鲁棒性。
 
+\subsection{解码算法}\label{subsec:decode}
 % ------------------ Decoding ------------------ %
 生成式模型仅仅定义了条件概率$p(Y|X)$，在推理阶段（Inference），需要采用某种启发式搜索算法从概率分布中
 生成输出$Y$，这个过程又称为解码（Decode）。
@@ -130,6 +133,7 @@ Li等人在\cite{DiverseBeam}中提出在标准集束搜索中，对来自相同
 
 % ------------------ Metrics ------------------ %
 \section{自动化评价指标}\label{sec:automatic_metric}
+\subsection{评价指标简介}\label{subsec:metrics_intro}
 机器翻译领域已有大量和人类评价相关性较高的指标，例如
 BLEU\upcite{BLEU}，
 NIST\upcite{NIST}，
@@ -312,15 +316,23 @@ $[\cdot, \cdot]$表示连接多个标量形成一个向量。
 把两个句子的单词看做二部图的节点，任意两个节点之间有一条边，边的权重定义为两个单词的余弦相似度，一个匹配
 定义为一对点，问如何构造一个匹配的集合，使其权重之和最大？贪心匹配给出了一种贪心方法：
 \begin{align}
-G(r, \hat{r}) = \frac{
-\sum_{w \in r} \max_{\hat{w} \in \hat{r}} \cos(e_w, e_{\hat{w}})
-}{ |r| } \\
+    G(r, \hat{r}) = \frac{
+    \sum_{w \in r} \max_{\hat{w} \in \hat{r}} \cos(e_w, e_{\hat{w}})
+    }{ |r| } \\
     \textit{Greedy-Matching} = \frac{
-G(r, \hat{r}) + G(\hat{r}, r)
-}{2}
+    G(r, \hat{r}) + G(\hat{r}, r)
+    }{2}
 \end{align}
-除了上述三种方法外，还有很多其他方法\upcite{VectorCompose}。
+除了上述三种组合方法外，还有很多其他方法\upcite{VectorCompose}。
 
+% -------- Distinct-N ---------- %
+Distinct-N是Li等人提出的衡量句子层面的n-gram多样性的简单指标\upcite{MMI}。
+它测量了一个句子不重复的n-gram数量除以句子的长度，公式为：
+\begin{align}
+    \textit{distinct} = \frac{\#\textit{unique-ngrams}}{\#\textit{words}}
+\end{align}
+
+\subsection{评价指标使用情况}\label{subsec:metrics_usage}
 % Ritter -- MT-chat
 Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter11}。
 因为不清楚面向任务的指标能不能用到面向生成的领域，他们就用了基于Amazon Mechanical Turk的人类评价。

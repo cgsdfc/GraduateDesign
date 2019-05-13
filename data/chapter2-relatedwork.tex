@@ -312,9 +312,9 @@ $r$是参考输出，$\hat{r}$是系统输出，$w$是句子中的一个单词�
 $e_r^{ex}$是参考输出的向量极值表示，$e_{\hat{r}}^{ex}$是系统输出的向量极值表示，
 $[\cdot, \cdot]$表示连接多个标量形成一个向量。
 最后一种方法是贪心匹配（Greedy Matching），
-它得名于边加权的二部图（Weighted Bipartite Graph）的最大匹配问题\upcite{GreedyAndOptimal}。
+它得名于边加权的二部图（Weighted Bipartite Graph）的最大匹配问题\upcite{GreedyAndOptimal}：
 把两个句子的单词看做二部图的节点，任意两个节点之间有一条边，边的权重定义为两个单词的余弦相似度，一个匹配
-定义为一对点，问如何构造一个匹配的集合，使其权重之和最大？贪心匹配给出了一种贪心方法：
+定义为一对点，问如何构造一个匹配的集合，使其权重之和最大？贪心匹配给出了一种贪心算法：
 \begin{align}
     G(r, \hat{r}) = \frac{
     \sum_{w \in r} \max_{\hat{w} \in \hat{r}} \cos(e_w, e_{\hat{w}})
@@ -333,11 +333,43 @@ Distinct-N是Li等人提出的衡量句子层面的n-gram多样性的简单指�
 \end{align}
 
 \subsection{评价指标使用情况}\label{subsec:metrics_usage}
+生成式对话系统并不像机器翻译领域有许多和人类评价相关性高的指标。
+对话的研究者们很早就意识到了这一点\upcite{Ritter11,GoogleChatbot,Shang,HRED}，
+所以他们常常使用人类评价作为核心的评判标准，有时用一些指标来衡量模型某一方面的性质，
+但很少把指标作为评价系统的主要手段。
+此外，展示和对比不同模型的响应输出也是这个领域常见的分析手段，通常称为定性分析（Qualitative Analysis），
+表~\ref{tab:qualitative_analysis}~展示了模型GoogleChatbot对哲学问题的响应。
+\begin{table}[H]
+    \centering
+    \caption{定性分析的例子\upcite{GoogleChatbot}}
+    \label{tab:qualitative_analysis}
+    \begin{tabular}{ll}
+        %        \textbf{Human:} &  \\
+        %        \textbf{Machine:} &  \\
+        \textbf{Human:} & what is the purpose of life ? \\
+        \textbf{Machine:} & to serve the greater good .\\
+        \textbf{Human:} & what is the purpose of living ? \\
+        \textbf{Machine:} & to live forever . \\
+        \textbf{Human:} & what is the purpose of existence ? \\
+        \textbf{Machine:} & to find out what happens when we get
+        to the planet earth . \\
+        \textbf{Human:} & where are you now ? \\
+        \textbf{Machine:} & i' m in the middle of nowhere . \\
+        \textbf{Human:} & what is the purpose of dying ? \\
+        \textbf{Machine:} & to have a life . \\
+        \textbf{Human:} & what is the purpose of being intelligent ? \\
+        \textbf{Machine:} & to find out what it is . \\
+        \textbf{Human:} & what is the purpose of emotions ? \\
+        \textbf{Machine:} & i don' t know .
+    \end{tabular}
+\end{table}
+
 % Ritter -- MT-chat
 Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter11}。
-因为不清楚面向任务的指标能不能用到面向生成的领域，他们就用了基于Amazon Mechanical Turk的人类评价。
+因为不清楚面向任务的指标能不能用于评价生成式模型，他们就用了基于Amazon Mechanical Turk的人类评价。
 他们利用人类评价的数据考察了BLEU在这方面的适用性，并发现系统的BLEU得分非常低，和人类评价的相关性也不是很高，
 因此他们认为BLEU不能直接应用到本领域。
+
 
 % Shang -- NRM
 % We use abbreviation hereby. Remember to introduce their fullname before!
@@ -360,20 +392,22 @@ Serban等人在HRED模型的评价中使用了困惑度和单词分类错误（W
 低的困惑度表示模型对数据的概率分布的拟合程度好。
 Serban等人认为困惑度是适用的，因为在存在多个合理输出的情况下，困惑度总是衡量生成单一参考输出的概率，
 这意味着它能可靠的衡量模型的质量。
-WCE计算模型的输出中正确预测的单词占整个数据集单词数量的比例，正确预测的单词要求单词在
-句子中的顺序都要正确，所以它是一个比困惑度更严苛的指标。
-尽管使用了自动化指标，Serban等人指出：这些指标和他们想要衡量的语法正确度（Grammatical Correctness）
-和语义连贯性（Semantic Coherence）之间的相关性并不明朗。值得注意的是，他们并没有使用人类评价。
+WCE计算模型的输出中正确预测的单词占整个数据集单词数量的比例，
+这里的“正确预测”要求单词在句子中的顺序也要正确，所以它是一个比困惑度更严苛的指标。
+尽管使用了自动化指标，Serban等人指出：这些指标与他们想要衡量的语法正确度（Grammatical Correctness）
+和语义连贯性（Semantic Coherence）之间的相关性并不明朗。
+值得注意的是，他们并没有使用人类评价。
 
 % Serban -- VHRED
-在Serban等人在VHRED模型的评价中主要使用了基于词嵌入的指标\upcite{VHRED}。
-Serban等人认为，虽然这些基于词嵌入的指标和人类评价的相关度不强，但是它们可以用于测量话题相似性（Topic Similarity），
-也就是模型的输出和参考输出的语义内容是否相似。
+Serban等人在VHRED模型的评价中主要使用了基于词嵌入的指标\upcite{VHRED}和人类评价。
+Serban等人认为，虽然这些基于词嵌入的指标和人类评价的相关度不高，但是它们可以用于测量话题相似性（Topic Similarity），
+也就是模型的输出和参考输出的语义内容是否相近。
+模型的输出和参考输出可能没有n-gram重叠，但是语义的距离总是可以衡量的。
 
 % Google Chatbot
-Vinyals等人在\cite{GoogleChatbot}也使用了困惑度为评价指标。
-他们基于Seq2Seq的模型NCM（Neural Conversation Model）在OpenSubtitles上取得了17的困惑度，而5-gram模型取得了28。
-除了困惑度，他们还让用让人类评价员对比了NCM和CleverBot，并通过亲自和模型互动（Manual Inspection）来评估它。
+Vinyals等人在\cite{GoogleChatbot}的评估中使用了困惑度，定性分析和人类评价。
+他们展示了模型在不同话题的对话中的输出，定性的分析了模型的优缺点。
+他们认为这些测评方法都存在明显的弊端，而设计出能快速评价对话模型的好指标仍有待学界研究。
 
 
 \section{公开的对话数据集}\label{sec:public_dataset}

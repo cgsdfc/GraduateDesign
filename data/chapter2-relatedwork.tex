@@ -412,6 +412,12 @@ Vinyals等人在\cite{GoogleChatbot}的评估中使用了困惑度，定性分�
 
 \section{公开的对话数据集}\label{sec:public_dataset}
 本领域在数据集的采集方面已经取得了很大进展，表~\ref{tab:dataset_list}~列举了一些常见数据集。
+对于表~\ref{tab:dataset_list}~中的数据集，大规模是指对话数量在1M以上的，中等规模是指对话数量在50K--1M之间的。
+Sina Weibo Corpus是一个中文数据集，其他都是英文数据集。
+数据集\cite{supreme,wiki_pages,tennis_corpus,parliamentary,gone_awry,movie_dialogs_corpus,DailyDialog}都具有丰富的元信息。
+Twitter Triple Corpus由于隐私保护政策的原因，不能公开原始数据。
+本文把注意力集中在三个数据集上：Ubuntu Dialogue Corpus，OpenSubtitles，LSDSCC，
+因为它们分别代表了三个常见的对话领域，分别是：技术支持，电影字幕和在线论坛讨论。
 
 \begin{table}[H]
     \centering
@@ -422,8 +428,8 @@ Vinyals等人在\cite{GoogleChatbot}的评估中使用了困惑度，定性分�
         名称 & 规模 & 领域 & 是否公开 \\
         \midrule
         Ubuntu Dialogue Corpus\upcite{ubuntu_corpus} & 大 & 技术支持 & 是 \\
-        Twitter Triple Corpus\upcite{Ritter11,DCGM,MMI} & 大 & 短对话多领域闲聊
-        & 是 \\
+        Twitter Corpus\upcite{Ritter11} & 大 & 短对话多领域闲聊 & 是 \\
+        Twitter Triple Corpus\upcite{DCGM} & 大 & Twitter Corpus的扩展版本 & 是 \\
         OpenSubtitles\upcite{OPUS,opensub} & 大 & 电影字幕（Subtitles） & 是 \\
         LSDSCC\upcite{LSDSCC} & 中 & Reddit论坛电影板块 & 是 \\
         Supreme Court Corpus\upcite{supreme} & 中 & 美国高等法院辩论 & 是\\
@@ -441,22 +447,24 @@ Vinyals等人在\cite{GoogleChatbot}的评估中使用了困惑度，定性分�
     \end{tabular}
 \end{table}
 
-%\protected\footnote{Twitter相关的数据由Twitter隐私条款保护}
-%\protected\footnote{http://www.opensubtitles.org}
-
-
-
 % --------- Ubuntu ---------- %
+Ubuntu Dialogue Corpus是Lowe等人从Freenode IRC网络的Ubuntu板块的聊天日志\footnote{https://irclogs.ubuntu.com/}
+中获取的技术性两人多轮对话。这个数据集中包含了大量技术符号，比如路径、命令、URL，还有笔误（Typo），缩写（Abbreviation）和俚语（Slang）。
+它的对话数量多达930,000（接近1M），庞大的数据量为数据驱动的模型提供了极佳的试验场。
+它的多轮特性为模型提供了更长的上下文，有助于能利用多轮对话的模型生成更有意义的响应。
 
 % --------- OpenSubtitles -------- %
+OpenSubtitles是the Open Parallel Corpus，OPUS工程的一部分。
+它是从一个人们可以自由上传和下载电影字幕的网站\footnote{http://www.opensubtitles.org}的数据库中获取的，
+庞大而充满噪音的开发领域数据集。
+由于OPUS的目的是收集机器翻译所用到的双语文库（Parallel Corpus），OpenSubtitles也是一个用于机器翻译的双语文库，
+它里面并没有对话数据集所需要的轮换信息（Turn-Taking），而且也没有区分旁白、独白和对白。
+Sordoni等人在\cite{GoogleChatbot}中把OpenSubtitles用到对话领域，
+他们把相邻的两个句子视为消息和响应，并且每一个句子既是消息又是响应。
+Li等人在\cite{MMI}中也采取了把相邻句子分别作为模型的输入和输出的方法。
+尽管充满噪音，OpenSubtitles应该是目前最大规模的电影字幕数据集。
 
 % --------- LSDSCC ------------- %
-
-% --------- Twitter ------------- %
-
-% --------- Cornell & MovieDialogueCorpus --------- %
-
-% -------- DailyDialog, MovieTriple, Movie-DiC, SubTle ------ %
 
 
 \section{本章小结}\label{sec:rw_conclusion}

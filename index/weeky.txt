@@ -5,7 +5,6 @@
 5.修复Adem指标模型，AutoTuring
 6.修复Rubber指标模型，ref和unref
 7.抢占式训练和训练进度监控方法。
-8.修复Rubber。
 9.从Seq2SeqChatbots中获得大量模型的情报。
 10.收集METEOR指标时发现了大量的MT指标，均找到代码实现。
 11.发现了Cornell数据集，元信息丰富，自带Turn Taking，规模中等，格式json，包括parliament，supreme，movie，reddit-small，tennis。reddit本身是多个subreddit组成的巨大的数据集。

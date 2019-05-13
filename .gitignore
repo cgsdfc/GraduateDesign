@@ -40,3 +40,5 @@
 # generated
 all.bib
 info
+
+tmp/

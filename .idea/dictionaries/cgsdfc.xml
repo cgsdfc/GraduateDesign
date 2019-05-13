@@ -8,6 +8,7 @@
       <w>datasets</w>
       <w>gisting</w>
       <w>hred</w>
+      <w>imsdb</w>
       <w>lsdscc</w>
       <w>qualical</w>
       <w>ritter</w>
@@ -15,6 +16,7 @@
       <w>sordoni</w>
       <w>unigram</w>
       <w>unscalable</w>
+      <w>wikipedia</w>
     </words>
   </dictionary>
 </component>

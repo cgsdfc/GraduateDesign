@@ -411,7 +411,50 @@ Vinyals等人在\cite{GoogleChatbot}的评估中使用了困惑度，定性分�
 
 
 \section{公开的对话数据集}\label{sec:public_dataset}
-生成式对话领域需要的数据集一般是
+本领域在数据集的采集方面已经取得了很大进展，表~\ref{tab:dataset_list}~列举了一些常见数据集。
+
+\begin{table}[H]
+    \centering
+    \caption{数据集一览}
+    \label{tab:dataset_list}
+    \begin{tabular}{llll}
+        \toprule
+        名称 & 规模 & 领域 & 是否公开 \\
+        \midrule
+        Ubuntu Dialogue Corpus\upcite{ubuntu_corpus} & 大 & 技术支持 & 是 \\
+        Twitter Triple Corpus\upcite{Ritter11,DCGM,MMI} & 大 & 短对话多领域闲聊
+        & 是 \\
+        OpenSubtitles\upcite{OPUS,opensub} & 大 & 电影字幕 & 是 \\
+        LSDSCC\upcite{LSDSCC} & 中 & Reddit论坛电影板块 & 是 \\
+        Supreme Court Corpus\upcite{supreme} & 中 & 美国高等法院辩论 & 是\\
+        Wikipedia Talk Pages Corpus\upcite{wiki_pages} & 中 & 维基百科编辑者在线讨论 & 是 \\
+        Tennis Corpus\upcite{tennis_corpus} & 中 & 网球比赛赛后新闻发布会 & 是 \\
+        Parliament Corpus\upcite{parliamentary} & 中 & 国会讨论 & 是 \\
+        Conversations Gone Awry Corpus\upcite{gone_awry} & 中 & 维基百科讨论页面吵架集锦 & 是 \\
+        Movie Dialogs Corpus\upcite{movie_dialogs_corpus} & 中 & 电影对白 & 是 \\
+        Movie-DiC\upcite{Movie-DiC} & 中 & IMSDB电影对白 & 否 \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+%\protected\footnote{Twitter相关的数据由Twitter隐私条款保护}
+%\protected\footnote{http://www.opensubtitles.org}
+
+
+
+% --------- Ubuntu ---------- %
+
+% --------- OpenSubtitles -------- %
+
+% --------- LSDSCC ------------- %
+
+% --------- Twitter ------------- %
+
+% --------- Cornell & MovieDialogueCorpus --------- %
+
+% -------- DailyDialog, MovieTriple, Movie-DiC, SubTle ------ %
+
+
 \section{本章小结}\label{sec:rw_conclusion}
-%这一节总结所有提及的指标，给它们分一下类，然后简要说明每一类
-%指标的特点，或者是它考察的方面。
+

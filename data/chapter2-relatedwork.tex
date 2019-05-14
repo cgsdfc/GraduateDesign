@@ -404,20 +404,20 @@ WCE计算模型的输出中正确预测的单词占整个数据集单词数量�
 Serban等人在VHRED模型的评价中主要使用了基于词嵌入的指标\upcite{VHRED}和人类评价。
 Serban等人认为，虽然这些基于词嵌入的指标和人类评价的相关度不高，但是它们可以用于测量话题相似性（Topic Similarity），
 也就是模型的输出和参考输出的语义内容是否相近。
-模型的输出和参考输出可能没有n-gram重叠，但是语义的距离总是可以衡量的。
+模型的输出和参考输出可能没有n-gram重叠，但分布式语义可以给出非0的相似性。
 
 % Google Chatbot
-Vinyals等人在\cite{GoogleChatbot}的评估中使用了困惑度，定性分析和人类评价。
-他们展示了模型在不同话题的对话中的输出，定性的分析了模型的优缺点。
-他们认为这些测评方法都存在明显的弊端，而设计出能快速评价对话模型的好指标仍有待学界研究。
+用Vinyals等人对\cite{GoogleChatbot}的评估结束本节：
+他们使用了困惑度，定性分析和人类评价。
+但是，他们认为这些测评方法都存在明显的弊端，而设计出能快速评价对话模型的好指标仍有待学界研究。
 
 
-\section{公开的对话数据集}\label{sec:public_dataset}
+\section{生成式对话的数据集}\label{sec:public_dataset}
 本领域在数据集的采集方面已经取得了很大进展，表~\ref{tab:dataset_list}~列举了一些常见数据集，
 大规模是指对话数量在1M以上的，中等规模是指对话数量在50K--1M之间的\footnote{1K = 1024，1M = 1024 K，1G = 1024 M。}。
 Sina Weibo Corpus是一个中文数据集，其他都是英文数据集。
 Twitter相关的数据集由于隐私保护政策的原因，不能公开原始数据。
-数据集\cite{supreme,wiki_pages,tennis_corpus,parliamentary,gone_awry,movie_dialogs_corpus,DailyDialog}都具有丰富的元信息，
+数据集\cite{supreme,wiki_pages,tennis_corpus,parliamentary,gone_awry,movie_dialogs_corpus,DailyDialog}都具有元信息，
 如时间戳，对话双方身份信息等等。
 数据集\cite{DailyDialog,LSDSCC,DCGM}有人类标注信息，如情感、话题和方面（Aspect）等。
 元信息和人类标注信息提供了额外的表征，对构建更智能的对话系统很有帮助。
@@ -459,19 +459,22 @@ Ubuntu Dialogue Corpus是Lowe等人从Freenode IRC网络的Ubuntu板块的聊天
 它的多轮特性为模型提供了更长的上下文，有助于能利用多轮对话的模型生成更有意义的响应。
 
 % --------- OpenSubtitles -------- %
-OpenSubtitles是the Open Parallel Corpus，OPUS工程的一部分。
+OpenSubtitles是The Open Parallel Corpus，OPUS项目的一部分。
 它是从一个人们可以自由上传和下载电影字幕的网站\footnote{http://www.opensubtitles.org}的数据库中获取的，
-庞大而充满噪音的开发领域数据集。
+庞大而充满噪音的开放领域数据集。
+它的对话数量达到了80M。
 由于OPUS的目的是收集机器翻译所用到的双语文库（Parallel Corpus），OpenSubtitles也是一个用于机器翻译的双语文库，
 它里面并没有对话数据集所需要的轮换信息（Turn-Taking），而且也没有区分旁白、独白和对白。
 Sordoni等人在\cite{GoogleChatbot}中把OpenSubtitles用到对话领域，
 他们把相邻的两个句子视为消息和响应，并且每一个句子既是消息又是响应。
-Li等人在\cite{MMI}中也采取了把相邻句子分别作为模型的输入和输出的方法。
+Li等人在\cite{MMI,persona,Future,DiverseBeam,
+Distill,deep_RL,Adversarial}中对OpenSubtitles也采用了类似办法。
 尽管充满噪音，OpenSubtitles仍然是目前最大规模的电影字幕数据集。
 
 % --------- LSDSCC ------------- %
-LSDSCC，A Large Scale Domain-Specific Conversational Corpus是一个单一领域的对话数据集\upcite{LSDSCC}。
+LSDSCC，A Large Scale Domain-Specific Conversational Corpus是一个单一领域的单轮对话数据集\upcite{LSDSCC}。
 有研究认为，单一领域和专注的话题有助于模型规避单调的响应。
+它有738,095个对话，词汇表比较大，达到了50K。
 作者从Reddit的电影板块\footnote{https://www.reddit.com/r/datasets}中获取了原始数据，
 设计了一套尽可能保留语料信息的清理程序，还使用人类评价员对消息和响应的相关度进行评价，
 最终得到一个高质量的信息-响应对（Query-Response Pair）文库。
@@ -488,13 +491,13 @@ LSDSCC，A Large Scale Domain-Specific Conversational Corpus是一个单一领�
 
 在指标方面，对话系统的指标还不能像机器翻译的指标那样准确的评价对话系统。
 可能最大的问题就是，如何提高指标和人类评价的相关性。
-导致这个困境的核心原因可能是对话的响应具有内在的，固有的语义多样性，
+导致这个困境的核心原因可能是对话的响应具有固有的语义多样性，
 这个事实可能导致两个结果：1. 用机器翻译的表征，比如单词层面的n-gram，字符层面的n-gram，
-对齐等等，无法有效捕捉语义层面的表征。
-2. 单纯使用衡量相似性的指标，无法捕捉多样性的维度，从而与人类评价不符。
+对齐等等，无法有效捕捉语义层面的信息。
+2. 单纯使用衡量相似性的指标无法捕捉多样性的维度，从而与人类评价不符。
 
 在数据集方面，本领域已经积累了各种领域（Domain）的数据，从技术性问答、社交媒体闲聊，到电影对白和字幕等等。
-既有大规模的数据集，也有中等规模，但是元信息或者人类标注信息丰富的数据集。
+既有大规模的数据集，也有中等规模，但是具有元信息或者人类标注信息的数据集。
 因为数据集的增多，一些数据集在领域上出现了重合，比如Movie Dialogs Corpus，MovieTriples和Movie-DiC都是
 电影对白领域；OpenSubtitles和SubTle都是电影字幕领域，Twitter Corpus和Sina Weibo Corpus都是短文本闲聊等等。
 尽管人类标注是对话文本的重要补充，但是由于其代价的高昂，所得的数据量往往比较少；
@@ -502,7 +505,7 @@ LSDSCC，A Large Scale Domain-Specific Conversational Corpus是一个单一领�
 相比与人类标注，元信息更容易获取，规模不受限制。
 并且，人类标注和元信息都有助于模型生成更加多样和连贯的响应\upcite{persona,Topic_Aware,ECM}。
 因此，数据集的收集过程应该充分保留原始数据中的元信息； 对话系统应该充分利用元信息。
-同时，我们还应该发展从对话文本中无监督的提取元信息的方法。
+同时，还应该发展从对话文本中无监督的提取元信息的方法。
 
 尽管本领域取得了丰硕的成果，我们应该持续关注并且不断探索上述难题的解决方案。
 本文就试图在一个多维度的设定下，研究不同的评价指标和不同的模型以及数据集之间的交互关系。

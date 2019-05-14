@@ -253,12 +253,15 @@ The LaTeX template for thesis of BUAA]
 
 %%%%%%%%%% reference %%%%%%%%%%
 % 参考文献
+% -- try to fix the caption-citation problem.
+%\RequirePackage{notoccite}
 
-\bibliographystyle{abbrv} % 参考文献格式
 \RequirePackage[sort&compress]{natbib}
+\RequirePackage{hypernat}
+\bibliographystyle{buaathesis} % 参考文献格式
+
 \bibpunct{[}{]}{,}{n}{}{}
 \setlength{\bibsep}{0pt}
-\RequirePackage{hypernat}
 \newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
 
 %%%%%%%%%% table %%%%%%%%%%

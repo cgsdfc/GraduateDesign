@@ -30,13 +30,14 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}所示。
 对话系统又可以分为生成式对话系统（Generative System）和检索式对话系统（Retrieval-Based System）
 \upcite{corpus_survey,NUC}。
 如果一个系统能生成训练集里没有的句子，就把它称为“生成式系统”\upcite{HowNot}。
-两种系统的区别在于：生成式系统以输入句子为条件，把条件概率最大的句子作为输出。
+生成式系统以输入句子为条件，把条件概率最大的句子作为输出。
 由于搜索空间过于庞大，在实际中通常采用某种启发式搜索方法，如集束搜索（Beam Search），贪婪搜索（Greedy Search）
 和随机取样（Random Sample）。
 设$X$为输入句子，$Y$为输出句子，$U$是全部句子的集合，生成式模型的一般表示为：
 \begin{align}
     Y = \argmax_{Y\in U} \left(p(Y|X)\right)
 \end{align}
+
 检索式系统根据输入句子从一个数据库$D$中检索输出句子。
 $D$通常由人类撰写的语句组成，并且足够大，使得输出句子不容易重复。
 系统通过某种打分机制，如词频-逆文档频率（Term Frequency-Inverse Document Frequency，TF-IDF）
@@ -44,6 +45,7 @@ $D$通常由人类撰写的语句组成，并且足够大，使得输出句子�
 \begin{align}
     Y = \argmax_{Y\in D} \textit{Score}(Y, X)
 \end{align}
+
 可见，生成式系统和检索式系统的根本区别在于获得输出句子的机制不同。
 这两种方法各有优劣：检索式模型的输出没有语法错误并且可以限制输出的范围\upcite{NUC}，但是不能生成新句子；
 生成式的模型能针对输入生成个性化的输出且系统高度灵活\upcite{Shang}，但是容易生成过短的句子\upcite{AdverEval}。

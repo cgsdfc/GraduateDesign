@@ -433,7 +433,7 @@ Twitter相关的数据集由于隐私保护政策的原因，不能公开原始�
         名称 & 规模 & 领域 & 是否公开 \\
         \midrule
         Ubuntu Dialogue Corpus\upcite{ubuntu_corpus} & 大 & 技术支持 & 是 \\
-        Twitter Corpus\upcite{Ritter11} & 大 & 短对话多领域闲聊 & 否 \\
+        Twitter Corpus\upcite{Ritter11} & 大 & 短文本多领域闲聊 & 否 \\
         Twitter Triple Corpus\upcite{DCGM} & 大 & Twitter Corpus的扩展版本 & 否 \\
         OpenSubtitles\upcite{OPUS,opensub} & 大 & 电影字幕（Subtitles） & 是 \\
         LSDSCC\upcite{LSDSCC} & 中 & Reddit论坛电影板块 & 是 \\
@@ -447,7 +447,7 @@ Twitter相关的数据集由于隐私保护政策的原因，不能公开原始�
         MovieTriples\upcite{HRED} & 中 &  Movie-DiC的扩展版本 & 否 \\
         SubTle\upcite{Luke_SubTle} & 中 & 电影字幕 & 否 \\
         DailyDialog\upcite{DailyDialog} & 中 & 日常对话 & 是 \\
-        Sina Weibo Corpus\upcite{weibo} & 中 & 新浪微博短对话闲聊 & 是 \\
+        Sina Weibo Corpus\upcite{weibo} & 中 & 新浪微博短文本闲聊 & 是 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -470,7 +470,39 @@ Li等人在\cite{MMI}中也采取了把相邻句子分别作为模型的输入�
 尽管充满噪音，OpenSubtitles仍然是目前最大规模的电影字幕数据集。
 
 % --------- LSDSCC ------------- %
-LSDSCC，A Large Scale Domain-Specific Conversational Corpus是
+LSDSCC，A Large Scale Domain-Specific Conversational Corpus是一个单一领域的对话数据集\upcite{LSDSCC}。
+有研究认为，单一领域和专注的话题有助于模型规避单调的响应。
+作者从Reddit的电影板块\footnote{https://www.reddit.com/r/datasets}中获取了原始数据，
+设计了一套尽可能保留语料信息的清理程序，还使用人类评价员对消息和响应的相关度进行评价，
+最终得到一个高质量的信息-响应对（Query-Response Pair）文库。
+在构建测试集方面，作者用类似\cite{DCGM}的IR方法构建了一个多重参考评测集。
+他们还进一步让人类评价员对一个消息的所有响应进行分类，并
+基于这个测试集提出了三个面向多样性的评价指标，不过我们并未使用。
 
 \section{本章小结}\label{sec:rw_conclusion}
+本章从模型、指标和数据集三个方面回顾了本领域的研究成果和现存问题。
+在模型方面，基于Seq2Seq的对话系统能够直接生成响应，能端对端的训练，减少写死的规则（Hard Written Rules），
+能从大量语料数据中自动学习语言规律，能利用话题和情感等多种表征，具有巨大的优越性。
+然而，这类系统也有弊端，比如无法准确控制生成的内容，偏向于生成单调的响应，
+没有人格一致性等等。
 
+在指标方面，对话系统的指标还不能像机器翻译的指标那样准确的评价对话系统。
+可能最大的问题就是，如何提高指标和人类评价的相关性。
+导致这个困境的核心原因可能是对话的响应具有内在的，固有的语义多样性，
+这个事实可能导致两个结果：1. 用机器翻译的表征，比如单词层面的n-gram，字符层面的n-gram，
+对齐等等，无法有效捕捉语义层面的表征。
+2. 单纯使用衡量相似性的指标，无法捕捉多样性的维度，从而与人类评价不符。
+
+在数据集方面，本领域已经积累了各种领域（Domain）的数据，从技术性问答、社交媒体闲聊，到电影对白和字幕等等。
+既有大规模的数据集，也有中等规模，但是元信息或者人类标注信息丰富的数据集。
+因为数据集的增多，一些数据集在领域上出现了重合，比如Movie Dialogs Corpus，MovieTriples和Movie-DiC都是
+电影对白领域；OpenSubtitles和SubTle都是电影字幕领域，Twitter Corpus和Sina Weibo Corpus都是短文本闲聊等等。
+尽管人类标注是对话文本的重要补充，但是由于其代价的高昂，所得的数据量往往比较少；
+另一方面，元信息是一类在数据采集过程中，伴随对话文本同时获得的描述性信息，比如对话者的性别（Gender）和角色（Character）。
+相比与人类标注，元信息更容易获取，规模不受限制。
+并且，人类标注和元信息都有助于模型生成更加多样和连贯的响应\upcite{persona,Topic_Aware,ECM}。
+因此，数据集的收集过程应该充分保留原始数据中的元信息； 对话系统应该充分利用元信息。
+同时，我们还应该发展从对话文本中无监督的提取元信息的方法。
+
+尽管本领域取得了丰硕的成果，我们应该持续关注并且不断探索上述难题的解决方案。
+本文就试图在一个多维度的设定下，研究不同的评价指标和不同的模型以及数据集之间的交互关系。

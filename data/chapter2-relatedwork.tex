@@ -1,3 +1,5 @@
+\usepackage{graphicx}
+
 % !Mode:: "TeX:UTF-8"
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
@@ -102,10 +104,44 @@ EffectiveAttention}，使输入序列的信息不必全部通过固定长度的�
 注意力机制使传统Seq2Seq模型对较长输入也具有鲁棒性。
 
 \subsection{多层编解码器}\label{subsec:hierarchical_rnn}
-多层编解码器（Hierarchical Recurrent Encoder-Decoder）
+多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}是一种能利用多轮对话结构的生成式模型。
+它把一个对话看做一个两层序列结构：一个对话$D$由$M$个句子组成，每个句子由$N_m$个单词组成：
+\begin{align}
+    D &= \{ U_1, \cdots, U_M \} \\
+    U_m &= \{ w_{m, 1}, \cdots, w_{m, N_m} \}
+\end{align}
 
-\subsection{解码算法}\label{subsec:decode}
+HRED由三个RNN组成：一个编码RNN（Encoder RNN）负责把每一个句子编码成一个固定长度的向量，称为句子向量（Utterance Vector）；
+一个上下文RNN（Context RNN）负责迭代的处理句子向量，
+把直到并且包括当前轮$m$的所有轮的句子$U_1, \cdots, U_m$编码成一个对话向量（Dialogue Vector）；
+最后，一个解码RNN（Decoder RNN）负责以对话向量为条件，生成对话的下一个句子$U_{m+1}$。
+三个RNN的协作关系如~图\ref{fig:HRED_computation_graph}~所示。
+本质上，HRED通过把对话分解为句子的序列，
+把句子分解为单词的序列，估计了一个对话$D$的概率$P_{\theta}(D)$：
+\begin{align}
+    P_{\theta}(D) &= P_{\theta}(U_1, \cdots, U_M) \\
+    &= \prod_{m=1}^M P_{\theta}(U_m|U_{<m}) \\
+    &= \prod_{m=1}^M \prod_{n=1}^{N_m} P_{\theta}(
+    w_{m, n} |w_{m, <n}, U_{<m}
+    )
+\end{align}
+
+$\theta$是HRED模型的参数，
+$U_{<m}$表示$U_m$之前的句子序列：
+$U_{<m} = \{ U_1, \cdots, U_{m-1} \}$，
+$w_{m, <n}$表示第$m$个句子的第$n$个单词之前的单词序列：
+$w_{m, <n} = \{ w_{m, 1}, \cdots, w_{m, n-1} \}$。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figure/HRED.png}
+    \caption{HRED的计算图\upcite{HRED}}
+    \label{fig:HRED_computation_graph}
+\end{figure}
+
+
 % ------------------ Decoding ------------------ %
+\subsection{解码算法}\label{subsec:decode}
 生成式模型仅仅定义了条件概率$p(Y|X)$，在推理阶段（Inference），需要采用某种启发式搜索算法从概率分布中
 生成输出$Y$，这个过程又称为解码（Decode）。
 最简单的搜索算法是贪心搜索（Greedy Search）：在每一时刻都输出条件概率最大的单词：
@@ -298,7 +334,7 @@ $p(x_i)$是模型赋给样本的概率。
     \text{cos}(x, y) = \frac{x\cdot y}
     {\left\| x \right\| \cdot \left\| y \right\|} \\
 \end{align}
-最常见组合方式是对单词向量取平均值，这类似于词袋表示（Bag-of-Words），对应的指标就是向量平均值（Vector Average）：
+最常见组合方式是对单词向量取平均值，类似于词袋表示（Bag-of-Words），对应的指标就是向量平均值（Vector Average）：
 \begin{align}
     \bar{e_r} = \frac{\sum_{w \in r} e_w}{|\sum_{w' \in r} e_{w'}|} \\
     \textit{Vector-Average} = \cos(\bar{e_r}, \bar{e}_{\hat{r}})

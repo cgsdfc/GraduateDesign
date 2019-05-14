@@ -16,7 +16,7 @@
 这种系统能根据对话的上下文和用户的提问产生语义相关的回答，用途有娱乐、语言学习工具和陪伴\upcite{HRED}等等。
 该领域主要考察二人对话，两人聊天的历史记录称为上下文（context），记为$c$；当前说话的人说出的话语称为消息（message），记为$m$；
 另外一个人对该消息的回复称为响应（response），记为$r$。
-$c,m,r$三者的关系如图~\ref{fig:context_message_response}所示。
+$c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
 系统的输入是$c,m$，输出是$r$，也就是把对话的上下文和消息映射为响应，这个问题被称为对话响应生成（Conversation Response Generation）。
 
 \begin{figure}[H]
@@ -59,7 +59,7 @@ $D$通常由人类撰写的语句组成，并且足够大，使得输出句子�
 易于训练，能避免梯度消失问题的循环门单元，如长短期记忆单元（Long Short-Term Memory，LSTM）
 \upcite{LSTM}和门循环单元（Gated Recurrent Unit，GRU）\upcite{GRU}；
 以及基于编解码器结构和RNN的序列到序列框架（Sequence to Sequence Framework，Seq2Seq）\upcite{Seq2Seq,GRU}，
-图~\ref{fig:Seq2Seq}是Seq2Seq的模型结构图。
+图~\ref{fig:Seq2Seq}~是Seq2Seq的模型结构图。
 
 % Chatbot in Seq2Seq.
 Seq2Seq框架在自然语言处理的多项任务上都超过了之前的方法，因此被广泛应用到对话生成领域。
@@ -124,7 +124,7 @@ Chen Xing等人向Seq2Seq加入了从预训练LDA模型中获取的主题词（T
     \end{tabular}
 \end{table}
 
-如表~\ref{tab:multiple_valid_responses}所示，合理的响应不唯一，这种固有的多样性决定了评价响应生成系统的困难。
+如表~\ref{tab:multiple_valid_responses}~所示，合理的响应不唯一，这种固有的多样性决定了评价响应生成系统的困难。
 Liu等人在\cite{HowNot}中研究了两类指标，分别是基于词重叠的指标（Word Overlap Based）
 和基于词嵌入的指标（Embedding Based），并且发现这些指标在非技术性的Twitter数据集上和人类评价只有弱相关性，
 在技术性的Ubuntu Dialogue Corpus\upcite{ubuntu_corpus}没有相关性。

@@ -254,7 +254,7 @@ METEOR首先计算系统输出和参考输出之间的Unigram匹配，这些匹�
 \begin{align}
     \textit{Fmean} = \frac{10PR}{R + 9P}
 \end{align}
-METEOR还包括对较短的n-gram匹配的惩罚系数：
+METEOR还加入了对较短的n-gram匹配的惩罚系数：
 \begin{align}
     \textit{Penalty} = 0.5 * \left( \frac{\#chunks}{\#unigrams\_matched} \right)
 \end{align}
@@ -290,7 +290,7 @@ $p(x_i)$是模型赋给样本的概率。
 用分布式语义（Distributed Semantic）来衡量两个句子的相似程度的指标，
 常被用于句子文本相似性（Sentence Textual Similarity）和学生输入自动打分\upcite{GreedyAndOptimal}等任务中。
 这类指标一般用某种组合方式从单词的向量表示得到句子的向量表示，
-再用余弦相似度（Cosine Similarity）测量两个句子向量的相似程度\upcite{VectorCompose}。
+再用余弦相似度（Cosine Similarity）测量两个句子向量的相似程度\upcite{VectorCompose}：
 \begin{align}
     \text{cos}(x, y) = \frac{x\cdot y}
     {\left\| x \right\| \cdot \left\| y \right\|} \\
@@ -316,7 +316,7 @@ $[\cdot, \cdot]$表示连接多个标量形成一个向量。
 最后一种方法是贪心匹配（Greedy Matching），
 它得名于边加权的二部图（Weighted Bipartite Graph）的最大匹配问题\upcite{GreedyAndOptimal}：
 把两个句子的单词看做二部图的节点，任意两个节点之间有一条边，边的权重定义为两个单词的余弦相似度，一个匹配
-定义为一对点，问如何构造一个匹配的集合，使其权重之和最大？贪心匹配给出了一种贪心算法：
+定义为一对点，问如何构造一个匹配的集合，使其权重之和最大。贪心匹配给出了一种贪心算法：
 \begin{align}
     G(r, \hat{r}) = \frac{
     \sum_{w \in r} \max_{\hat{w} \in \hat{r}} \cos(e_w, e_{\hat{w}})
@@ -331,7 +331,7 @@ $[\cdot, \cdot]$表示连接多个标量形成一个向量。
 Distinct-N是Li等人提出的衡量句子层面的n-gram多样性的简单指标\upcite{MMI}。
 它测量了一个句子不重复的n-gram数量除以句子的长度，公式为：
 \begin{align}
-    \textit{distinct} = \frac{\#\textit{unique-ngrams}}{\#\textit{words}}
+    \textit{Distinct-N} = \frac{\#\textit{unique-ngrams}}{\#\textit{words}}
 \end{align}
 
 \subsection{评价指标使用情况}\label{subsec:metrics_usage}
@@ -413,11 +413,14 @@ Vinyals等人在\cite{GoogleChatbot}的评估中使用了困惑度，定性分�
 
 
 \section{公开的对话数据集}\label{sec:public_dataset}
-本领域在数据集的采集方面已经取得了很大进展，表~\ref{tab:dataset_list}~列举了一些常见数据集。
-对于表~\ref{tab:dataset_list}~中的数据集，大规模是指对话数量在1M以上的，中等规模是指对话数量在50K--1M之间的。
+本领域在数据集的采集方面已经取得了很大进展，表~\ref{tab:dataset_list}~列举了一些常见数据集，
+大规模是指对话数量在1M以上的，中等规模是指对话数量在50K--1M之间的\footnote{1K = 1024，1M = 1024 K，1G = 1024 M。}。
 Sina Weibo Corpus是一个中文数据集，其他都是英文数据集。
-数据集\cite{supreme,wiki_pages,tennis_corpus,parliamentary,gone_awry,movie_dialogs_corpus,DailyDialog}都具有丰富的元信息。
-Twitter Triple Corpus由于隐私保护政策的原因，不能公开原始数据。
+Twitter相关的数据集由于隐私保护政策的原因，不能公开原始数据。
+数据集\cite{supreme,wiki_pages,tennis_corpus,parliamentary,gone_awry,movie_dialogs_corpus,DailyDialog}都具有丰富的元信息，
+如时间戳，对话双方身份信息等等。
+数据集\cite{DailyDialog,LSDSCC,DCGM}有人类标注信息，如情感、话题和方面（Aspect）等。
+元信息和人类标注信息提供了额外的表征，对构建更智能的对话系统很有帮助。
 本文把注意力集中在三个数据集上：Ubuntu Dialogue Corpus，OpenSubtitles，LSDSCC，
 因为它们分别代表了三个常见的对话领域，分别是：技术支持，电影字幕和在线论坛讨论。
 
@@ -430,8 +433,8 @@ Twitter Triple Corpus由于隐私保护政策的原因，不能公开原始数�
         名称 & 规模 & 领域 & 是否公开 \\
         \midrule
         Ubuntu Dialogue Corpus\upcite{ubuntu_corpus} & 大 & 技术支持 & 是 \\
-        Twitter Corpus\upcite{Ritter11} & 大 & 短对话多领域闲聊 & 是 \\
-        Twitter Triple Corpus\upcite{DCGM} & 大 & Twitter Corpus的扩展版本 & 是 \\
+        Twitter Corpus\upcite{Ritter11} & 大 & 短对话多领域闲聊 & 否 \\
+        Twitter Triple Corpus\upcite{DCGM} & 大 & Twitter Corpus的扩展版本 & 否 \\
         OpenSubtitles\upcite{OPUS,opensub} & 大 & 电影字幕（Subtitles） & 是 \\
         LSDSCC\upcite{LSDSCC} & 中 & Reddit论坛电影板块 & 是 \\
         Supreme Court Corpus\upcite{supreme} & 中 & 美国高等法院辩论 & 是\\
@@ -464,7 +467,7 @@ OpenSubtitles是the Open Parallel Corpus，OPUS工程的一部分。
 Sordoni等人在\cite{GoogleChatbot}中把OpenSubtitles用到对话领域，
 他们把相邻的两个句子视为消息和响应，并且每一个句子既是消息又是响应。
 Li等人在\cite{MMI}中也采取了把相邻句子分别作为模型的输入和输出的方法。
-尽管充满噪音，OpenSubtitles应该是目前最大规模的电影字幕数据集。
+尽管充满噪音，OpenSubtitles仍然是目前最大规模的电影字幕数据集。
 
 % --------- LSDSCC ------------- %
 LSDSCC，A Large Scale Domain-Specific Conversational Corpus是

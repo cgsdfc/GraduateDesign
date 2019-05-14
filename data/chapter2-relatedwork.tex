@@ -101,6 +101,9 @@ EffectiveAttention}，使输入序列的信息不必全部通过固定长度的�
 解码器能自动关注和当前输出最相关的输入部分，实现输入序列与输出序列的对自动对齐（Alignment）。
 注意力机制使传统Seq2Seq模型对较长输入也具有鲁棒性。
 
+\subsection{多层编解码器}\label{subsec:hierarchical_rnn}
+多层编解码器（Hierarchical Recurrent Encoder-Decoder）是
+
 \subsection{解码算法}\label{subsec:decode}
 % ------------------ Decoding ------------------ %
 生成式模型仅仅定义了条件概率$p(Y|X)$，在推理阶段（Inference），需要采用某种启发式搜索算法从概率分布中
@@ -142,7 +145,7 @@ NIST\upcite{NIST}，
 METEOR\upcite{METEOR}，
 BEER\upcite{beer}，
 CHRF\upcite{chrf}，
-TER\upcite{HTER}等等。
+TER\upcite{TER}等等。
 然而，适用于开放领域的，面向闲聊的对话系统的指标要少得多；
 在考察本领域对自动指标的使用情况之前，先对各种指标作一个简要介绍。
 
@@ -444,7 +447,7 @@ Twitter相关的数据集由于隐私保护政策的原因，不能公开原始�
         Conversations Gone Awry Corpus\upcite{gone_awry} & 中 & 维基百科讨论页面吵架集锦 & 是 \\
         Movie Dialogs Corpus\upcite{movie_dialogs_corpus} & 中 & 电影对白 & 是 \\
         Movie-DiC\upcite{Movie-DiC} & 中 & IMSDB电影对白 & 否 \\
-        MovieTriples\upcite{HRED} & 中 &  Movie-DiC的扩展版本 & 否 \\
+        MovieTriples\upcite{HRED} & 中 & Movie-DiC的扩展版本 & 否 \\
         SubTle\upcite{Luke_SubTle} & 中 & 电影字幕 & 否 \\
         DailyDialog\upcite{DailyDialog} & 中 & 日常对话 & 是 \\
         Sina Weibo Corpus\upcite{weibo} & 中 & 新浪微博短文本闲聊 & 是 \\

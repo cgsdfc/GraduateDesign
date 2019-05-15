@@ -6,7 +6,8 @@
         <serverdata>
           <mappings>
             <mapping deploy="/deployment/GraduateDesign" local="$PROJECT_DIR$" web="/" />
-            <mapping deploy="/Metrics/Eval" local="$PROJECT_DIR$/../Metrics/Eval" />
+            <mapping deploy="/deployment/Metrics/Eval" local="$PROJECT_DIR$/../Metrics/Eval" web="/" />
+            <mapping deploy="/deployment/Models/HRED-VHRED" local="$PROJECT_DIR$/../Models/HRED-VHRED" web="/" />
           </mappings>
         </serverdata>
       </paths>

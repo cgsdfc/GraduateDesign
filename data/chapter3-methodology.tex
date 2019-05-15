@@ -128,8 +128,57 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 在OpenSubtitles和LSDSCC上的学习率为0.0001。
 在解码时，我们使用随机取样。
 
-\section{数据集预处理及其统计数据}
+\section{数据集预处理}
 \label{sec:dataset_proprecessing}
+我们使用的Ubuntu Dialogue Corpus直接来自Serban等人的项目hed-truncated
+\footnote{\url{https://github.com/julianser/hed-dlg-truncated.git}}，没有经过任何额外处理。
+我们从Li等人的项目Neural-Dialogue-Generation中获取了经过预处理的OpenSubtitles数据
+\footnote{\url{https://github.com/jiweil/Neural-Dialogue-Generation.git}}（他们称其为OpenSubData）。
+对OpenSubData作了如下处理：
+\begin{enumerate}
+    \item 将其从整数的下标形式还原为字符串的单词形式；
+    \item 将其字典文件\texttt{movie\_25000}转化为下标从0开始的
+    pickle\footnote{pickle是一个Python特有的序列化格式}格式。
+    \item 使用Serban等人的\texttt{convert\_text2dict.py}脚本，将训练集，测试集和开发集均转换为pickle格式；
+    \item 选用OpenSubData中的3轮对话，句子最短长度为6的dialogue3\_6格式作为实际使用的数据集；
+    \item 从测试集随机取样1\%的样本作为正式使用的数据集。
+\end{enumerate}
+
+LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google.com/file/d/1nbpbnhwNP14xAc4SAc1 NN5lvEr01dQb/view?usp=sharing}}。
+由于它的词汇数量多达50K，为了使内存不至于溢出，我们将其词汇表裁剪至35000个最常见的单词。
+此外，由于我们只使用单个参考的指标，因此对LSDSCC的测试集中的多个参考，我们只取第一个参考。
+剩下的处理过程类似OpenSubData的处理。
+\begin{table}
+    \centering
+    \caption{训练集的统计数据}
+    \label{tab:training_set_statistics_T}
+    \begin{tabular}{lllll}
+        \toprule
+        数据集 & 词汇数量 & 样本数量 & 单词数量 & 轮数 \\
+        \midrule
+        Ubuntu & 20000 & 448833 & 45697699 & 多轮 \\
+        OpenSubtitles & 23876 & 11771393 & 379346841 & 3 \\
+        LSDSCC & 35008 & 738095 & 32355628 & 1 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}
+    \centering
+    \caption{训练集的统计数据}
+    \label{tab:training_set_statistics}
+    \begin{tabular}{llll}
+        \toprule
+        & Ubuntu & OpenSubtitles & LSDSCC \\
+        \midrule
+        词汇数量 & 20000 & 23876 & 35008 \\
+        样本数量 & 448833 & 11771393 & 738095 \\
+        单词数量 & 45697699 & 379346841 & 32355628 \\
+        轮数 & 多轮 & 3 & 1 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
 
 \section{指标配置}\label{sec:metric_config}
 

@@ -148,10 +148,20 @@ LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google
 由于它的词汇数量多达50K，为了使内存不至于溢出，我们将其词汇表裁剪至35000个最常见的单词。
 此外，由于我们只使用单个参考的指标，因此对LSDSCC的测试集中的多个参考，我们只取第一个参考。
 剩下的处理过程类似OpenSubData的处理。
-\begin{table}
+
+表~\ref{tab:train_set_stats}~是三个数据集的训练集的一些统计数据。
+从表中可以看到，OpenSubtitles的样本数量要远远超过其他两个数据集，是Ubuntu的26倍， 是LSDSCC的16倍。
+但是，从单词数量来看，OpenSubtitles超过另外两个数据集的倍数却小得多，
+这是因为Ubuntu的每一个样本包含了多个句子，其长度要远远超过OpenSubtitles的样本。
+这也导致了Ubuntu的样本数量少于LSDSCC，但是单词数量却超过了LSDSCC。
+测试集的统计数据如表~\ref{tab:test_set_stats}~所示。
+对于LSDSCC的测试集，我们其实可以从其训练集分一部分出来作为测试集，这样可以使样本数量更多。
+但是，我们选择了从LSDSCC的多重参考测评集中构造测试集，这导致样本数量只有不到300。
+
+\begin{table}[H]
     \centering
     \caption{训练集的统计数据}
-    \label{tab:training_set_statistics_T}
+    \label{tab:train_set_stats}
     \begin{tabular}{lllll}
         \toprule
         数据集 & 词汇数量 & 样本数量 & 单词数量 & 轮数 \\
@@ -163,22 +173,20 @@ LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google
     \end{tabular}
 \end{table}
 
-\begin{table}
+\begin{table}[H]
     \centering
-    \caption{训练集的统计数据}
-    \label{tab:training_set_statistics}
-    \begin{tabular}{llll}
+    \caption{测试集的统计数据}
+    \label{tab:test_set_stats}
+    \begin{tabular}{lll}
         \toprule
-        & Ubuntu & OpenSubtitles & LSDSCC \\
+        数据集 & 样本数量 & 单词数量 \\
         \midrule
-        词汇数量 & 20000 & 23876 & 35008 \\
-        样本数量 & 448833 & 11771393 & 738095 \\
-        单词数量 & 45697699 & 379346841 & 32355628 \\
-        轮数 & 多轮 & 3 & 1 \\
+        Ubuntu & 18920 & 2045082   \\
+        OpenSubtitles & 14714 & 474074 \\
+        LSDSCC & 299 & 10914 \\
         \bottomrule
     \end{tabular}
 \end{table}
-
 
 \section{指标配置}\label{sec:metric_config}
 

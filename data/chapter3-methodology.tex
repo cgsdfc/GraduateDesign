@@ -53,22 +53,21 @@ batch\_size统一设为20。
 HRED和VHRED的句子编码器（Utterance Encoder）
 在Ubuntu上使用500个隐藏单元，
 在OpenSubtitles和LSDSCC上使用1000个隐藏单元
-\footnote{这里的LSTM模型是一个语言模型，所以它既没有编码RNN，
-也没有上下文RNN，只有解码RNN。}。
+\footnote{LSTM模型是一个语言模型，只有句子解码器。}。
 % -- Hidden Units of Context Encoder -- %
 HRED和VHRED的上下文编码器（Context Encoder）
 在所有数据集上都使用1000个隐藏单元。
 % -- Hidden Units of Utterance Decoder -- %
 不同模型的句子解码器（Utterance Decoder）
-在不同数据集上各有不同，
+在不同数据集上的隐藏单元数量
 如表~\ref{tab:utterance_decoder_hidden_units}~所示。
-我们根据数据集的特点来设置不同RNN的隐藏单元数目，
-通常在样本数多或者词汇表大的数据集上训练时，
-模型的隐藏单元数目会更多。
+一般根据数据集的特点来设置不同RNN的隐藏单元数量，
+在样本数多或者词汇表大的数据集上训练时，
+隐藏单元数量会更多。
 
 \begin{table}[H]
     \centering
-    \caption{句子解码器的隐层状态单元数目}
+    \caption{句子解码器的隐层状态单元数量}
     \label{tab:utterance_decoder_hidden_units}
     \begin{tabular}{llll}
         \toprule
@@ -106,9 +105,10 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 
 所有的模型都在一台GeForce GTX TITAN X上训练了至少1周。
 模型收敛时的困惑度如表~\ref{tab:converged_perplexity}~所示。
+% -- TODO
 \begin{table}[H]
     \centering
-    \caption{}
+    \caption{模型收敛时的困惑度}
     \label{tab:converged_perplexity}
     \begin{tabular}{llll}
         \toprule
@@ -137,11 +137,11 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 对OpenSubData作了如下处理：
 \begin{enumerate}
     \item 将其从整数的下标形式还原为字符串的单词形式；
-    \item 将其字典文件\texttt{movie\_25000}转化为下标从0开始的
+    \item 将其词汇表文件\texttt{movie\_25000}转化为下标从0开始的
     pickle\footnote{pickle是一个Python特有的序列化格式}格式。
-    \item 使用Serban等人的\texttt{convert\_text2dict.py}脚本，将训练集，测试集和开发集均转换为pickle格式；
+    \item 用Serban等人的\texttt{convert\_text2dict.py}脚本将训练集，测试集和开发集均转换为pickle格式；
     \item 选用OpenSubData中的3轮对话，句子最短长度为6的dialogue3\_6格式作为实际使用的数据集；
-    \item 从测试集随机取样1\%的样本作为正式使用的数据集。
+    \item 从测试集随机抽取1\%的样本作为正式使用的数据集。
 \end{enumerate}
 
 LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google.com/file/d/1nbpbnhwNP14xAc4SAc1 NN5lvEr01dQb/view?usp=sharing}}。

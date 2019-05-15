@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Metrics/Eval/.idea/Eval.iml" filepath="$PROJECT_DIR$/../Metrics/Eval/.idea/Eval.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/GraduateDesign.iml" filepath="$PROJECT_DIR$/.idea/GraduateDesign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Models/HRED-VHRED/.idea/HRED-VHRED.iml" filepath="$PROJECT_DIR$/../Models/HRED-VHRED/.idea/HRED-VHRED.iml" />
     </modules>
   </component>
 </project>

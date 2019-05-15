@@ -8,6 +8,7 @@
       <w>datasets</w>
       <w>freenode</w>
       <w>gisting</w>
+      <w>hparams</w>
       <w>hred</w>
       <w>imsdb</w>
       <w>lsdscc</w>
@@ -18,6 +19,7 @@
       <w>sordoni</w>
       <w>unigram</w>
       <w>unscalable</w>
+      <w>vhred</w>
       <w>weibo</w>
       <w>wikipedia</w>
     </words>

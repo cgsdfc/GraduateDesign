@@ -4,7 +4,7 @@
 
 \chapter{研究方法}\label{ch:method}
 
-% -- 简要说明实验框架。并不复杂，一图足矣。
+% 简要说明实验框架。并不复杂，一图足矣。
 % 详细说明数据集的统计数据，模型的超参数，训练参数，指标实现的来源，
 % 指标的超参数。这些属于Training Procedure或者Experiment的内容。
 % 因为是本科毕设，写verbose一些也没关系。
@@ -12,8 +12,11 @@
 我们的实验主要涉及在多个数据集上训练多个模型，然后用多种指标去测量这些系统的句子层面得分和系统层面得分。
 表~\ref{tab:experiment_triples}~展示了实验所使用的模型，数据集和指标。
 % -- Math & Figure
-如图~\ref{fig:framework}~所示，我们的实验首先从对每一个模型$m$和数据集$d$的组合$(m, d) \in M \times D$在训练集上进行训练，
-并让训练好的$(m, d)$在测试集上解码产生响应$r$，然后再用每一个指标$s \in S$去给$r$在句子层面和系统层面上打分，分别得到$\lambda_{u}$和$\lambda_{s}$。实验的最终结果是获得一个5元组$(m, d, e, \lambda_{u}, \lambda_{s})$，表示在数据集$d$上训练的模型$m$在指标$s$的评价下所得的句子层面得分$\lambda_u$和系统层面得分$\lambda_s$。
+如图~\ref{fig:framework}~所示，我们的实验首先从让每一个模型$m$和数据集$d$的组合$(m, d) \in M \times D$在训练集上进行训练，
+并让训练好的$(m, d)$在测试集上解码产生响应$r$，然后再用每一个指标$s \in S$给$r$在句子层面打分，给$(m, d)$在系统层面打分，
+分别得到$\lambda_{u}$和$\lambda_{s}$。
+实验的最终结果是一个5元组$(m, d, e, \lambda_{u}, \lambda_{s})$，
+表示在数据集$d$上训练的模型$m$在指标$s$的评价下所得的句子层面得分$\lambda_u$和系统层面得分$\lambda_s$。
 
 
 %本章将详细介绍模型的超参数，训练流程，数据集预处理等实验细节。
@@ -45,7 +48,7 @@
 % ------ Model setup ----------- %
 在模型超参数方面，我们的设置大致和\cite{VHRED}相同。
 我们用Adam\upcite{AdamOpt}来优化所有模型，
-batch\_size统一设为20。
+一个小批（Mini-batch）处理20个样本。
 % -- Dimension of Word Embeddings -- %
 我们在Ubuntu上使用维度是300的词嵌入，
 在OpenSubtitles和LSDSCC上使用维度是400的词嵌入。
@@ -87,7 +90,7 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 所有模型的句子编码器和上下文编码器（如果有）都使用GRU作为门单元。
 % -- Gate Type of Decoder -- %
 句子解码器的门单元类型如表~\ref{tab:utterance_decoder_gate_types}~所示
-\footnote{由于失误，OpenSubtitles和LSDSCC上的LSTM模型的解码器都没有使用LSTM门单元，不过它们仍然是语言模型。}。
+\footnote{OpenSubtitles和LSDSCC上的LSTM模型的解码器都没有使用LSTM门单元，不过它们仍然是语言模型。}。
 \begin{table}[H]
     \centering
     \caption{句子解码器的门单元类型}
@@ -108,7 +111,7 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 % -- TODO
 \begin{table}[H]
     \centering
-    \caption{模型收敛时的困惑度}
+    \caption{模型收敛时的困惑度(TODO)}
     \label{tab:converged_perplexity}
     \begin{tabular}{llll}
         \toprule
@@ -167,8 +170,8 @@ LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google
         数据集 & 词汇数量 & 样本数量 & 单词数量 & 轮数 \\
         \midrule
         Ubuntu & 20000 & 448833 & 45697699 & 多轮 \\
-        OpenSubtitles & 23876 & 11771393 & 379346841 & 3 \\
-        LSDSCC & 35008 & 738095 & 32355628 & 1 \\
+        OpenSubtitles & 23876 & 11771393 & 379346841 & 多轮 \\
+        LSDSCC & 35008 & 738095 & 32355628 & 单轮 \\
         \bottomrule
     \end{tabular}
 \end{table}

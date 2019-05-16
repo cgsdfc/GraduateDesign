@@ -64,7 +64,7 @@ $C$通常由人类撰写的语句组成，并且足够大，使得输出句子�
 
 % Chatbot in Seq2Seq.
 Seq2Seq框架在自然语言处理的多项任务上都超过了之前的最佳水平，因此被广泛应用到对话生成领域。
-最早把Seq2Seq用到对话生成领域的是Vinyals等人\upcite{GoogleChatbot}，
+在国外，最早把Seq2Seq用到对话生成领域的是Vinyals等人\upcite{GoogleChatbot}，
 他们在OpenSubtitles\upcite{opensub}
 上训练的模型能回答简单的常识问题，
 并且比基于规则的系统CleverBot\footnote{http://www.cleverbot.com/}获得了更高的人类评价得分。
@@ -82,25 +82,26 @@ Serban等人把Sordoni等人提出的用于查询建议（Query Suggestion）的
 多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}应用到对话生成领域，
 提出了能捕捉对话的层级结构的HRED模型\upcite{HRED}。
 基于HRED，Serban等人又提出了利用随机潜变量（Stochastic Latent Variable）增加对话多样性的Variational Hierarchical Recurrent Encoder-Decoder，即VHRED\upcite{VHRED}；
-以及加入了多层次抽象信息的多精度循环网络（Multiresolution Recurrent Neural Networks，MultiRNN）\upcite{MrRNN}。
+以及加入了高层次抽象信息的多精度循环网络（Multiresolution Recurrent Neural Networks，MultiRNN）\upcite{MrRNN}。
 
 % -- Shang -- %
-在国内，Shang等人研究了微博数据集上的短文本对话生成问题（Short-Text-Conversation，STC），
+在国内，Shang等人研究了微博数据集上的短文本对话生成问题（Short-Text Conversation），
 提出了以GRU为门单元的编解码器模型（Neural Response Machine，NRM）\upcite{Shang}，
 并在人类评价上取得了比检索式系统和翻译式系统\upcite{Ritter11}更好的成绩。
-Chen Xing等人向Seq2Seq加入了从预训练LDA模型中获取的主题词（Topic Words）并提出了Topic-Aware Seq2Seq \upcite{Topic_Aware}。
+Chen Xing等人加入了从预训练LDA模型中获取的主题词（Topic Words），提出了Topic-Aware Seq2Seq \upcite{Topic_Aware}，
 由于篇幅有限，不能一一介绍。
 
 
 \section{课题研究意义}\label{sec:research_meaning}
 % 存在的问题：1. 评估模型的困难性。2. 容易生成Naive响应。
-% A long-standing problem in this field is the difficulty of evaluating the generated responses.
-生成式对话系统目前有两个难题：一是评价系统生成的响应的困难性\upcite{HowNot,Shang,deep_RL,deltaBLEU,ADEM}；
+本领域目前有两个难题：一是评价系统生成的响应的困难性\upcite{HowNot,Shang,deep_RL,deltaBLEU,ADEM}；
 二是如何避免生成单调的响应
 \upcite{MMI,Distill,Ritter11,DCGM,HRED}。
 对第一个难题的一个普遍解释是，和机器翻译相比，对话生成的输出具有更高的熵（Entropy）。
-在对话的场景下，给定一个消息，往往存在大量合理的响应，这些响应和参考响应（Ground Truth）的语义可能完全不一样，
-并且彼此有着各异的语义。
+如表~\ref{tab:multiple_valid_responses}~所示，
+给定一个消息，往往存在大量合理的响应，
+这些响应的语义多种多样，
+和参考响应（Ground Truth）的语义可能完全不同。
 
 \begin{table}[H]
     \centering
@@ -123,45 +124,54 @@ Chen Xing等人向Seq2Seq加入了从预训练LDA模型中获取的主题词（T
     \end{tabular}
 \end{table}
 
-如表~\ref{tab:multiple_valid_responses}~所示，合理的响应不唯一，这种固有的多样性决定了评价响应生成系统的困难。
+这种固有的多样性决定了评价响应生成系统的困难。
 Liu等人在\cite{HowNot}中研究了两类指标，分别是基于词重叠的指标（Word Overlap Based）
 和基于词嵌入的指标（Embedding Based），并且发现这些指标在非技术性的Twitter数据集上和人类评价只有弱相关性，
 在技术性的Ubuntu Dialogue Corpus\upcite{ubuntu_corpus}没有相关性。
-Liu等人的工作为对话领域的自动评价指标的研究开辟了新的方向。
+朝着Liu等人提出的新方向，许多学者提出了新的对话指标。
 
 % ------- ADEM ------------ %
-Lowe等人以自动化的图灵测试（Automatic Turing Test）为灵感，
-提出了一个以VHRED为编码器，根据消息、参考响应和模型响应预测人类评分的模型，
+在国外，Lowe等人以自动图灵测试（Automatic Turing Test）为灵感，
+提出了一个根据消息（Message），参考（Reference）和响应（Response）预测人类评分的模型，
 称为自动化对话评价模型（Automatic Dialogue Evaluation Model，ADEM）\upcite{ADEM}。
 他们在新的数据和Liu的数据上评估了ADEM模型，发现它和人类评价的相关性在句子水平和系统水平都达到了很高水平。
 % ------- AdverEval --------- %
-Kannan等人在\cite{AdverEval}中初步尝试了把GAN的方法应用到对话系统的自动评价中。
+Kannan等人初步尝试了把GAN的方法应用到对话系统的自动评价中
+\upcite{AdverEval}，
 他们训练了一个鉴别器（Discriminator）来区分一个响应是来自系统还是来自人类，并且发现鉴别器能捕捉到基于Seq2Seq的模型
 倾向于生成短句子和通用句子的缺点。
+% -- add Li?
+
 % ------ RUBER --------- %
-在国内，Tao等人提出了基于神经网络和词嵌入的RUBER指标\upcite{RUBER}。
-该指标线性的结合了带参考的指标（Referenced Score）和不带参考的指标（Unreferenced Score），
-并采用无监督的负采样（Negative Sampling）来训练模型，
-在中文数据集豆瓣网\footnote{http://www.douban.com}上取得了很高的人类评价相关性。 % Correlation to Human Judgement
-%这些研究进展的取得和Liu等人对自动化评价指标的实验和研究有着密切联系。
+%基于带参考的得分（Referenced Score）和不带参考的得分（Unreferenced Score）的RUBER
+%Referenced
+%metric and Unreferenced metric Blended
+%Evaluation Routine
+
+在国内，Tao等人提出了基于带参考的得分（Referenced Score）
+和不带参考的得分（Unreferenced Score）的RUBER指标\upcite{RUBER}。
+该指标线性的结合了消息与响应的相似度（不带参考）和参考与响应（带参考）的相似度，
+其中带参考的指标用基于词嵌入的相似度来衡量，
+不带参考的指标通过无监督的负采样（Negative Sampling）来训练。
+该指标在中文数据集豆瓣网\footnote{http://www.douban.com}上取得了很高的人类评价相关性。
 
 本课题延续Liu等人的工作，对自动评价指标进行深入研究。
-Liu等人已经研究了评价指标与人类评价的相关性，并且发现了它们的弱点；
-本文进一步研究了评价指标之间的相关性，以及模型的性能在不同数据集上的一致性。
+Liu等人已经研究了评价指标与人类评价的相关性，并且发现了它们的弱点。
+本课题进一步研究了评价指标之间的相关性，以及模型的性能在不同数据集上的一致性。
 虽然，目前大多数评价指标尚不能和人类评价一样准确的衡量系统的性能，
-但是对它们性质的研究将有助于理解现有指标的弱点，进而有助于自动评价生成式对话系统的发展。
+但是对它们性质的研究将有助于理解现有指标的弱点，进而有助于自动化指标的发展。
 
 \section{课题研究内容}\label{sec:reseach_content}
 本课题以\cite{VHRED}的实验中使用的三个模型LSTM，HRED，VHRED为基线，
 扩展了\cite{HowNot}中考察的两类指标，
 并在三个具有代表性的公开数据集：Ubuntu Dialogue Corpus，OpenSubtitles和LSDSCC\upcite{LSDSCC}上进行了实验。
-尽管没有人类监督信号，但是我们对指标之间和模型之间的一致性分析还是取得了有意义的结论。
+尽管没有进行人类评价，但是我们对指标之间和模型之间的一致性分析还是取得了有意义的结论。
 % 具体是什么结论，现在还不是很清楚。到时候实验一章写完之后，这里再修改。
 
 \section{论文组织结构}\label{sec:paper_organization}
 本文的组织结构如下：
-第~\ref{ch:related_work}~章相关工作介绍了生成式对话领域中自动化指标的使用情况和研究现状；
-第~\ref{ch:method}~章研究方法介绍了我们的实验方法以及实验涉及的指标、模型和数据集；
-第~\ref{ch:experiment}~章实验结果与讨论详细展示了我们的实验配置、实验数据以及结论；
-第~\ref{ch:conclusion}~章结论总结了本课题的研究成果，并展现了若干未来的研究方向。
+第~\ref{ch:related_work}~章相关工作介绍了本领域的模型，指标和数据集的基本情况。
+第~\ref{ch:method}~章研究方法介绍了我们的实验框架，模型超参数，数据集预处理和指标参数的选择等等。
+第~\ref{ch:experiment}~章实验结果与讨论详细展示了实验数据和结论。
+最后一章结论总结了本课题的研究成果，提出了若干研究方向。
 % 某些写的笼统的地方，等实验结论出来之后，可以改的具体一些。

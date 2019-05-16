@@ -31,6 +31,7 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
 \upcite{corpus_survey,NUC}。
 如果一个系统能生成训练集里没有的句子，就把它称为生成式系统\upcite{HowNot}，反之称为检索式系统。
 生成式系统建立了给定输入句子，所有输出句子的条件概率，并从这个分布中生成句子。
+在解码（Decode）时，
 由于可能的句子空间过于庞大，在实际中通常采用某种启发式搜索方法，
 如集束搜索（Beam Search），贪婪搜索（Greedy Search）
 和随机取样（Random Sample）等等，产生一个次优解。

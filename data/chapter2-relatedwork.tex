@@ -1,3 +1,5 @@
+\usepackage{amsmath}
+
 % !Mode:: "TeX:UTF-8"
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
@@ -12,101 +14,106 @@
     p(Y|X) = P(y_1, y_2, \cdots, y_m|x_1, x_2, \cdots, x_n)
     \label{eqn:generative_conditional_probability}
 \end{align}
+% Sane way to do |S|:
+% https://tex.stackexchange.com/questions/43008/absolute-value-symbols
 
 模型的训练目标就是在数据集$S$上最大化给定$X$，$Y$的对数概率（Log Probability）：
 \begin{align}
-    \mathit{L} = \frac{1}{|S|} \sum_{(Y, X) \in S} \log p(Y|X)
+    \mathit{L} = \frac{1}{\left |S| \right}
+    \sum_{(Y, X) \in S} \log p(Y|X)
 \end{align}
-从这个角度来看，语言模型\upcite{NNLM,RNNLM}（Language Model）和编解码器（Encoder-Decoder）都属于生成式模型，
+从定义上看，语言模型\upcite{NNLM,RNNLM}（Language Model）和编解码器（Encoder-Decoder）都属于生成式模型，
 因为它们都定义了条件概率$p(Y|X)$。
-生成式模型把一个长度可变的序列$X$映射到另一个长度可变的序列$Y$，且$X$和$Y$的长度可以不相等。
+
+% -- RNN -- %
+生成式模型需要把一个长度可变的序列$X$映射到另一个长度可变的序列$Y$，且$X$和$Y$的长度可以不相等。
 循环神经网络（RNN）为这个问题提供了自然的解决方案。
-% RNN
-RNN的基本思想是：序列由有序的元素组成，每一个时刻（Time Step）输入并输出一个元素，同时更新内部的隐层状态（Hidden State）。
+RNN的基本思想是：序列由有序的元素组成，每一个时刻（Time Step）输入一个元素，同时更新内部的隐藏状态（Hidden State），然后输出一个元素。
+如图~\ref{fig:RNN_unrolled}\footnote{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}~所示，
 在时间轴上展开的RNN和一般的前馈神经网络（Feed Forward Neural Networks）很像，不过每一个时刻的权重矩阵都是共享的。
-这个共享的权重矩阵$A$又被称为循环矩阵（Recurrent Matrix）。
-循环矩阵的作用是保存输入序列的顺序信息，并把当前时刻的输入序列编码成一个定长向量。
-图~\ref{fig:RNN_unrolled}\footnote{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
-描绘了简化的RNN结构。
+这个共享的权重矩阵$A$又被称为循环矩阵（Recurrent Matrix），
+它的作用是对输入序列进行某种保持顺序信息的编码。
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{figure/RNN-unrolled.png}
-    \caption{RNN的一般表示和展开表示}
+    \caption{在时间轴上展开的RNN}
     \label{fig:RNN_unrolled}
 \end{figure}
 
 % ------------------ RNN types ------------------ %
 根据是否使用了某种门单元，RNN可分为普通RNN\upcite{RNNLM}，
 LSTM\upcite{LSTM}和GRU\upcite{GRU}。
-根据是否对反向序列（Reversed Sequence）建模，RNN可分为单向RNN（Unidirectional RNN）
+根据是否对反向序列（Reversed Sequence）编码，
+RNN可分为单向RNN（Unidirectional RNN）
 和双向RNN（Bidirectional RNN）\upcite{BiRNN}。
 由于普通RNN受到梯度消失的影响，目前学界普遍采用LSTM或者GRU；
 尽管后者受到梯度爆炸的影响，但是可以通过梯度剪裁（Gradient~Clipping）
 \upcite{GoogleChatbot}解决。
-采用多层RNN组成的深度神经网络比单层RNN能获得更好的性能\upcite{GoogleChatbot}。
+此外，多层RNN组成的深度循环神经网络比单层RNN有更好的性能\upcite{GoogleChatbot}。
 
 \subsection{RNN语言模型}\label{subsec:RNNLM}
 % ---------------- RNNLM ------------------ %
-RNN语言模型可以给出序列$X=x_1, x_2, \cdots, x_n$的概率分布：
+RNN语言模型通过循环神经网络估计给定序列$X=x_1, x_2, \cdots, x_n$的概率分布：
 \begin{align}
     p(X) = \prod_{i=1}^{n} p(x_i|x_1, x_2, \cdots, x_{i-1})
-    \label{eqn:language_model_probability}
-\end{align}
-
-RNN语言模型\footnote{为了简洁起见，我们描述了普通RNN。LSTM和GRU有着更复杂的数学表达式。}
-通过神经网络中的参数来估计公式~\ref{eqn:language_model_probability}~乘积中的一项：
-\begin{align}
+    \label{eqn:language_model_probability} \\
     p(x_i = w|x_1, x_2, \cdots, x_{i-1}) = \frac{\exp{o_{tw}}}{\sum_{v=1}^V \exp{o_{tv}}}
     \label{eqn:language_model_estimation}
 \end{align}
-$o_t$是RNN的在$t$时刻的输出向量，$V$是词汇表的大小。
-公式~\ref{eqn:language_model_estimation}~的右边本质上是对一个长度为$V$的向量进行softmax运算。
-$t$时刻的输出向量是由输出矩阵$W_{out}$和$t$时刻隐层状态$h_i$相乘得到的：
+
+$o_t$是RNN的在$t$时刻的输出向量，$V$是词汇表的大小，
+RNN语言模型\footnote{为了简洁起见，我们描述了不使用任何门单元的RNN。LSTM和GRU有着更复杂的数学表达式。}通过如下公式计算出$o_t$：
 \begin{align}
-    o_i &= h_i^T W_{out}
-\end{align}
-而$h_i$则是当前输入$x_i$和上一时刻的隐层状态$h_{i-1}$在输入矩阵$W_{in}$和循环矩阵$W_{hh}$分别作用后再相加的结果：
-\begin{align}
+    o_i &= h_i^T W_{out} \\
     h_i &= \sigma \left( x_i^T W_{in} + h_{i-1}^T W_{hh} \right)
 \end{align}
+
+$W_{in}$是输入矩阵，$W_{out}$是输出矩阵，$W_{hh}$是循环矩阵，
+$\sigma$是激活函数。
 RNN语言模型在训练时最大化训练集上的句子的对数概率：
 \begin{align}
     \mathit{L(X)} = \sum_{i=1}^n \log p(x_i|x_1, x_2, \cdots, x_{i-1})
 \end{align}
-在预测时，对模型输入消息$m$，从模型的给出的概率分布中用某种搜索方法，如Beam Search可得出响应$r$。
+
+在解码时，RNN语言模型通过预测下一个单词，从一个全零的初态开始生成句子。
 
 \subsection{Seq2Seq框架}\label{subsec:Seq2Seq}
 % ------------------ Seq2Seq ------------------ %
 如图~\ref{fig:Seq2Seq}~所示，
-Seq2Seq框架使用两个拥有独立参数的RNN分别作为编码器和解码器。
-尽管编解码器不一定都使用RNN\upcite{JointTransAlign}，本文仅关注使用RNN的Seq2Seq变体。
+Seq2Seq框架使用两个有着独立参数的RNN分别作为编码器和解码器。
 首先，编码器把输入序列$X$编码成一个定长向量$v$。
-该向量又称为思考向量（Though Vector），是编码器完全读取输入序列后的隐层状态（Last Hidden State）。
-接着，解码器以$v$为初始隐层状态（Initial Hidden State），像一个RNN语言模型一样对输出序列进行预测。
-整个过程可以描述为：编码器把输入序列$X$变换成某种压缩编码$v$，再由解码器把$v$还原为另一个序列$Y$，
-Seq2Seq把公式~\ref{eqn:generative_conditional_probability}~
-作了如下转化：
-\begin{align}
-    p(y_1, y_2, \cdots, y_m|x_1, x_2, \cdots, x_n) = \prod_{i=1}^m p(y_i|v, y_1, y_2, \cdots, y_{i-1})
-\end{align}
-其中$v$是以$f$为门单元的编码器的最后一个隐层状态：
-\begin{align}
-    h_i &= f(x_i ,h_{i-1}) \\
-    v &= h_n
-\end{align}
-编码器和解码器以同一个目标函数同时训练。
-为了更好的处理长序列，Seq2Seq一般引入注意力机制（Attention Mechanism）
-\upcite{
-JointTransAlign,
-EffectiveAttention}，使输入序列的信息不必全部通过固定长度的向量$v$传递。
-解码器能自动关注和当前输出最相关的输入部分，实现输入序列与输出序列的对自动对齐（Alignment）。
-注意力机制使传统Seq2Seq模型对较长输入也具有鲁棒性。
+该向量又称为思考向量（Though Vector），
+是编码器的最后一个隐藏状态（Last Hidden State）。
+接着，解码器以$v$为初始隐藏状态（Initial Hidden State），
+像RNN语言模型一样生成输出序列。
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figure/Seq2Seq.png}
     \caption{Seq2Seq框架图\upcite{Seq2Seq}}
     \label{fig:Seq2Seq}
 \end{figure}
+
+通过先把输入序列$X$变换成某种压缩编码$v$，
+再把$v$还原为另一个序列$Y$，
+Seq2Seq把公式~\ref{eqn:generative_conditional_probability}~作了如下转化：
+\begin{align}
+    h_i &= f(x_i ,h_{i-1}) \\
+    v &= h_n \\
+    p(y_1, y_2, \cdots, y_m|x_1, x_2, \cdots, x_n) &=
+    \prod_{i=1}^m p(y_i|v, y_1, y_2, \cdots, y_{i-1})
+\end{align}
+
+$h_n$是编码器的最后一个隐藏状态， $f$是编码器采用的门单元函数。
+编码器和解码器以同一个目标函数同时训练。
+
+为了更好的处理长序列，
+Seq2Seq一般引入注意力机制（Attention Mechanism）
+\upcite{JointTransAlign,EffectiveAttention}，
+使输入序列的信息不必全部通过固定长度的向量$v$传递。
+该机制使解码器能自动关注和当前输出最相关的输入部分，
+实现输入序列与输出序列的对自动对齐（Automatic Alignment）。
+
 
 \subsection{多层编解码器}\label{subsec:hierarchical_rnn}
 多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}是一种能利用多轮对话结构的生成式模型。

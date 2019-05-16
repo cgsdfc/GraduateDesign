@@ -36,7 +36,7 @@
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figure/drawio/eval_v3.pdf}
+    \includegraphics[width=0.8\textwidth]{figure/drawio/eval_v4.pdf}
     \caption{实验框架}
     \label{fig:framework}
 \end{figure}
@@ -189,5 +189,32 @@ LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google
 \end{table}
 
 \section{指标配置}\label{sec:metric_config}
+我们尽可能使用业界公认的指标实现，并且使用推荐的指标参数。
+和\cite{HowNot}一样，我们只考虑单轮对话，并且每个系统输出响应都只有单个参考响应。
+% -- BLEU -- %
+我们使用NLTK\footnote{\url{https://www.nltk.org/}}提供的BLEU实现， 并且加入了平滑处理。
+% -- ROUGE -- %
+我们使用了自己实现的ROUGE，并将准确率和召回率的比例设置为1:9，因为在机器翻译领域，
+召回率比准确率和人类评价的相关性更高\upcite{METEOR}。
+ROUGE-W的权重设置为1.2 。
+% -- METEOR -- %
+我们使用了METEOR的官方实现\texttt{meteor-1.5.jar}，并且按照官方文档
+\footnote{\url{http://www.cs.cmu.edu/~alavie/METEOR/README.html}}的说明，
+加入对特定语言（英语）的优化过的正则化处理。
+% -- PPL -- %
+我们使用Serban等人的\texttt{evaluate.py}脚本测量模型的困惑度，
+由于该程序对测试样本进行了随机取样，我们无法得知某个样本的确切得分，所以只测得了系统层面的得分。
+% -- EB -- %
+关于词嵌入的指标，我们对Serban等人的\texttt{embedding\_metrics.py}脚本进行了改写，
+使之能测量句子层面的得分；和他们一样，我们使用在谷歌新闻文库（Google News Corpus）上进行训练的
+word2vec词嵌入\footnote{\url{https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM}}。
+% -- ADEM -- %
+关于ADEM指标，我们使用作者提供的代码库\footnote{\url{https://github.com/mike-n-7/ADEM.git}}和预训练模型
+\footnote{\url{https://drive.google.com/file/d/0B-nb1w_dNuMLY0Fad3N1YU9ZOU0/view?usp=sharing}}。
+该版本的ADEM使用了VHRED的句子编码器和上下文编码器，并在一个带人类评价的Twitter文库上训练。
+最后，我们自己实现了比较简单的Distinct-N指标。
 
 \section{本章小结}\label{sec:method_conclusion}
+本章详细介绍了实验的各项设置，包括模型的超参数和训练过程，
+数据集的预处理操作和一些统计数据，以及指标的实现和参数选择。
+在下一章中，我们将展示实验的结果并进行讨论。

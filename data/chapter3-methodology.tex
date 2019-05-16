@@ -108,18 +108,17 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 
 所有的模型都在一台GeForce GTX TITAN X上训练了至少1周。
 模型收敛时的困惑度如表~\ref{tab:converged_perplexity}~所示。
-% -- TODO
 \begin{table}[H]
     \centering
-    \caption{模型收敛时的困惑度(TODO)}
+    \caption{模型收敛时的困惑度}
     \label{tab:converged_perplexity}
     \begin{tabular}{llll}
         \toprule
         & HRED & LSTM & VHRED \\
         \midrule
-        LSDSCC & & &  \\
-        OpenSubtitles & & &  \\
-        Ubuntu & & &  \\
+        LSDSCC & 32.9229 & 32.5599 & 37.7149 \\
+        OpenSubtitles & 41.6392 & 34.2724 & 33.6867 \\
+        Ubuntu & 39.1623 & 46.4055 & 40.2486 \\
         \bottomrule
     \end{tabular}
 \end{table}

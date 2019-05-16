@@ -77,6 +77,7 @@ RNN语言模型在训练时最大化训练集上的句子的对数概率：
 
 \subsection{Seq2Seq框架}\label{subsec:Seq2Seq}
 % ------------------ Seq2Seq ------------------ %
+如图~\ref{fig:Seq2Seq}~所示，
 Seq2Seq框架使用两个拥有独立参数的RNN分别作为编码器和解码器。
 尽管编解码器不一定都使用RNN\upcite{JointTransAlign}，本文仅关注使用RNN的Seq2Seq变体。
 首先，编码器把输入序列$X$编码成一个定长向量$v$。
@@ -100,6 +101,12 @@ JointTransAlign,
 EffectiveAttention}，使输入序列的信息不必全部通过固定长度的向量$v$传递。
 解码器能自动关注和当前输出最相关的输入部分，实现输入序列与输出序列的对自动对齐（Alignment）。
 注意力机制使传统Seq2Seq模型对较长输入也具有鲁棒性。
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figure/Seq2Seq.png}
+    \caption{Seq2Seq框架图\upcite{Seq2Seq}}
+    \label{fig:Seq2Seq}
+\end{figure}
 
 \subsection{多层编解码器}\label{subsec:hierarchical_rnn}
 多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}是一种能利用多轮对话结构的生成式模型。

@@ -154,35 +154,61 @@ $w_{m, <n} = \{ w_{m, 1}, \cdots, w_{m, n-1} \}$。
 
 % ------------------ Decoding ------------------ %
 \subsection{解码算法}\label{subsec:decode}
-生成式模型仅仅定义了条件概率$p(Y|X)$，在推理阶段（Inference），需要采用某种启发式搜索算法从概率分布中
-生成输出$Y$，这个过程又称为解码（Decode）。
+生成式模型仅仅定义了条件概率$p(Y|X)$，
+在解码阶段，需要采用某种启发式搜索算法从概率分布中生成输出$Y$。
 最简单的搜索算法是贪心搜索（Greedy Search）：在每一时刻都输出条件概率最大的单词：
 \begin{align}
-    y_i = \argmax_{y_i \in V} p(y_i|y_1, y_2, \cdots, y_{i-1}, X)
+    y_i = \argmax_{w \in V} p(w|y_1, y_2, \cdots, y_{i-1}, X)
 \end{align}
 因为各个$y_i$的概率都不是独立的，而是受之前输出的单词的影响，贪心搜索不能保证得到概率最大的输出序列。
-随机取样（Random Sampling）在每一时刻都从模型生成的全体词汇的概率分布中随机选取一个单词。
-这样就使输出就带有不确定性，在一定程度上增加了输出的多样性。
-Serban等人曾发现随机取样的输出能避免单调响应的问题，并且能产生多样化的，
-话题相关的输出\upcite{HRED}。
+
+随机取样（Random Sampling）
+每生一步都从模型估计的全体词汇的离散概率分布中随机选取一个单词：
+\begin{align}
+    p(y_i = w) = p(w|y_1, y_2, \cdots, y_{i-1}, X), w \in V
+\end{align}
+Serban等人发现随机取样能避免单调响应的问题，并且能产生多样化的，
+话题相关的输出\upcite{HRED}，
+但是Li等人指出随机取样会导致输出中出现语法错误\upcite{DiverseBeam}。
+
 最为常用的方法是集束搜索（Beam Search），它在生成整个句子的过程中维护一个大小为$B$的列表，称为集束（Beam）。
 算法开始时，集束初始化为模型生成的$B$个概率最高的单词。
 在每一个时刻开始时，集束中都有$B$个部分生成的句子，它们称为候选$Y_c$。
-在每一个时刻，算法对集束中的每一个候选都生成$B$个概率最大的下一个单词$w_{i+1, c}$，从而形成$B \times B$个部分生成的句子$Y_{ex}$，
-称为扩展的候选集。从扩展的候选集中，只保留前$B$个概率$p(Y_{ex}|X)$最大的句子。
-算法不断迭代直到在某次对候选集的扩展中，某些候选中产生了句子结束符号（End-of-Sentence，EOS），
-于是概率最大而且完成了的候选句子将作为输出。
+在每一个时刻，算法对集束中的每一个候选都生成$B$个概率最大的下一个单词$w_{i+1, c}$，从而形成$B \times B$个部分生成的句子，
+称为扩展的候选集。从扩展的候选集中，只保留前$B$个概率最大的句子。
+算法不断迭代直到某些候选中产生了句子结束符号（End-of-Sentence，EOS），
+算法将这些结束了的句子作为输出。
+本质上，集束搜索是一种队列长度有限的宽度优先搜索
+（Breath First Search）。
 
-% ------ Diverse Beam, MMI, Stochastic Greedy Sampling ------ %
+% ------ Diverse Beam -- %
 为了增加模型输出的多样性，学者们提出了许多改进的解码算法。
-Li等人在\cite{DiverseBeam}中提出在标准集束搜索中，对来自相同父节点的候选加以惩罚，即鼓励来自不同父节点的候选。
-他们在\cite{MMI}中提出用最大互信息（MMI）对标准集束搜索生成的候选列表进行重新排序，
-从而提高候选输出的反向概率（Backward Probability），
-即给定输出$Y$，输入$X$的条件概率$p(Y|X)$，使输出对输入更有针对性。
-他们在\cite{Distill}中提出了一种名为随机贪心取样（Stochastic Greedy Sampling）的解码算法，
-以求在随机取样和贪心搜索之间找到一个平衡点。与传统的随机取样不同，他们的算法只在条件概率最高的前$K$个候选单词中取样，
-参数$K$控制了随机取样和贪心搜索之间的比例：$K$越大，算法越接近随机取样，$K$越小，算法越接近贪心搜索。
+Li等人提出了Diverse Beam算法，
+在标准集束搜索中对来自相同父节点的候选加以惩罚，
+即鼓励来自不同父节点的候选\upcite{DiverseBeam}。
+% -- formula too complex to add -- %
+% -- MMI -- %
+Li等人还提出了以最大互信息（MMI）为目标函数的解码算法\upcite{MMI}。
+本质上，他们训练了一个根据输入预测输出的正向模型（Forward Model）和
+一个根据输出预测输入的反向模型（Backward Model），
+再用反向模型的反向概率$p(Y|X)$对正向模型生成的候选集进行重新排序。
+据此，他们提出了两种解码算法：MMI\_antiLM和MMI\_bidi，
+分别如公式~\ref{eqn:MMI_antiLM}和公式~\ref{eqn:MMI_bidi}~所示：
+\begin{align}
+    MMI(S, T) &= \log \frac{p(S, T)}{p(S)p(T)} \label{eqn:MMI} \\
+    \textit{MMI\_antiLM}(S, T) &= \log p(T|S) - \lambda \log p(T) \label{eqn:MMI_antiLM} \\
+    \textit{MMI\_bidi}(S, T) &= (1 - \lambda) \log p(T|S) + \lambda \log p(S|T) \label{eqn:MMI_bidi}
+\end{align}
+
+% -- Stochastic Greedy Sampling -- %
+Li等人还提出了随机贪心取样（Stochastic Greedy Sampling）算法
+\upcite{Distill}，
+以求在随机取样和贪心搜索之间找到一个平衡点。
+该算法只在条件概率最高的前$K$个候选单词中取样，
+参数$K$控制了随机取样和贪心搜索之间的比例：
+$K$越大，算法越接近随机取样，$K$越小，算法越接近贪心搜索。
 这些改进的解码算法在不同程度上提高了响应的多样性。
+% -- no formula found in paper -- %
 
 % ------------------ Metrics ------------------ %
 \section{自动化评价指标}\label{sec:automatic_metric}

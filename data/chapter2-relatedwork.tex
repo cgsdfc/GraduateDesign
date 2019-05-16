@@ -258,20 +258,20 @@ BLEU的最终公式为：
     \textit{BLEU} = \textit{BP} \cdot \exp \left( \sum_{n=1}^N w_n \log p_n \right)
 \end{align}
 实际使用中一般取$N = 4$，$w_n = 1 / N$。
-原始的BLEU容易在句子层面给出0分，人们提出了各种平滑处理\upcite{sBLEU-Smooth}。
+由于原始的BLEU容易在句子层面给出0分，人们提出了各种平滑处理\upcite{sBLEU-Smooth}。
 本文在使用BLEU时也采用了一种平滑处理。
 
 % ------------ ROUGE -------------- %
 ROUGE，Recall-Oriented Understudy for Gisting Evaluation\upcite{ROUGE}是一种基于召回率的自动摘要领域的指标。
-它有多个变体：ROUGE-N，ROUGE-L，ROUGE-W，ROUGE-S，以及ROUGE-SU，
+它有多个变形：ROUGE-N，ROUGE-L，ROUGE-W，ROUGE-S，以及ROUGE-SU，
 分别使用了不同的计数单元（Counting Unit），如n-gram共现数、最长公共子序列（Longest Common Subsequence，LCS）和二元跳词（Skip-Bigram）等等。
-这些指标的基础是信息检索领域常用的F-measure，即准确率$P$和召回率$R$的加权调和平均值：
+这些指标的基础是信息检索领域常用的F-measure，即准确率和召回率的加权调和平均值：
 \begin{align}
     \textit{F-measure} = \frac{(1 + \beta^2) RP}{R + \beta^2 P}
 \end{align}
 $\beta$控制准确率和召回率的相对重要性。
-以下无特殊说明时，当指标是句子层面的时候，$n$是系统输出的句子的长度，$m$是参考输出的句子的长度；
-当指标是摘要层面的时候，$n$是系统输出的摘要的总单词数，$m$是参考输出的摘要的总单词数。
+以下无特殊说明时，当指标是句子层面的时候，$n$是系统句子的长度，$m$是参考句子的长度；
+当指标是摘要层面的时候，$n$是系统摘要的总单词数，$m$是参考摘要的总单词数。
 
 ROUGE-N利用了n-gram共现数，其公式为：
 \begin{align}
@@ -309,16 +309,18 @@ $\mu$是系统输出的摘要句子的数量， $\textit{LCS}_\cup(r_i, C)$计�
     P_{wlcs} &= f^{-1} \left( \frac{\textit{WLCS}(X, Y)}{f(n)} \right) \\
     \textit{ROUGE-W} &= \frac{(1 + \beta^2) R_{wlcs}P_{wlcs}}{R_{wlcs} + \beta^2 P_{wlcs}}
 \end{align}
-其中$\textit{WLCS}$是一个计算两个序列的加权LCS的算法，该算法奖励较长的连续的LCS。
+$\textit{WLCS}$是一个计算两个序列的加权LCS的算法，它奖励较长的连续的LCS。
 摘要层面的ROUGE-W与摘要层面的ROUGE-L类似。
 
-二元跳词是句子中保持句中顺序的一对单词，两个单词之间可以有任意数量的其他单词。基于二元跳词的句子层面ROUGE-S定义为：
+二元跳词是句子中顺序不变的一对单词，两个单词之间可以有任意数量的其他单词。
+基于二元跳词的句子层面ROUGE-S定义为：
 \begin{align}
     R_{skip2} &= \frac{\textit{SKIP2}(X, Y)}{C(m, 2)} \\
     P_{skip2} &= \frac{\textit{SKIP2}(X, Y)}{C(n, 2)} \\
     \textit{ROUGE-S} &= \frac{(1 + \beta^2) R_{skip2}P_{skip2}}{R_{skip2} + \beta^2 P_{skip2}}
 \end{align}
-$C(\cdot, \cdot)$为组合数。摘要层面的ROUGE-S相当于把摘要看作首尾相连的句子来计算。
+$C(\cdot, \cdot)$为组合数。
+摘要层面的ROUGE-S相当于把摘要看作首尾相连的句子来计算。
 ROUGE-SU是ROUGE-S加入了Unigram的扩展。
 
 % ----------------- METEOR ----------------- %
@@ -344,19 +346,19 @@ METEOR的最终公式为：
 
 % --------- Perplexity ------------ %
 困惑度（Perplexity，PPL）是一种衡量统计语言模型性能的指标。
-困惑度$P$可以形象的表述为：一个语言模型在预测一个词的时候，平均需要从$P$个词中等可能的选出一个,
+一个模型的困惑度为$P$可以形象的表述为：
+该模型在预测一个词的时候，平均需要从$P$个词中等可能的选出一个。
 因此，困惑度越低，语言模型在选择一个词时就越不“困惑”。
 困惑度的计算公式为：
 \begin{align}
-    \textit{PPL} = b^{-\frac{1}{N} \sum_{i=1}^N \log_b p(x_i)}
+    \textit{PPL} = \exp(-\frac{1}{N} \sum_{i=1}^N \log p(x_i))
 \end{align}
-$b$是常量，通常取自然对数、10或者2。
 $N$是测试集的样本数，$x_i$是一个样本，在语言模型中它是一个句子，
 在生成式模型中它是一对输入输出序列$(X, Y)$。
-$p(x_i)$是模型赋给样本的概率。
-一个好的模型应该给测试集的样本赋予较高概率，
-所以好的模型PPL较低。
-实际在自然语言处理中使用的PPL还要除以文本中的总单词数，得到平均每个词的困惑度（Perplexity per-word）：
+$p(x_i)$是模型估计的概率。
+一个好的模型应该给测试集的样本估计较高的概率， 所以好的模型PPL较低。
+实际在自然语言处理中使用的PPL还要除以文本中的总单词数，
+得到平均每个词的困惑度（Perplexity per-word）：
 \begin{align}
     \textit{PPL-w} = \frac{1}{\#\textit{words}} \exp(-\frac{1}{N} \sum_{i=1}^N \log p(x_i))
 \end{align}
@@ -365,7 +367,7 @@ $p(x_i)$是模型赋给样本的概率。
 词嵌入（Word Embedding）指标是一类建立在分布式假设
 \upcite{distributed_hypothesis,Mathematical_structures_of_language}（Distributed Hypothesis）上，
 用分布式语义（Distributed Semantic）来衡量两个句子的相似程度的指标，
-常被用于句子文本相似性（Sentence Textual Similarity）和学生输入自动打分\upcite{GreedyAndOptimal}等任务中。
+常用于句子文本相似性（Sentence Textual Similarity）和学生输入自动打分\upcite{GreedyAndOptimal}等任务中。
 这类指标一般用某种组合方式从单词的向量表示得到句子的向量表示，
 再用余弦相似度（Cosine Similarity）测量两个句子向量的相似程度\upcite{VectorCompose}：
 \begin{align}
@@ -374,24 +376,26 @@ $p(x_i)$是模型赋给样本的概率。
 \end{align}
 最常见组合方式是对单词向量取平均值，类似于词袋表示（Bag-of-Words），对应的指标就是向量平均值（Vector Average）：
 \begin{align}
-    \bar{e_r} = \frac{\sum_{w \in r} e_w}{|\sum_{w' \in r} e_{w'}|} \\
-    \textit{Vector-Average} = \cos(\bar{e_r}, \bar{e}_{\hat{r}})
+    \bar{e_r} &= \frac{\sum_{w \in r} e_w}{|\sum_{w' \in r} e_{w'}|} \\
+    \textit{Vector-Average} &= \cos(\bar{e_r}, \bar{e}_{\hat{r}})
 \end{align}
 $r$是参考输出，$\hat{r}$是系统输出，$w$是句子中的一个单词。
-另外一种组合方式被称为向量极值（Vector Extrema），它把单词向量每个维度上最极端的值作为句子向量在该维度上的值\upcite{Vector_Extrema}：
+
+另外一种组合方式是向量极值（Vector Extrema），它把单词向量每个维度上的极端值作为句子向量在该维度上的值\upcite{Vector_Extrema}：
 \begin{align}
-    \text{extrema}(d_i) =
+    \text{extrema}(d_i) &=
     \begin{cases}
         \ \max d_i & \text{if}\ \max d_i \geq |\min d_i| \\
         \ \min d_i & \text{otherwise}
     \end{cases} \\
-    e_r^{ex} = [\text{extrema}(d_1), \cdots, \text{extrema}(d_n)] \\
-    \textit{Vector-Extrema} = \cos( e_r^{ex}, e_{\hat{r}}^{ex} )
+    e_r^{ex} &= [\text{extrema}(d_1), \cdots, \text{extrema}(d_n)] \\
+    \textit{Vector-Extrema} &= \cos( e_r^{ex}, e_{\hat{r}}^{ex} )
 \end{align}
-$e_r^{ex}$是参考输出的向量极值表示，$e_{\hat{r}}^{ex}$是系统输出的向量极值表示，
-$[\cdot, \cdot]$表示连接多个标量形成一个向量。
-最后一种方法是贪心匹配（Greedy Matching），
-它得名于边加权的二部图（Weighted Bipartite Graph）的最大匹配问题\upcite{GreedyAndOptimal}：
+$[\cdot, \cdot]$表示连接多个标量形成一个向量，
+$e_r^{ex}$是参考输出的向量极值表示，$e_{\hat{r}}^{ex}$是系统输出的向量极值表示。
+
+贪心匹配（Greedy Matching）
+得名于边加权的二部图（Weighted Bipartite Graph）的最大匹配问题\upcite{GreedyAndOptimal}：
 把两个句子的单词看做二部图的节点，任意两个节点之间有一条边，边的权重定义为两个单词的余弦相似度，一个匹配
 定义为一对点，问如何构造一个匹配的集合，使其权重之和最大。贪心匹配给出了一种贪心算法：
 \begin{align}
@@ -405,8 +409,7 @@ $[\cdot, \cdot]$表示连接多个标量形成一个向量。
 除了上述三种组合方法外，还有很多其他方法\upcite{VectorCompose}。
 
 % -------- Distinct-N ---------- %
-Distinct-N是Li等人提出的衡量句子层面的n-gram多样性的简单指标\upcite{MMI}。
-它测量了一个句子不重复的n-gram数量除以句子的长度，公式为：
+Distinct-N是Li等人提出的衡量句子层面的n-gram多样性的指标\upcite{MMI}：
 \begin{align}
     \textit{Distinct-N} = \frac{\#\textit{unique-ngrams}}{\#\textit{words}}
 \end{align}

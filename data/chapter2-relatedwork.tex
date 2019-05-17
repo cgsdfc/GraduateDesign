@@ -415,19 +415,17 @@ Distinct-N是Li等人提出的衡量句子层面的n-gram多样性的指标\upci
 \end{align}
 
 \subsection{评价指标使用情况}\label{subsec:metrics_usage}
-生成式对话系统并不像机器翻译领域有许多和人类评价相关性高的指标。
+生成式对话系统还没有公认的，与人类评价相关度较高的评价指标，
 对话的研究者们很早就意识到了这一点\upcite{Ritter11,GoogleChatbot,Shang,HRED}，
 所以他们常常使用人类评价作为核心的评判标准，有时用一些指标来衡量模型某一方面的性质，
 但很少把指标作为评价系统的主要手段。
-此外，展示和对比不同模型的响应输出也是这个领域常见的分析手段，通常称为定性分析（Qualitative Analysis），
+此外，展示和对比不同模型的响应输出也是这个领域常见的分析手段，通常称为定性分析（Qualitative Analysis），比如
 表~\ref{tab:qualitative_analysis}~展示了模型GoogleChatbot对哲学问题的响应。
 \begin{table}[H]
     \centering
     \caption{定性分析的例子\upcite{GoogleChatbot}}
     \label{tab:qualitative_analysis}
     \begin{tabular}{ll}
-        %        \textbf{Human:} &  \\
-        %        \textbf{Machine:} &  \\
         \textbf{Human:} & what is the purpose of life ? \\
         \textbf{Machine:} & to serve the greater good .\\
         \textbf{Human:} & what is the purpose of living ? \\

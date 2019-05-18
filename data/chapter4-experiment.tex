@@ -1,3 +1,5 @@
+\usepackage{graphicx}
+
 % !Mode:: "TeX:UTF-8"
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
@@ -15,9 +17,26 @@
 \input{data/system_scores.tex}
 
 \section{句子层面得分}\label{sec:utterance_scores}
+我们还从句子层面得分方面进行了分析。
+因为模型生成的句子$u$可以看做一个句子空间$U$上的随机变量，而指标是一个确定的函数$f_{s}$，
+所以可以把句子层面的得分看做一个随机变量$\lambda_u = f_{s}(u)$。
+于是我们便可以用概率分布的工具来分析指标在句子水平的情况。
+
 \subsection{指标的概率分布}\label{subsec:metric_distribution}
-\input{figure/latex/figure/distplot/adem/figure.tex}
-\input{figure/latex/figure/distplot/embedding_based_vector_average/figure.tex}
+我们首先观察了各种指标的句子层面得分的单变量分布（Univariate Distribution）。
+为了突出普遍性，我们首先对每个指标绘制了在所有模型和数据集的组合上的概率分布图。
+为了便于从图像上比较各种指标的分布特征，我们对数值作了正则化处理，使数据的平均值为0，标准为1：
+\begin{align}
+    x' = \frac{x - \mu}{\sigma}
+\end{align}
+中心极限定理表明（Central Limit Theorems）：大量独立随机变量的叠加近似于高斯分布。
+因为各位人类评价员之间的评价是独立的， 我们假设当句子足够多时，句子层面的人类评价近似于高斯分布。
+从该假设出发可以认为，句子层面得分的分布接近高斯分布是一个指标和人类评价具有较高相关性的前提条件。
+
+如图~\ref{fig:ADEMdist}~所示，ADEM的分布非常接近高斯分布（Gaussian Distribution），
+并且ADEM与人类评价的相关性比较高\upcite{ADEM}。
+\input{data/distplot_grid/adem.tex}
+\input{data/distplot_grid/bleu_2.tex}
 
 \subsection{不同指标的相关性分析}\label{subsec:metric_correlation}
 

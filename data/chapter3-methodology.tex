@@ -214,7 +214,8 @@ word2vec词嵌入\footnote{\url{https://drive.google.com/file/d/0B7XkCwpI5KDYNlN
 关于ADEM指标，我们使用作者提供的代码库\footnote{\url{https://github.com/mike-n-7/ADEM.git}}和预训练模型
 \footnote{\url{https://drive.google.com/file/d/0B-nb1w_dNuMLY0Fad3N1YU9ZOU0/view?usp=sharing}}。
 该版本的ADEM使用了VHRED的句子编码器和上下文编码器，并在一个带人类评价的Twitter文库上训练。
-最后，我们自己实现了比较简单的Distinct-N指标。
+我们自己实现了比较简单的Distinct-N指标。
+我们的指标还加入了句子长度$\textit{\#words}$，以观察句子长度对不同指标的得分是否有影响。
 
 \section{本章小结}\label{sec:method_conclusion}
 本章详细介绍了实验的各项设置，包括模型的超参数和训练过程，

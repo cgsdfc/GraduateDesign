@@ -28,9 +28,11 @@
 \begin{align}
     x' = \frac{x - \mu}{\sigma}
 \end{align}
-我们绘制了在所有$(m, d, s)$的组合上绘制了分布图，并发现各种指标的分布在不同的数据集和模型的组合上
-有着相似的形状。为了使读者能迅速检阅所有指标的分布，我们在正文中展示的是$(\text{HRED}, \text{OpenSubtitles})$
-上各项指标的分布。请参阅附录~\ref{ch:metric_dist}~查看所有的组合上的分布。
+我们绘制了所有模型和数据集的组合上的分布图。
+图片的数量非常多，为了使读者能快速检阅所有指标的分布情况，
+我们在正文只展示了模型为HRED，数据集为OpenSubtitles
+的各项指标的分布。
+请参阅附录~\ref{ch:metric_dist}~查看所有的组合上的分布。
 
 \input{data/distplot_group/BLEU.tex}
 图~\ref{fig:BLEU_dist}~是BLEU的N取1到4时的分布图。
@@ -94,16 +96,53 @@ ROUGE-2这类图像的特点是几乎所有句子的得分都集中在均值，
 相应的，ROUGE-1，ROUGE-L，ROUGE-W都退化成了BLEU-1。
 
 \input{data/distplot_group/Other.tex}
-图~\ref{fig:Other_dist}~是Distinct-N，METEOR和#words的分布图。
+图~\ref{fig:Other_dist}~是Distinct-N，METEOR和\#words的分布图。
+我们发现Distinct-1的分布呈现两极分化，
+在均值附近和均值右边较远处都聚集了大量句子。
+Distinct-N的分母是句子的长度（\#words），
+分子是句子中各异的n-gram数量。
+从\ref{fig:words_dist}来看，句子的长度集中在均值附近，
+长于均值的句子比短于均值的句子多，
+这表明Distinct-N的值主要受分子影响。
+Distinct-1的曲线表明，极大部分句子的各异的单词数量都接近平均值，
+但也有少部分句子各异的单词数量远远小于平均值。
+% -- Distinct-2
+Distinct-2的图像没有出现两极分化，
+可能是因为Bigram的空间比Unigram更大，
+一个句子更容易出现各异的Bigram。
+图像的特点是：
+\begin{enumerate}
+    \item 大部分句子集中在高于均值的一片区域。
+    \item 个别低于均值的区间聚集了大量句子。
+\end{enumerate}
+这可以理解为模型在应对不同的消息时，
+生成的句子质量不一，对一部分消息产生了平庸的响应，
+对另一部分消息却产生了单调的响应。
 
+尽管通常被分类成基于词重叠的指标，
+METEOR的图像表现出了和其他基于词重叠的指标（BLEU，ROUGE）相当不同的性质。
+它似乎能区分不同响应的质量，并且和句子长度有着某种联系。
+图像在均值的右侧表现出指数衰减， 在左侧则是一个尖锐的单峰。
+本质上，METEOR是基于Unigram匹配的，
+但是我们尚不清楚METEOR的多种匹配模块，对齐算法和惩罚系数是如何
+使它的分布变得与BLEU-1等指标的分布如此不同。
 
 % -- Conclusion -- %
 中心极限定理（Central Limit Theorems）表明：大量独立随机变量的叠加近似于高斯分布。
-因为各位人类评价员之间的评价是独立的，我们假设当句子足够多时，句子层面的人类评价近似于高斯分布。
+我们假设当句子足够多时，句子层面的人类评价近似于高斯分布。
 据此我们认为，句子层面得分的分布接近高斯分布是一个指标和人类评价具有较高相关性的前提条件之一。
 从上述各个指标的分布来看， ADEM和词嵌入指标具有很大的潜力。
 
-\subsection{不同指标的相关性分析}\label{subsec:metric_correlation}
+最后要提醒读者，
+本节的分析结果是从OpenSubtitles和HRED的组合中得出的，
+并不能完全代表所有组合下的指标分布情况。
+观察附录~\ref{ch:metric_dist}可发现， 一般来说，
+指标的分布当模型不同而数据集相同时比较相似，
+当模型相同而数据集不同时则有较大差异，
+因此句子层面的指标分布受数据集的影响较大。
+
+\subsection{不同指标的相关性分析}
+\label{subsec:metric_correlation}
 
 \section{定性分析}\label{sec:qualitative_analysis}
 

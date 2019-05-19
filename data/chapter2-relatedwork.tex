@@ -441,8 +441,6 @@ $[1, 5]$的得分。
 Lowe等人在一个带人类评价的Twitter数据集上训练并且评估了ADEM模型，
 发现它和人类评价的相关性在句子水平和系统水平都达到了很高水平。
 
-
-
 % ------- AdverEval --------- %
 Kannan等人初步尝试了把GAN的方法应用到对话系统的自动评价中
 \upcite{AdverEval}，
@@ -451,17 +449,38 @@ Kannan等人初步尝试了把GAN的方法应用到对话系统的自动评价�
 % -- add Li?
 
 % ------ RUBER --------- %
-%基于带参考的得分（Referenced Score）和不带参考的得分（Unreferenced Score）的RUBER
-%Referenced
-%metric and Unreferenced metric Blended
-%Evaluation Routine
+%基于带参考的得分（Referenced Score）和无参考的得分（Unreferenced Score）的RUBER
+%Referenced metric and Unreferenced metric Blended Evaluation Routine
 
-Tao等人提出了基于带参考的得分（Referenced Score）
-和不带参考的得分（Unreferenced Score）的RUBER指标\upcite{RUBER}。
-该指标线性的结合了消息与响应的相似度（不带参考）和参考与响应（带参考）的相似度，
-其中带参考的指标用基于词嵌入的相似度来衡量，
-不带参考的指标通过无监督的负采样（Negative Sampling）来训练。
+Tao等人提出了Referenced Metric and Unreferenced Metric Blended Evaluation Routine指标\upcite{RUBER}，简称RUBER。
+如图~\ref{fig:RUBER_components}~所示，RUBER由带参考的指标（Referenced Score）和无参考的指标（Unreferenced Score）组成。
+带参考的指标使用了
+基于词嵌入的最大-最小池化（Max-Min Pooling）作为句子向量，
+衡量了消息和响应的相似度：
+\begin{align}
+    v_{max}[i] = \max \{ w_1[i], w_2[i], \cdots, w_n[i] \} \\
+    v_{min}[i] = \min \{ w_1[i], w_2[i], \cdots, w_n[i] \} \\
+    v = [v_{max}; v_{min}] \\
+    s_R(r, \hat{r}) = \cos(v_r, v_{\hat{r}}) = \frac{v_r^T v_{\hat{r}}}{\left\| v_r \right\| \cdot \left\| v_{\hat{r}} \right\|}
+\end{align}
+无参考的指标通过如图~\ref{fig:RUBER_unref_model}~所示的神经网络来估计，
+使用无监督的负采样（Negative Sampling）来训练。
 该指标在中文数据集豆瓣网\footnote{http://www.douban.com}上取得了很高的人类评价相关性。
+\begin{figure}[H]
+    \begin{subfigure}{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/RUBER_overview.png}
+        \caption{分数组成}
+        \label{fig:RUBER_components}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/RUBER_model.png}
+        \caption{无参考指标的模型结构}
+        \label{fig:RUBER_unref_model}
+    \end{subfigure}
+    \caption{RUBER指标}
+\end{figure}
 
 % -- Usage of Metrics -- %
 \subsection{评价指标使用情况}\label{subsec:metrics_usage}

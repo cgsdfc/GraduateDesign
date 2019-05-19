@@ -16,8 +16,7 @@
 
 模型的训练目标就是在数据集$S$上最大化给定$X$，$Y$的对数概率（Log Probability）：
 \begin{align}
-    \mathit{L} = \frac{1}{\left |S| \right}
-    \sum_{(Y, X) \in S} \log p(Y|X)
+    \mathit{L} = \frac{1}{\left|S|\right} \sum_{(Y, X) \in S} \log p(Y|X)
 \end{align}
 从定义上看，语言模型\upcite{NNLM,RNNLM}（Language Model）和编解码器（Encoder-Decoder）都属于生成式模型，
 因为它们都定义了条件概率$p(Y|X)$。

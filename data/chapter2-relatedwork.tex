@@ -1,3 +1,5 @@
+\usepackage{graphicx}
+
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
 
@@ -410,6 +412,58 @@ Distinct-N是Li等人提出的衡量句子层面的n-gram多样性的指标\upci
     \textit{Distinct-N} = \frac{\#\textit{unique-ngrams}}{\#\textit{words}}
 \end{align}
 
+% ------- ADEM ------------ %
+Lowe等人从自动图灵测试（Automatic Turing Test）得到灵感，
+提出了自动化对话评价模型（Automatic Dialogue Evaluation Model，ADEM）\upcite{ADEM}。
+如图~\ref{fig:ADEM_model}~所示，ADEM采用VHRED的双层编码器
+（Hierarchical Encoder）分别对上下文$c$，参考$r$和响应$\hat{r}$
+进行编码，然后简单的将三者的编码线性组合到一起，并经过归一化得到区间在
+$[1, 5]$的得分。
+模型通过最小化和人类评价的均方误差（Mean Squared Error，MSE），
+可以端对端的训练。
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figure/ADEM.pdf}
+    \caption{ADEM模型结构图}
+    \label{fig:ADEM_model}
+\end{figure}
+
+公式~\ref{eqn:ADEM_score}~是ADEM的打分公式，$M, N$是可学习的
+参数矩阵，$\alpha, \beta$是缩放常量，使得分数落在$[1, 5]$区间。
+公式~\ref{eqn:ADEM_objective}~是模型训练的目标函数 ，
+它是一个带L2正则化的均方误差。
+\begin{align}
+    \textit{score}(c, r, \hat{r}) = (c^T M \hat{r} + r^T N \hat{r} - \alpha) / \beta
+    \label{eqn:ADEM_score} \\
+    \mathcal{L} = \sum_{i=1:K} [\textit{score}(c_i, r_i, \hat{r}_i) - \textit{human}_i]^2 + \gamma \left\| \theta \right\| _2
+    \label{eqn:ADEM_objective}
+\end{align}
+Lowe等人在一个带人类评价的Twitter数据集上训练并且评估了ADEM模型，
+发现它和人类评价的相关性在句子水平和系统水平都达到了很高水平。
+
+
+
+% ------- AdverEval --------- %
+Kannan等人初步尝试了把GAN的方法应用到对话系统的自动评价中
+\upcite{AdverEval}，
+他们训练了一个鉴别器（Discriminator）来区分一个响应是来自系统还是来自人类，并且发现鉴别器能捕捉到基于Seq2Seq的模型
+倾向于生成短句子和通用句子的缺点。
+% -- add Li?
+
+% ------ RUBER --------- %
+%基于带参考的得分（Referenced Score）和不带参考的得分（Unreferenced Score）的RUBER
+%Referenced
+%metric and Unreferenced metric Blended
+%Evaluation Routine
+
+Tao等人提出了基于带参考的得分（Referenced Score）
+和不带参考的得分（Unreferenced Score）的RUBER指标\upcite{RUBER}。
+该指标线性的结合了消息与响应的相似度（不带参考）和参考与响应（带参考）的相似度，
+其中带参考的指标用基于词嵌入的相似度来衡量，
+不带参考的指标通过无监督的负采样（Negative Sampling）来训练。
+该指标在中文数据集豆瓣网\footnote{http://www.douban.com}上取得了很高的人类评价相关性。
+
+% -- Usage of Metrics -- %
 \subsection{评价指标使用情况}\label{subsec:metrics_usage}
 生成式对话系统还没有公认的，与人类评价相关度较高的评价指标，
 对话的研究者们很早就意识到了这一点\upcite{Ritter11,GoogleChatbot,Shang,HRED}，

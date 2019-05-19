@@ -131,31 +131,6 @@ Liu等人在\cite{HowNot}中研究了两类指标，分别是基于词重叠的�
 在技术性的Ubuntu Dialogue Corpus\upcite{ubuntu_corpus}没有相关性。
 朝着Liu等人提出的新方向，许多学者提出了新的对话指标。
 
-% ------- ADEM ------------ %
-在国外，Lowe等人以自动图灵测试（Automatic Turing Test）为灵感，
-提出了一个根据消息（Message），参考（Reference）和响应（Response）预测人类评分的模型，
-称为自动化对话评价模型（Automatic Dialogue Evaluation Model，ADEM）\upcite{ADEM}。
-他们在新的数据和Liu的数据上评估了ADEM模型，发现它和人类评价的相关性在句子水平和系统水平都达到了很高水平。
-% ------- AdverEval --------- %
-Kannan等人初步尝试了把GAN的方法应用到对话系统的自动评价中
-\upcite{AdverEval}，
-他们训练了一个鉴别器（Discriminator）来区分一个响应是来自系统还是来自人类，并且发现鉴别器能捕捉到基于Seq2Seq的模型
-倾向于生成短句子和通用句子的缺点。
-% -- add Li?
-
-% ------ RUBER --------- %
-%基于带参考的得分（Referenced Score）和不带参考的得分（Unreferenced Score）的RUBER
-%Referenced
-%metric and Unreferenced metric Blended
-%Evaluation Routine
-
-在国内，Tao等人提出了基于带参考的得分（Referenced Score）
-和不带参考的得分（Unreferenced Score）的RUBER指标\upcite{RUBER}。
-该指标线性的结合了消息与响应的相似度（不带参考）和参考与响应（带参考）的相似度，
-其中带参考的指标用基于词嵌入的相似度来衡量，
-不带参考的指标通过无监督的负采样（Negative Sampling）来训练。
-该指标在中文数据集豆瓣网\footnote{http://www.douban.com}上取得了很高的人类评价相关性。
-
 本课题延续Liu等人的工作，对自动评价指标进行深入研究。
 Liu等人已经研究了评价指标与人类评价的相关性，并且发现了它们的弱点。
 本课题进一步研究了评价指标之间的相关性，以及模型的性能在不同数据集上的一致性。

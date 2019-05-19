@@ -441,13 +441,6 @@ $[1, 5]$的得分。
 Lowe等人在一个带人类评价的Twitter数据集上训练并且评估了ADEM模型，
 发现它和人类评价的相关性在句子水平和系统水平都达到了很高水平。
 
-% ------- AdverEval --------- %
-Kannan等人初步尝试了把GAN的方法应用到对话系统的自动评价中
-\upcite{AdverEval}，
-他们训练了一个鉴别器（Discriminator）来区分一个响应是来自系统还是来自人类，并且发现鉴别器能捕捉到基于Seq2Seq的模型
-倾向于生成短句子和通用句子的缺点。
-% -- add Li?
-
 % ------ RUBER --------- %
 %基于带参考的得分（Referenced Score）和无参考的得分（Unreferenced Score）的RUBER
 %Referenced metric and Unreferenced metric Blended Evaluation Routine
@@ -481,6 +474,16 @@ Tao等人提出了Referenced Metric and Unreferenced Metric Blended Evaluation R
     \end{subfigure}
     \caption{RUBER指标}
 \end{figure}
+
+% ------- AdverEval --------- %
+Kannan等人初步尝试基于对抗生成网络的对抗式评价
+（Adversarial Evaluation） \upcite{AdverEval}，
+他们训练了一个鉴别器（Discriminator）来区分一个响应是来自系统还是来自人类，
+并且发现鉴别器能捕捉到基于Seq2Seq的模型倾向于生成短句子和通用句子的缺点。
+Li等人在\cite{Adversarial}中构建了完整的对抗生成网络，
+提出了训练和对抗式评价的一体框架。
+由于篇幅有限，不再描述。
+
 
 % -- Usage of Metrics -- %
 \subsection{评价指标使用情况}\label{subsec:metrics_usage}

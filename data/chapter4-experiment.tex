@@ -12,8 +12,69 @@
 在OpenSubtitles上的最优模型是VHRED，
 在Ubuntu上的最优模型是HRED，它在9个指标中取得了最优，但是LSTM也在6个指标中取得了最优。
 \input{data/system_scores.tex}
-\input{data/barplot_group/ADEM_EB.tex}
+
+为了了解不同模型在不同数据集上的表现，我们对每一个指标的系统层面得分
+绘制了柱形图。
 \input{data/barplot_group/BLEU.tex}
+图~\ref{fig:BLEU_system}~是BLEU的系统得分柱形图。
+BLEU-1和BLEU-2的情况比较类似：
+从总体上看，模型在Ubuntu的得分普遍高于在另外两个数据集上的得分，
+而HRED和VHRED在所有数据集上都比LSTM表现好，
+在Ubuntu上，VHRED超过了HRED，但在另外两个数据集上，
+HRED都一致的超过了VHRED。
+模型的BLEU-1得分在虽然在不同数据集之间相差较大，
+但在同一个数据集内却相差不大。
+然而，模型的BLEU-2，BLEU-3，BLEU-4得分即便在同一个数据集内也相差很大。
+
+BLEU-3和BLEU-4的情况比较类似：
+从总体上看，没有哪一个数据集的得分要普遍高于其他数据集上的得分。
+在所有数据集上，HRED和VHRED仍然普遍比LSTM得分高，
+虽然有时候优势不太明显 。
+VHRED在OpenSubtitles上大幅度的超过了HRED，
+但在另外两个数据集上，HRED都超过了VHRED。
+从绝对数量的角度来看，BLEU的得分随着N的增大而减小，
+表现在图上就是，$N = i$的BLEU最低分不低于$N = i + 1$的最高分，
+这可能是因为两个句子的n-gram共现数随着$N$的增大而减少。
+
+\input{data/barplot_group/ADEM_EB.tex}
+图~\ref{fig:ADEM_EB_system}~是基于词嵌入的指标和ADEM的系统得分柱形图。
+ADEM指标由于有着和词嵌入指标相似的句子得分分布，放在一起比较。
+有趣的是，ADEM对所有数据集上的所有模型的打分都非常接近2.6。
+从表~\ref{tab:systemScoresAll}~看出，
+当数据集不同时，ADEM的分数在百分位变化，
+当数据集相同而模型不同时，ADEM的分数在千分位或之后变化，
+这表明数据集对ADEM得分的影响要大于模型的影响。
+\begin{table}[H]
+    \centering
+    \caption{ADEM的系统层面打分}
+    \label{tab:ADEM_system}
+    \begin{tabular}{llll}
+        \toprule
+        & HRED & LSTM & VHRED \\
+        \midrule
+        LSDSCC & 2.6178 & 2.6127 & 2.6163  \\
+        OpenSubtitles & 2.6228 & 2.6224 & 2.6219 \\
+        Ubuntu & 2.6353 & 2.6381 & 2.635 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+由于从图~\ref{subfig:ADEM_system}~中难以得分的优劣，
+我们将从表~\ref{tab:ADEM_system}~得出结论：
+首先，从数据集的角度，所有模型在Ubuntu上的得分好于在OpenSubtitles的得分，
+而后者要好于在LSDSCC上的得分。
+其次，从模型的角度，在LSDSCC上，HRED的得分好于VHRED的得分，
+后者要好于LSTM的得分。
+在OpenSubtitles上，HRED的得分好于LSTM的得分，
+后者要好于VHRED的得分。
+在Ubuntu上，最好的模型是LSTM，其次是HRED，最后是VHRED。
+从上述分析来看，HRED在两个数据集上得分最优，
+VHRED在两个数据集上得分最差，
+LSTM在三个数据集上排名各不相同。
+尽管得分的差异很小（最大值和最小值之间只相差0.019），
+而且各个数据集上模型的排名都不相同，但是还是可以看出，
+HRED在ADEM指标上表现较好，而VHRED则较差。
+
+
 \input{data/barplot_group/ROUGE.tex}
 \input{data/barplot_group/Other.tex}
 

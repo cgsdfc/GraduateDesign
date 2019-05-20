@@ -98,11 +98,10 @@ LSDSCC是单轮对话，OpenSubtitles是3轮对话，而Ubuntu是多轮对话。
 多轮对话数据集更有利于能够利用它们的HRED和VHRED。
 
 \input{data/barplot_group/ROUGE.tex}
-图~\ref{fig:ROUGE_N_system}~和图~\ref{fig:ROUGE_LW_system}~
-是ROUGE的系统得分柱形图。
+图~\ref{fig:ROUGE_system}~是ROUGE的系统得分柱形图。
 从总体上看，
 不同数据集上的模型在ROUGE-1，ROUGE-2，ROUGE-L和ROUGE-W的得分都不为0，
-但在ROUGE-2和ROUGE-4上，多个模型的得分接近0，
+但在ROUGE-3和ROUGE-4上，多个模型的得分接近0，
 这是正常的，因为一般来说，响应和参考之间的高阶n-gram重叠非常少。
 ROUGE-1，ROUGE-L和ROUGE-W的图像非常相似。
 在这三个指标上，在LSDSCC和OpenSubtitles上，HRED和VHRED超过了LSTM，
@@ -111,9 +110,32 @@ ROUGE-1，ROUGE-L和ROUGE-W的图像非常相似。
 但是模型之间的差距有时很大，比如LSDSCC上的ROUGE-2，
 有时很小，比如OpenSubtitles上的ROUGE-1。
 
-在ROUGE-2和ROUGE-4上
+在ROUGE-3和ROUGE-4上，LSTM的得分在所有数据集上普遍很低，
+而HRED和VHRED在某些数据集上得分也很低，
+在Ubuntu上，所有模型的得分都很低。
+令人注目的是，VHRED在OpenSubtitles和LSDSCC上都取得了不错的成绩，
+而HRED的表现在LSDSCC上较好，在OpenSubtitles上较差。
 
 \input{data/barplot_group/Other.tex}
+图~\ref{fig:Other_system}~是Distinct-N，
+METEOR和句子长度的系统得分图。
+先看句子长度，在Ubuntu上的模型的句子长度明显大于
+在LSDSCC上的模型，而后者大于在OpenSubtitles上的模型。
+从第~\ref{sec:dataset_proprecessing}~节我们知道，
+在训练集的平均句子长度上，有Ubuntu > LSDSCC > OpenSubtitles。
+模型生成的响应的长度和训练集的平均句子长度具有一致性，
+这是因为训练的目标函数是最大化训练集样本的对数概率，
+模型倾向于模仿训练集的统计特征。
+
+Distinct-N对模型的区分度并不高，
+在同一个数据集上训练的模型，它们的Distinct-N都比较接近。
+从数据集的角度，OpenSubtitles上的模型的Distinct-1较高，
+而Ubuntu上的模型的Distinct-2较高。
+METEOR似乎受句子长度的影响较大，
+在句子长度较大的Ubuntu上，模型的METEOR得分要比其他数据集上的得分高得多。
+而LSDSCC上的METEOR也比OpenSubtitles上的得分略高。
+METEOR对不同模型的区分度不是很大，
+从总体上看，HRED和VHRED比LSTM的表现要好。
 
 % -- Boxplot Dataset -- %
 \input{data/boxplot/dataset/BLEU.tex}

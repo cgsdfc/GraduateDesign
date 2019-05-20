@@ -1,0 +1,45 @@
+\begin{tabularx}{\textwidth}{@{}rX@{}}%
+\toprule%
+\midrule%
+\textbf{消息：}&after running that command I lost keyboard input , and it didnt solve the problem . so i force restarted and now i'm back in \_\_eou\_\_ \_\_eot\_\_ You could have gotten to a terminal via ctrl+alt+F1 , for future reference . \_\_eou\_\_ \_\_eot\_\_ how can I press those keys without keyboard input ? \_\_eou\_\_ \_\_eot\_\_ You probably did have keyboard input , just no window in X was active to recieve it . \_\_eou\_\_ \_\_eot\_\_ possibly , though I tried some shortcuts and got no response . I'll remember it for the future though , cheers \_\_eou\_\_ \_\_eot\_\_ Also , sysrq goes directly to the kernel if you are really stuck . \_\_eou\_\_ \_\_eot\_\_\\%
+\textbf{参考：}&thats cool , but not if i dont even have a print screen button on this mac haha \_\_eou\_\_\\%
+\textbf{响应：}&yes , but it was too system so I could eject the usb stick \_\_eou\_\_ no , it 's pissing me off , the windows \_\_eou\_\_ Here is screen the screen where I am using the memtest on my grub > General > Not Found error message of 17 lines now from 5 to Mem : 14 Oct SUPER left {]} usb resume disc . \_\_eou\_\_ going to try again later once more time \_\_eou\_\_\\%
+\midrule%
+\textbf{消息：}&The system may be poweroff or perhabs external connecton is refussed or the system has no openssh{-}client installed at that system if it is debian based \_\_eou\_\_ Or may be due to iptable rules , Pardon me if i am wrong \_\_eou\_\_ \_\_eot\_\_ the machine is right next to me and can ssh my machine . \_\_eou\_\_ \_\_eot\_\_ it means that machine has set iptables for no ssh connection also there might be a possibility that , that machine have no openssh{-}server installed that is necessary \_\_eou\_\_ \_\_eot\_\_ what should I do then ? \_\_eou\_\_ \_\_eot\_\_ Go and install openssh{-}server if already not nistalled in that system and then allow your system ip for ssh to that machine using iptables , you can flush iptables but it is not good idea , use a rule for ssh \_\_eou\_\_ You can also set iptbales rules by ip and also by MAC address \_\_eou\_\_ \_\_eot\_\_ I don't understand the " allow your system ip for ssh to that machine using iptables \_\_eou\_\_ \_\_eot\_\_ i suggest to read a manual for ssh connection , go through google \_\_eou\_\_ Good Luck Man ! \_\_eou\_\_ \_\_eot\_\_ thanks man installing openssh{-}server on machine 2 did the trick . so openssh{-}server was to allow someone to ssh access not to do ssh on some other machine . right ? \_\_eou\_\_ \_\_eot\_\_\\%
+\textbf{参考：}&To connect to any machine that machine have must installed openssh{-}server and to make a connecton to that machine you must have to install open{-}ssh client \_\_eou\_\_ * openssh{-}client \_\_eou\_\_\\%
+\textbf{响应：}&options to /etc/init . ssh/ \_\_eou\_\_\\%
+\midrule%
+\textbf{消息：}&Yes SATA \_\_eou\_\_ And why would it have every other SMART attribute normal \_\_eou\_\_ \_\_eot\_\_ are those internal drives , or usb3 ? \_\_eou\_\_ \_\_eot\_\_\\%
+\textbf{参考：}&I know for sure my USB3 enclosure doesn't work with them , so I'm using standard SATA internal \_\_eou\_\_\\%
+\textbf{响应：}&Drive \_\_eou\_\_ \_\_eou\_\_\\%
+\midrule%
+\textbf{消息：}&if you need to add dns nameservers to resolv . con , that 's no longer the correct file , add them to **unknown** . conf . **unknown** , that file writes to resolv . conf now , and just ignore the warning and add your dns IPs as nameserver \_\_eou\_\_ \_\_eot\_\_ I've got my nameservers set within the networking/interfaces and that seems to do the trick \_\_eou\_\_ \_\_eot\_\_ yes that works if you're using network manager \_\_eou\_\_ \_\_eot\_\_ Is network manger not ideal on a server then ? \_\_eou\_\_ \_\_eot\_\_\\%
+\textbf{参考：}&well if network manager is working , stick with it \_\_eou\_\_\\%
+\textbf{响应：}&no , you pose a right chance of you , sorry \_\_eou\_\_\\%
+\midrule%
+\textbf{消息：}&Any idea why it 's not working , or what I could do to fix it ? \_\_eou\_\_ \_\_eot\_\_ where did you install grub ? \_\_eou\_\_ \_\_eot\_\_ I selected sda for boot loader installation . sdb is a seperate hdd . \_\_eou\_\_ \_\_eot\_\_ Hrm , does windows have its bootloader on sdb ? \_\_eou\_\_ \_\_eot\_\_ I don't know . Do you know how I could check that ? \_\_eou\_\_ \_\_eot\_\_ Ok you have two hds correct ? \_\_eou\_\_ \_\_eot\_\_ Yes , I have an SSD and a HDD . I want / on the SSD and win7 and /home on HDD . \_\_eou\_\_ \_\_eot\_\_\\%
+\textbf{参考：}&Ok ... Hrm , try installing grub to the second hd , that way it /has/ to read grub first \_\_eou\_\_\\%
+\textbf{响应：}&when I tell what gets used , what do you want to install OS onto ? \_\_eou\_\_\\%
+\midrule%
+\textbf{消息：}&how can i manually check if SLI is enabled ? what config file should i check ? \_\_eou\_\_ how can i check if SLI is enabled or not ? im pretty sure its not working , even though i use the commands that should activate it \_\_eou\_\_ where can i get NVIDIA specific ubuntu help ? \_\_eou\_\_ ive tried this channel atleast 10 times , and always basically get ignored .. \_\_eou\_\_ \_\_eot\_\_ What 's the problem ? Have you tried this ? https://help.ubuntu.com/community/BinaryDriverHowto/Nvidia \_\_eou\_\_ \_\_eot\_\_\\%
+\textbf{参考：}&going through it now , thanks \_\_eou\_\_ the nvidia driver is installed , it shows as active , the nvidia settings gui shows the correct driver version as active , everything works , except SLI , so i cant play any nicer games \_\_eou\_\_\\%
+\textbf{响应：}&i want to set 800x600 res to somthing custom everytime \_\_eou\_\_\\%
+\midrule%
+\textbf{消息：}&Mate is the kind of ' project ' that could die off very quickly ... \_\_eou\_\_ ' most supported ' is no longer valid . and ' compatible ' is also debateable . \_\_eou\_\_ \_\_eot\_\_ why this ? \_\_eou\_\_ \_\_eot\_\_ why what .. \_\_eou\_\_ \_\_eot\_\_ mate die \_\_eou\_\_ \_\_eot\_\_\\%
+\textbf{参考：}&its a 3rd party fork . when the main devs get bored with it . it could die off very fast . Ive seen many other projects die off . Like the ' keep kde3 alive project ' or some other projects ive seen over the last decade . \_\_eou\_\_\\%
+\textbf{响应：}&yes .. i was having file playing ... \_\_eou\_\_\\%
+\midrule%
+\textbf{消息：}&find ppa for lucid \_\_eou\_\_ \_\_eot\_\_ the ppa 's for lucid seem not to have **unknown** , whereas the newer ubuntu 's do \_\_eou\_\_ \_\_eot\_\_ it means it 's wrong ppa \_\_eou\_\_ it hsould give you all the libs that you are missing \_\_eou\_\_ \_\_eot\_\_ http://pastebin.ubuntu.com/1300333/ \_\_eou\_\_ those broken packages , how do i get those ? \_\_eou\_\_ \_\_eot\_\_\\%
+\textbf{参考：}&show me your /etc/apt/sources . list \_\_eou\_\_\\%
+\textbf{响应：}&what caused it you are being able to use your repo ? \_\_eou\_\_\\%
+\midrule%
+\textbf{消息：}&hey \_\_eou\_\_ how do i permanently change wifi to accept all european channels ( 12 \& 13 ) ? \_\_eou\_\_ \_\_eot\_\_ you can add the command to /etc/rc . local \_\_eou\_\_ \_\_eot\_\_\\%
+\textbf{参考：}&if i knew the command ... \_\_eou\_\_\\%
+\textbf{响应：}&ok i'm looking at it now \_\_eou\_\_ and also found my script is about line only deal \_\_eou\_\_ but it isnt ... \_\_eou\_\_\\%
+\midrule%
+\textbf{消息：}&Anyone know the correct drivers and way to install them for an ATI Radeon X1200 onboard gpu ? \_\_eou\_\_ \_\_eot\_\_ you can only use the open source radeon driver . \_\_eou\_\_ \_\_eot\_\_ Which one is that ? \_\_eou\_\_ \_\_eot\_\_ \^{} \_\_eou\_\_ \_\_eot\_\_\\%
+\textbf{参考：}&well I can't do anything cause of video lag ... \_\_eou\_\_\\%
+\textbf{响应：}&Here the website isn't working : driver to open source ??? \_\_eou\_\_\\%
+\midrule\bottomrule%
+%
+\end{tabularx}

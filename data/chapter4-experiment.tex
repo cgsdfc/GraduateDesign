@@ -19,6 +19,9 @@
 \end{enumerate}
 以下所有图片均使用seaborn绘制\footnote{\url{http://seaborn.pydata.org/}}。
 
+% ------------------------- %
+% ----- System Level ------ %
+% ------------------------- %
 \section{系统层面得分}\label{sec:system_scores}
 表~\ref{tab:systemScoresAll}~展示了各个模型在不同数据集上测定的各项指标的系统层面得分，
 加粗的得分是三个系统中的最优者，
@@ -169,12 +172,11 @@ METEOR对不同模型的区分度不是很大，
 我们得出的结论是相同的，但是由于这些箱体图数量较多，所以放在了附录。
 附录~\ref{ch:dataset_system_dist}~和
 附录~\ref{ch:model_system_dist}~分别从
-数据集的维度
-和
-模型的维度
-展示了不同指标的系统层面得分。
+数据集的维度 和 模型的维度 展示了不同指标的系统层面得分。
 
+% --------------------- %
 % -- Utterance Level -- %
+% --------------------- %
 \section{句子层面得分}\label{sec:utterance_scores}
 我们还从句子层面得分方面进行了分析。
 因为模型生成的句子$u$可以看做一个句子空间$U$上的随机变量，而指标是一个确定的函数$f_{s}$，
@@ -229,7 +231,7 @@ Lowe在\cite{ADEM}中指出，ADEM倾向于保守打分，
 说明它不倾向于打高分或者低分。
 
 \input{data/distplot_group/ROUGE.tex}
-图~\ref{fig:ROUGE_N_dist}~和图~\ref{fig:ROUGE_LW_dist}~是ROUGE系列指标的分布图。
+图~\ref{fig:ROUGE_dist}~是ROUGE系列指标的分布图。
 从曲线的形状来看，大致可分为两类：
 ROUGE-1，ROUGE-L，ROUGE-W是一类，
 ROUGE-2，ROUGE-3，ROUGE-4是一类。

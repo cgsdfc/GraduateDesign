@@ -124,7 +124,7 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 \end{table}
 
 与\cite{VHRED}不同的是，我们没有用预训练的HRED的参数来初始化对应的VHRED。
-从实验结果来看，从零开始训练的VHRED也能达到和HRED相匹配的性能。
+从实验结果来看，未经过预训练的VHRED的性能普遍不如HRED。
 所有的模型都使用了梯度剪裁，阈值为1。
 所有模型在Ubuntu上的学习率为0.0002，
 在OpenSubtitles和LSDSCC上的学习率为0.0001。

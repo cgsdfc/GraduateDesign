@@ -38,7 +38,6 @@ VHRED在OpenSubtitles上大幅度的超过了HRED，
 
 \input{data/barplot_group/ADEM_EB.tex}
 图~\ref{fig:ADEM_EB_system}~是基于词嵌入的指标和ADEM的系统得分柱形图。
-ADEM指标由于有着和词嵌入指标相似的句子得分分布，放在一起比较。
 有趣的是，ADEM对所有数据集上的所有模型的打分都非常接近2.6。
 从表~\ref{tab:systemScoresAll}~看出，
 当数据集不同时，ADEM的分数在百分位变化，
@@ -74,6 +73,9 @@ LSTM在三个数据集上排名各不相同。
 而且各个数据集上模型的排名都不相同，但是还是可以看出，
 HRED在ADEM指标上表现较好，而VHRED则较差。
 
+和ADEM相比，基于词嵌入的指标则表现的更具有一致性。
+Average，Greedy和Extrema三种指标虽然在绝对数值上有些差异，
+但是图像的模式却非常相似。
 
 \input{data/barplot_group/ROUGE.tex}
 \input{data/barplot_group/Other.tex}

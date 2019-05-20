@@ -4,17 +4,43 @@
 
 \chapter{实验结果与讨论}\label{ch:experiment}
 本章从系统层面得分，句子层面得分和定性分析三个方面展示了实验的数据与结论。
+在众多数据中，我们发现以下主要的结论：
+\begin{enumerate}
+    \item 同一个数据集上的模型的得分差异较小，不同数据集上的模型得分差异较大。
+    \item 各个指标的分布情况呈现集群现象，同一集群内的指标分布相似，不同集群之间的指标分布迥异。
+    \item 尽管在某些指标或数据集上一个模型一致的超过另一个模型，但是在全部指标和数据集上，没有这种现象。
+\end{enumerate}
+我们把上述结论归因于以下几个方面：
+\begin{enumerate}
+    \item 生成式对话的合理响应空间巨大，响应具有很高的熵，给评价增加了难度。
+    \item 模型在不同数据集上的泛化能力有待加强。
+    \item 对话数据集的质量参差不齐，而模型的质量和数据集的质量紧密相关。
+    \item 指标捕捉了错误的表征，给评价模型的性能加入了噪音。
+\end{enumerate}
+以下所有图片均使用seaborn绘制\footnote{\url{http://seaborn.pydata.org/}}。
 
 \section{系统层面得分}\label{sec:system_scores}
-图~\ref{tab:systemScoresAll}~展示了各个模型在不同数据集上测定的各种指标的系统层面得分，
-加粗的得分是三个系统中的最优者。
-从表中的数据来看，在LSDSCC上的最优模型是HRED，
-在OpenSubtitles上的最优模型是VHRED，
-在Ubuntu上的最优模型是HRED，它在9个指标中取得了最优，但是LSTM也在6个指标中取得了最优。
+表~\ref{tab:systemScoresAll}~展示了各个模型在不同数据集上测定的各项指标的系统层面得分，
+加粗的得分是三个系统中的最优者，
+句子平均长度（\#words）不是作为一个指标而是作为一个参考数据出现的，
+所以没有加粗。
+从表中的数据来看，
+在LSDSCC上HRED取得了除ROUGE-4外所有指标的最优，
+在OpenSubtitles上，VHRED取得了除了ADEM和Distinct-N之外所有指标
+的最优，
+在Ubuntu上情况比较复杂：HRED取得9个指标的最优，
+LSTM取得了6个指标的最优，
+VHRED取得了3个指标的最优。
+如果我们把在一个数据集上取得最优指标最多的模型称为在该数据集上的
+最优模型的话，
+从总体上看，HRED是所有数据集上的最优模型，
+因为它在LSDSCC和OpenSubtitles都是最优模型。
+但是观察在每一项指标上取得最优的模型时我们发现，
+不同数据集上的取得最优的模型往往不相同。
 \input{data/system_scores.tex}
+为了了解不同模型在不同数据集上的表现，
+我们对每一个指标的系统层面得分绘制了柱形图。
 
-为了了解不同模型在不同数据集上的表现，我们对每一个指标的系统层面得分
-绘制了柱形图。
 \input{data/barplot_group/BLEU.tex}
 图~\ref{fig:BLEU_system}~是BLEU的系统得分柱形图。
 BLEU-1和BLEU-2的情况比较类似：
@@ -137,6 +163,17 @@ METEOR似乎受句子长度的影响较大，
 METEOR对不同模型的区分度不是很大，
 从总体上看，HRED和VHRED比LSTM的表现要好。
 
+本节利用柱状图分析了模型，数据集和指标的系统层面得分。
+在一些图中，各个模型或者数据集的得分差异不十分明显，
+为了突显得分的差异，我们把观察的维度分成数据集和模型，并分别绘制了箱体图。
+我们得出的结论是相同的，但是由于这些箱体图数量较多，所以放在了附录。
+附录~\ref{ch:dataset_system_dist}~和
+附录~\ref{ch:model_system_dist}~分别从
+数据集的维度
+和
+模型的维度
+展示了不同指标的系统层面得分。
+
 % -- Utterance Level -- %
 \section{句子层面得分}\label{sec:utterance_scores}
 我们还从句子层面得分方面进行了分析。
@@ -144,9 +181,7 @@ METEOR对不同模型的区分度不是很大，
 所以可以把句子层面的得分看做一个随机变量$\lambda_u = f_{s}(u)$。
 于是我们便可以用描述统计学（Descriptive Statistics）和统计推断断（Statistical Inference）
 的方法来分析指标在句子水平的情况，包括单变量和双变量的方法，以及各种统计数据。
-以下所有图片均使用seaborn绘制\footnote{\url{http://seaborn.pydata.org/}}。
 
-\subsection{指标的概率分布}\label{subsec:metric_distribution}
 我们绘制了各种指标的句子层面得分的单变量分布（Univariate Distribution）。
 为了便于从图像上比较各种指标的分布特征，我们对数值作了归一化（Scaling）处理，使数据的平均值为0，标准差为1：
 \begin{align}
@@ -264,9 +299,6 @@ METEOR的图像表现出了和其他基于词重叠的指标（BLEU，ROUGE）�
 指标的分布当模型不同而数据集相同时比较相似，
 当模型相同而数据集不同时则有较大差异，
 因此句子层面的指标分布受数据集的影响较大。
-
-\subsection{不同指标的相关性分析}
-\label{subsec:metric_correlation}
 
 \section{定性分析}\label{sec:qualitative_analysis}
 

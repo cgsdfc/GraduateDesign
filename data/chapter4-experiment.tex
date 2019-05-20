@@ -72,10 +72,12 @@ LSTM在三个数据集上排名各不相同。
 尽管得分的差异很小（最大值和最小值之间只相差0.019），
 而且各个数据集上模型的排名都不相同，但是还是可以看出，
 HRED在ADEM指标上表现较好，而VHRED则较差。
+这可能是因为我们没有用预训练的HRED初始化VHRED。
 
 和ADEM相比，基于词嵌入的指标则表现的更具有一致性。
 Average，Greedy和Extrema三种指标虽然在绝对数值上有些差异，
 但是图像的模式却非常相似。
+从总体来看，
 
 \input{data/barplot_group/ROUGE.tex}
 \input{data/barplot_group/Other.tex}

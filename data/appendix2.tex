@@ -2,7 +2,14 @@
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
 
-\chapter{不同模型的系统得分分布图}\label{ch:model_system_dist}
+\chapter{不同模型的系统得分}\label{ch:model_system_dist}
+我们在这里展示了不同模型的不同指标的箱体图。
+横坐标是模型，每一个箱子概括了三个数据集的情况。
+箱子的上面和下面的黑线是模型得分的标准差，表示得分的变动范围。
+从这些图像我们可以清楚的看到模型在数据集上的平均水平以及模型得分的相对高低。
+这些图像从模型的维度再现了第~\ref{sec:system_scores}~节的结论。
+但是，由于数据集对指标得分的影响大于模型，一个模型在多个数据集上的分布
+有较大的方差。
 
 % -- Boxplot Model -- %
 \input{data/boxplot/model/BLEU.tex}

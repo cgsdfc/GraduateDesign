@@ -1,5 +1,3 @@
-\usepackage{graphicx}
-
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
 
@@ -415,7 +413,7 @@ Distinct-N是Li等人提出的衡量句子层面的n-gram多样性的指标\upci
 % ------- ADEM ------------ %
 Lowe等人从自动图灵测试（Automatic Turing Test）得到灵感，
 提出了自动化对话评价模型（Automatic Dialogue Evaluation Model，ADEM）\upcite{ADEM}。
-如图~\ref{fig:ADEM_model}~所示，ADEM采用VHRED的双层编码器
+如图~\ref{fig:ADEM_model}~所示，ADEM采用VHRED的多层编码器
 （Hierarchical Encoder）分别对上下文$c$，参考$r$和响应$\hat{r}$
 进行编码，然后简单的将三者的编码线性组合到一起，并经过归一化得到区间在
 $[1, 5]$的得分。

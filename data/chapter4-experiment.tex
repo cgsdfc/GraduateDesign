@@ -74,10 +74,29 @@ LSTM在三个数据集上排名各不相同。
 HRED在ADEM指标上表现较好，而VHRED则较差。
 这可能是因为我们没有用预训练的HRED初始化VHRED。
 
-和ADEM相比，基于词嵌入的指标则表现的更具有一致性。
+和ADEM相比，基于词嵌入的指标表现的更具有一致性。
 Average，Greedy和Extrema三种指标虽然在绝对数值上有些差异，
 但是图像的模式却非常相似。
-从总体来看，
+从总体来看，在所有数据集和指标上，HRED和VHRED都比LSTM表现的好。
+我们发现在LSDSCC上，这三个指标很难将模型区分开来，
+事实上，所有模型在LSDSCC上的某个指标都倾向于得到相同的分数。
+我们猜测这是因为LSDSCC的测试集样本太少（300个），
+没有足够多的样本令模型之间的差异展现出来。
+在测试集样本数比较多的OpenSubtitles上，三个模型的区别比在LSDSCC上明显，
+但是由于OpenSubtitles的噪音比较大，话题比较分散，
+模型相对比较容易产生话题相关的响应，
+导致三个模型的区分不是特别明显。
+在Ubuntu上，三个模型具有最明显的区分，
+HRED和VHRED超过了LSTM并拉开了较大距离。
+我们猜测这是因为Ubuntu是一个技术领域的数据集，
+含有大量技术词汇，如\texttt{apt-get}，\texttt{java}等等。
+模型必须能捕捉到消息中的技术相关的语义并生成相关的句子才能的高分，
+这要求模型对消息的主题有很强的捕捉能力。
+HRED和VHRED比LSTM多了编码器结构，可以肯定它们捕捉消息主题的能力更强。
+此外，模型在三个数据集上的区分度的不同也和数据集的对话轮数有关，
+LSDSCC是单轮对话，OpenSubtitles是3轮对话，而Ubuntu是多轮对话。
+多轮对话数据集更有利于能够利用它们的HRED和VHRED。
+
 
 \input{data/barplot_group/ROUGE.tex}
 \input{data/barplot_group/Other.tex}

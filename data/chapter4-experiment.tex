@@ -3,30 +3,28 @@
 % Email: zhengxi.tian@hotmail.com
 
 \chapter{实验结果与讨论}\label{ch:experiment}
-本章从系统层面得分，句子层面得分和定性分析三个方面展示了实验的数据与结论。
+本章从系统层面得分和句子层面得分两个方面展示了实验的数据与结论。
 在众多数据中，我们发现以下主要的结论：
 \begin{enumerate}
     \item 同一个数据集上的模型的得分差异较小，不同数据集上的模型得分差异较大。
     \item 各个指标的分布情况呈现集群现象，同一集群内的指标分布相似，不同集群之间的指标分布迥异。
-    \item 尽管在某些指标或数据集上一个模型一致的超过另一个模型，但是在全部指标和数据集上，没有这种现象。
+    \item 尽管在某些指标或数据集上一个模型超过另一个模型，但是在全部指标和数据集上，没有哪个模型一致的超过另一个模型。
 \end{enumerate}
 我们把上述结论归因于以下几个方面：
 \begin{enumerate}
-    \item 生成式对话的合理响应空间巨大，响应具有很高的熵，给评价增加了难度。
+    \item 合理的响应的空间巨大，响应具有很高的熵，给评价增加了难度。
     \item 模型在不同数据集上的泛化能力有待加强。
     \item 对话数据集的质量参差不齐，而模型的质量和数据集的质量紧密相关。
     \item 指标捕捉了错误的表征，给评价模型的性能加入了噪音。
 \end{enumerate}
-以下所有图片均使用seaborn绘制\footnote{\url{http://seaborn.pydata.org/}}。
 
 % ------------------------- %
 % ----- System Level ------ %
 % ------------------------- %
 \section{系统层面得分}\label{sec:system_scores}
 表~\ref{tab:systemScoresAll}~展示了各个模型在不同数据集上测定的各项指标的系统层面得分，
-加粗的得分是三个系统中的最优者，
-句子平均长度（\#words）不是作为一个指标而是作为一个参考数据出现的，
-所以没有加粗。
+加粗的得分是三个系统中的最优者。
+句子平均长度（\#words）没有加粗，因为它是一个参考数据。
 从表中的数据来看，
 在LSDSCC上HRED取得了除ROUGE-4外所有指标的最优，
 在OpenSubtitles上，VHRED取得了除了ADEM和Distinct-N之外所有指标
@@ -43,6 +41,7 @@ VHRED取得了3个指标的最优。
 \input{data/system_scores.tex}
 为了了解不同模型在不同数据集上的表现，
 我们对每一个指标的系统层面得分绘制了柱形图。
+以下所有图片均使用seaborn绘制\footnote{\url{http://seaborn.pydata.org/}}。
 
 \input{data/barplot_group/BLEU.tex}
 图~\ref{fig:BLEU_system}~是BLEU的系统得分柱形图。
@@ -57,12 +56,11 @@ HRED都一致的超过了VHRED。
 
 BLEU-3和BLEU-4的情况比较类似：
 从总体上看，没有哪一个数据集的得分要普遍高于其他数据集上的得分。
-在所有数据集上，HRED和VHRED仍然普遍比LSTM得分高，
+在所有数据集上，HRED和VHRED的得分仍然普遍比LSTM高，
 虽然有时候优势不太明显 。
 VHRED在OpenSubtitles上大幅度的超过了HRED，
 但在另外两个数据集上，HRED都超过了VHRED。
 从绝对数量的角度来看，BLEU的得分随着N的增大而减小，
-表现在图上就是，$N = i$的BLEU最低分不低于$N = i + 1$的最高分，
 这可能是因为两个句子的n-gram共现数随着$N$的增大而减少。
 
 \input{data/barplot_group/ADEM_EB.tex}
@@ -86,11 +84,10 @@ VHRED在OpenSubtitles上大幅度的超过了HRED，
         \bottomrule
     \end{tabular}
 \end{table}
-由于从图~\ref{subfig:ADEM_system}~中难以得分的优劣，
-我们将从表~\ref{tab:ADEM_system}~得出结论：
-首先，从数据集的角度，所有模型在Ubuntu上的得分好于在OpenSubtitles的得分，
+如表~\ref{tab:ADEM_system}~所示，
+从数据集的角度，所有模型在Ubuntu上的得分好于在OpenSubtitles的得分，
 而后者要好于在LSDSCC上的得分。
-其次，从模型的角度，在LSDSCC上，HRED的得分好于VHRED的得分，
+从模型的角度，在LSDSCC上，HRED的得分好于VHRED的得分，
 后者要好于LSTM的得分。
 在OpenSubtitles上，HRED的得分好于LSTM的得分，
 后者要好于VHRED的得分。
@@ -148,15 +145,15 @@ ROUGE-1，ROUGE-L和ROUGE-W的图像非常相似。
 \input{data/barplot_group/Other.tex}
 图~\ref{fig:Other_system}~是Distinct-N，
 METEOR和句子长度的系统得分图。
-先看句子长度，在Ubuntu上的模型的句子长度明显大于
+在Ubuntu上的模型的句子长度明显大于
 在LSDSCC上的模型，而后者大于在OpenSubtitles上的模型。
 从第~\ref{sec:dataset_proprecessing}~节我们知道，
-在训练集的平均句子长度上，有Ubuntu > LSDSCC > OpenSubtitles。
+训练集的平均句子长度有Ubuntu 大于 LSDSCC 大于 OpenSubtitles。
 模型生成的响应的长度和训练集的平均句子长度具有一致性，
 这是因为训练的目标函数是最大化训练集样本的对数概率，
-模型倾向于模仿训练集的统计特征。
+所以模型倾向于模仿训练集的统计特征。
 
-Distinct-N对模型的区分度并不高，
+Distinct-N对模型的区分度不高，
 在同一个数据集上训练的模型，它们的Distinct-N都比较接近。
 从数据集的角度，OpenSubtitles上的模型的Distinct-1较高，
 而Ubuntu上的模型的Distinct-2较高。
@@ -164,12 +161,12 @@ METEOR似乎受句子长度的影响较大，
 在句子长度较大的Ubuntu上，模型的METEOR得分要比其他数据集上的得分高得多。
 而LSDSCC上的METEOR也比OpenSubtitles上的得分略高。
 METEOR对不同模型的区分度不是很大，
-从总体上看，HRED和VHRED比LSTM的表现要好。
+但从总体上看，HRED和VHRED比LSTM的表现要好。
 
 本节利用柱状图分析了模型，数据集和指标的系统层面得分。
 在一些图中，各个模型或者数据集的得分差异不十分明显，
-为了突显得分的差异，我们把观察的维度分成数据集和模型，并分别绘制了箱体图。
-我们得出的结论是相同的，但是由于这些箱体图数量较多，所以放在了附录。
+为了突显得分的差异，我们把观察的维度分成数据集和模型两个维度，并分别绘制了箱体图。
+通过箱体图得出的结论是相同的，但是由于图像的数量较多，所以放在了附录。
 附录~\ref{ch:dataset_system_dist}~和
 附录~\ref{ch:model_system_dist}~分别从
 数据集的维度 和 模型的维度 展示了不同指标的系统层面得分。
@@ -182,32 +179,32 @@ METEOR对不同模型的区分度不是很大，
 因为模型生成的句子$u$可以看做一个句子空间$U$上的随机变量，而指标是一个确定的函数$f_{s}$，
 所以可以把句子层面的得分看做一个随机变量$\lambda_u = f_{s}(u)$。
 于是我们便可以用描述统计学（Descriptive Statistics）和统计推断断（Statistical Inference）
-的方法来分析指标在句子水平的情况，包括单变量和双变量的方法，以及各种统计数据。
+的方法来分析指标在句子水平的情况。
 
 我们绘制了各种指标的句子层面得分的单变量分布（Univariate Distribution）。
-为了便于从图像上比较各种指标的分布特征，我们对数值作了归一化（Scaling）处理，使数据的平均值为0，标准差为1：
+为了便于从图像上比较各种指标的分布特征，我们对数值作了归一化处理，
+使数据的平均值为0，标准差为1：
 \begin{align}
     x' = \frac{x - \mu}{\sigma}
 \end{align}
-我们绘制了所有模型和数据集的组合上的分布图。
-图片的数量非常多，为了使读者能快速检阅所有指标的分布情况，
-我们在正文只展示了模型为HRED，数据集为OpenSubtitles
-的各项指标的分布。
-请参阅附录~\ref{ch:metric_dist}~查看所有的组合上的分布。
+$\mu$是$x$的平均值，$\sigma$是$x$的标准差。
+为了使读者能快速检阅所有指标的分布情况，
+我们在正文展示了模型为HRED，数据集为OpenSubtitles的各项指标的分布，
+附录~\ref{ch:metric_dist}~展示了所有的组合上的指标分布。
 
 \input{data/distplot_group/BLEU.tex}
 图~\ref{fig:BLEU_dist}~是BLEU的N取1到4时的分布图。
 由于加入了平滑处理，所以大部分得分都有非零数值，
-然而正如\cite{HowNot}所说，大部分句子的得分非常低，
-在图像上的反映是，在均值附近集中了大量的概率质量（Probability Mass）。
-得分较高和较低的句子非常少，几乎没有。
-比其更高的N值，Unigram匹配是最容易得到的，所以BLEU-1在
-均值的右边有一个比较低矮的分布，并且峰值对应的横坐标偏离了均值0，
+在均值附近集中了大量的句子，
+这可能是因为大部分句子的得分非常低\cite{HowNot}。
+一元词匹配相对高阶n-gram匹配更容易，
+所以BLEU-1在均值的右边有一个低矮的峰值，
+并且峰值对应的横坐标偏离了均值0，
 这说明有相当一部分句子的得分高于均值。
-而低于均值的部分出现了一个高峰，说明也有大量句子得分低于均值，
-但总体来说，得分高于均值的句子更多。
-BLEU-2至4的分布都非常相似，峰值的横坐标比BLEU-1更接近均值。
-从总体上来说，BLEU的分布形状十分尖锐，大量句子集中在均值或略高于均值附近，
+而低于均值的部分出现了一个高峰，说明也有大量句子得分低于均值。
+BLEU-2至4的分布都非常相似，
+只是峰值的横坐标比BLEU-1更接近均值。
+从总体上来说，BLEU的分布形状十分尖锐，大量句子集中在均值附近，
 图像不对称， 峰值比高斯分布的峰值$1 / \sqrt{2 \pi} \approx 0.4$高。
 
 \input{data/distplot_group/ADEM_EB.tex}
@@ -237,11 +234,9 @@ ROUGE-1，ROUGE-L，ROUGE-W是一类，
 ROUGE-2，ROUGE-3，ROUGE-4是一类。
 ROUGE-2这类图像的特点是几乎所有句子的得分都集中在均值，
 除此之外没有其他得分。
-因为我们没有对ROUGE指标做任何平滑处理，
-我们猜想原因是除了极个别句子外，其他句子都得了零分。
+我们猜想因为没有对ROUGE指标做任何平滑处理，除了极个别句子外，
+其他句子都得了零分。
 这表明ROUGE-N指标当$N > 1$时捕捉不到任何n-gram重叠。
-与BLEU不同的是，ROUGE-N不考虑$n < N$的其他n-gram，
-导致它更容易给出0分。
 
 另一方面，ROUGE-1类指标更像是BLEU-1指标的噪化版本，
 它们都是双峰曲线，而且第一个峰值对应的点$(x_1, y_1)$和
@@ -252,9 +247,8 @@ ROUGE-2这类图像的特点是几乎所有句子的得分都集中在均值，
     0 < x_2 < 2, 0 < y_2 < 0.5
 \end{align}
 
-造成上述现象的原因是，所有的响应和参考基本上没有$N > 1$的n-gram重叠，
-因此基于最长公共子序列和它的加权版本的匹配都退化成了Unigram匹配，
-相应的，ROUGE-1，ROUGE-L，ROUGE-W都退化成了BLEU-1。
+我们猜想上述现象的原因是所有的响应和参考基本上没有$N > 1$的n-gram重叠，
+因此基于最长公共子序列的匹配退化成了一元词匹配。
 
 \input{data/distplot_group/Other.tex}
 图~\ref{fig:Other_dist}~是Distinct-N，METEOR和\#words的分布图。
@@ -269,23 +263,23 @@ Distinct-1的曲线表明，极大部分句子的各异的单词数量都接近�
 但也有少部分句子各异的单词数量远远小于平均值。
 % -- Distinct-2
 Distinct-2的图像没有出现两极分化，
-可能是因为Bigram的空间比Unigram更大，
-一个句子更容易出现各异的Bigram。
+可能是因为二元词的空间比一元词的空间更大，
+一个句子各异的二元词通常多余各异的一元词。
 图像的特点是：
 \begin{enumerate}
     \item 大部分句子集中在高于均值的一片区域。
     \item 个别低于均值的区间聚集了大量句子。
 \end{enumerate}
 这可以理解为模型在应对不同的消息时，
-生成的句子质量不一，对一部分消息产生了平庸的响应，
+生成的句子质量不一，对一部分消息产生了多样的响应，
 对另一部分消息却产生了单调的响应。
 
 尽管通常被分类成基于词重叠的指标，
 METEOR的图像表现出了和其他基于词重叠的指标（BLEU，ROUGE）相当不同的性质。
 它似乎能区分不同响应的质量，并且和句子长度有着某种联系。
 图像在均值的右侧表现出指数衰减， 在左侧则是一个尖锐的单峰。
-本质上，METEOR是基于Unigram匹配的，
-但是我们尚不清楚METEOR的多种匹配模块，对齐算法和惩罚系数是如何
+本质上，METEOR是基于一元词匹配的，
+但是我们尚不清楚METEOR的多种匹配模块，对齐算法和惩罚系数如何
 使它的分布变得与BLEU-1等指标的分布如此不同。
 
 % -- Conclusion -- %
@@ -294,7 +288,6 @@ METEOR的图像表现出了和其他基于词重叠的指标（BLEU，ROUGE）�
 据此我们认为，句子层面得分的分布接近高斯分布是一个指标和人类评价具有较高相关性的前提条件之一。
 从上述各个指标的分布来看， ADEM和词嵌入指标具有很大的潜力。
 
-最后要提醒读者，
 本节的分析结果是从OpenSubtitles和HRED的组合中得出的，
 并不能完全代表所有组合下的指标分布情况。
 观察附录~\ref{ch:metric_dist}可发现， 一般来说，
@@ -302,7 +295,7 @@ METEOR的图像表现出了和其他基于词重叠的指标（BLEU，ROUGE）�
 当模型相同而数据集不同时则有较大差异，
 因此句子层面的指标分布受数据集的影响较大。
 
-%\section{定性分析}\label{sec:qualitative_analysis}
 \section{结果与讨论}\label{sec:result_and_discussion}
-本
+本章通过在系统层面的分析和句子层面的分析，
+
 \section{本章小结}\label{sec:experiment_conclusion}

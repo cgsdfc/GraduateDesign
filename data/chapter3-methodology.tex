@@ -4,22 +4,21 @@
 
 \chapter{研究方法}\label{ch:method}
 
-% 简要说明实验框架。并不复杂，一图足矣。
-% 详细说明数据集的统计数据，模型的超参数，训练参数，指标实现的来源，
-% 指标的超参数。这些属于Training Procedure或者Experiment的内容。
-% 因为是本科毕设，写verbose一些也没关系。
 \section{指标测评框架}\label{sec:eval_framework}
-我们的实验主要涉及在多个数据集上训练多个模型，然后用多种指标去测量这些系统的句子层面得分和系统层面得分。
+我们的实验主要涉及在多个数据集上训练多个模型，
+然后用多种指标去测量这些系统的句子层面得分和系统层面得分。
 表~\ref{tab:experiment_triples}~展示了实验所使用的模型，数据集和指标。
 % -- Math & Figure
-如图~\ref{fig:framework}~所示，我们的实验首先从让每一个模型$m$和数据集$d$的组合$(m, d) \in M \times D$在训练集上进行训练，
-并让训练好的$(m, d)$在测试集上解码产生响应$r$，然后再用每一个指标$s \in S$给$r$在句子层面打分，给$(m, d)$在系统层面打分，
+如图~\ref{fig:framework}~所示，
+我们的实验首先从让每一个模型$m$和数据集$d$的组合
+$(m, d) \in M \times D$在训练集上进行训练，
+并让训练好的$(m, d)$在测试集上解码产生响应$r$，
+然后再用每一个指标$s \in S$给$r$在句子层面打分，给$(m, d)$在系统层面打分，
 分别得到$\lambda_{u}$和$\lambda_{s}$。
 实验的最终结果是一个5元组$(m, d, e, \lambda_{u}, \lambda_{s})$，
-表示在数据集$d$上训练的模型$m$在指标$s$的评价下所得的句子层面得分$\lambda_u$和系统层面得分$\lambda_s$。
+表示在数据集$d$上训练的模型$m$在指标$s$
+的评价下所得的句子层面得分$\lambda_u$和系统层面得分$\lambda_s$。
 
-
-%本章将详细介绍模型的超参数，训练流程，数据集预处理等实验细节。
 \begin{table}[H]
     \centering
     \caption{实验对象一览}
@@ -66,14 +65,15 @@ HRED和VHRED的上下文编码器（Context Encoder）
 如表~\ref{tab:utterance_decoder_hidden_units}~所示。
 一般根据数据集的特点来设置不同RNN的隐藏单元数量，
 在样本数多或者词汇表大的数据集上训练时，
-隐藏单元数量会更多。
+隐藏单元数量会相应的增多。
 
 \begin{table}[H]
     \centering
-    \caption{句子解码器的隐层状态单元数量}
+    \caption{句子解码器的隐藏状态单元数量}
     \label{tab:utterance_decoder_hidden_units}
     \begin{tabular}{llll}
         \toprule
+        \midrule
         & HRED & LSTM & VHRED \\
         \midrule
         LSDSCC & 1000 & 2000 & 1000 \\
@@ -97,6 +97,7 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
     \label{tab:utterance_decoder_gate_types}
     \begin{tabular}{llll}
         \toprule
+        \midrule
         & HRED & LSTM & VHRED \\
         \midrule
         LSDSCC & LSTM & GRU & GRU \\
@@ -108,12 +109,18 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 
 所有的模型都在一台GeForce GTX TITAN X上训练了至少1周。
 模型收敛时的困惑度如表~\ref{tab:converged_perplexity}~所示。
+与\cite{VHRED}不同的是，我们没有用预训练的HRED的参数来初始化对应的VHRED。
+所有的模型都使用了梯度剪裁，阈值为1。
+所有模型在Ubuntu上的学习率为0.0002，
+在OpenSubtitles和LSDSCC上的学习率为0.0001。
+在解码时，我们使用随机取样。
 \begin{table}[H]
     \centering
     \caption{模型收敛时的困惑度}
     \label{tab:converged_perplexity}
     \begin{tabular}{llll}
         \toprule
+        \midrule
         & HRED & LSTM & VHRED \\
         \midrule
         LSDSCC & 32.9229 & 32.5599 & 37.7149 \\
@@ -123,26 +130,20 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
     \end{tabular}
 \end{table}
 
-与\cite{VHRED}不同的是，我们没有用预训练的HRED的参数来初始化对应的VHRED。
-从实验结果来看，未经过预训练的VHRED的性能普遍不如HRED。
-所有的模型都使用了梯度剪裁，阈值为1。
-所有模型在Ubuntu上的学习率为0.0002，
-在OpenSubtitles和LSDSCC上的学习率为0.0001。
-在解码时，我们使用随机取样。
-
+% -- Dataset Preprocessing -- %
 \section{数据集预处理}
 \label{sec:dataset_proprecessing}
-我们使用的Ubuntu Dialogue Corpus直接来自Serban等人的项目hed-truncated
+我们使用的Ubuntu Dialogue Corpus直接来自Serban等人的项目
 \footnote{\url{https://github.com/julianser/hed-dlg-truncated.git}}，没有经过任何额外处理。
-我们从Li等人的项目Neural-Dialogue-Generation中获取了经过预处理的OpenSubtitles数据
-\footnote{\url{https://github.com/jiweil/Neural-Dialogue-Generation.git}}（他们称其为OpenSubData）。
-对OpenSubData作了如下处理：
+我们从Li等人的项目
+\footnote{\url{https://github.com/jiweil/Neural-Dialogue-Generation.git}}
+中获取了经过预处理的OpenSubtitles数据，并作了如下处理：
 \begin{enumerate}
     \item 将其从整数的下标形式还原为字符串的单词形式；
-    \item 将其词汇表文件\texttt{movie\_25000}转化为下标从0开始的
-    pickle\footnote{pickle是一个Python特有的序列化格式}格式。
-    \item 用Serban等人的\texttt{convert\_text2dict.py}脚本将训练集，测试集和开发集均转换为pickle格式；
-    \item 选用OpenSubData中的3轮对话，句子最短长度为6的dialogue3\_6格式作为实际使用的数据集；
+    \item 将其词汇表文件\texttt{movie\_25000}转化为下标从0开始的 pickle\footnote{pickle是一个Python特有的序列化格式}格式。
+    \item 用Serban等人的\texttt{convert\_text2dict.py}将训练集，
+    测试集和开发集均转换为pickle格式；
+    \item 选用OpenSubtitles中的轮数为3， 句子最短长度为6的dialogue3\_6格式作为实际使用的数据集；
     \item 从测试集随机抽取1\%的样本作为正式使用的数据集。
 \end{enumerate}
 
@@ -152,43 +153,53 @@ LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google
 剩下的处理过程类似OpenSubData的处理。
 
 表~\ref{tab:train_set_stats}~是三个数据集的训练集的一些统计数据。
-从表中可以看到，OpenSubtitles的样本数量要远远超过其他两个数据集，是Ubuntu的26倍， 是LSDSCC的16倍。
+从表中可以看到，OpenSubtitles的样本数量要远远超过其他两个数据集，
+是Ubuntu的26倍， 是LSDSCC的16倍。
 但是，从单词数量来看，OpenSubtitles超过另外两个数据集的倍数却小得多，
-这是因为Ubuntu的每一个样本包含了多个句子，其长度要远远超过OpenSubtitles的样本。
+这是因为Ubuntu的每一个样本包含了多个句子，
+其长度要远远超过OpenSubtitles的样本。
 这也导致了Ubuntu的样本数量少于LSDSCC，但是单词数量却超过了LSDSCC。
 测试集的统计数据如表~\ref{tab:test_set_stats}~所示。
-对于LSDSCC的测试集，我们其实可以从其训练集分一部分出来作为测试集，这样可以使样本数量更多。
-但是，我们选择了从LSDSCC的多重参考测评集中构造测试集，这导致样本数量只有不到300。
-
+对于LSDSCC的测试集，我们其实可以从其训练集分一部分出来作为测试集，
+这样可以使样本数量更多。
+但是，为了是训练集尽可能大，
+我们选择了从LSDSCC的多重参考测评集中构造测试集，
+导致测试集的样本只有不到300个。
 \begin{table}[H]
     \centering
-    \caption{训练集的统计数据}
-    \label{tab:train_set_stats}
-    \begin{tabular}{lllll}
-        \toprule
-        数据集 & 词汇数量 & 样本数量 & 单词数量 & 轮数 \\
-        \midrule
-        Ubuntu & 20000 & 448833 & 45697699 & 多轮 \\
-        OpenSubtitles & 23876 & 11771393 & 379346841 & 多轮 \\
-        LSDSCC & 35008 & 738095 & 32355628 & 单轮 \\
-        \bottomrule
-    \end{tabular}
+    \caption{数据集的统计数据}
+    \begin{subtable}{0.6\linewidth}
+        \centering
+        \caption{训练集}
+        \label{tab:train_set_stats}
+        \begin{tabular}{lllll}
+            \toprule
+            \midrule
+            数据集 & 词汇数量 & 样本数量 & 单词数量 & 轮数 \\
+            \midrule
+            Ubuntu & 20000 & 448833 & 45697699 & 多轮 \\
+            OpenSubtitles & 23876 & 11771393 & 379346841 & 多轮 \\
+            LSDSCC & 35008 & 738095 & 32355628 & 单轮 \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}%
+    \begin{subtable}{0.3\linewidth}
+        \centering
+        \caption{测试集}
+        \label{tab:test_set_stats}
+        \begin{tabular}{lll}
+            \toprule
+            \midrule
+            样本数量 & 单词数量 \\
+            \midrule
+            18920 & 2045082   \\
+            14714 & 474074 \\
+            299 & 10914 \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
 \end{table}
 
-\begin{table}[H]
-    \centering
-    \caption{测试集的统计数据}
-    \label{tab:test_set_stats}
-    \begin{tabular}{lll}
-        \toprule
-        数据集 & 样本数量 & 单词数量 \\
-        \midrule
-        Ubuntu & 18920 & 2045082   \\
-        OpenSubtitles & 14714 & 474074 \\
-        LSDSCC & 299 & 10914 \\
-        \bottomrule
-    \end{tabular}
-\end{table}
 
 \section{指标配置}\label{sec:metric_config}
 我们尽可能使用业界公认的指标实现，并且使用推荐的指标参数。

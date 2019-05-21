@@ -1,3 +1,5 @@
+\usepackage{graphicx}
+
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
 
@@ -11,8 +13,6 @@
     p(Y|X) = P(y_1, y_2, \cdots, y_m|x_1, x_2, \cdots, x_n)
     \label{eqn:generative_conditional_probability}
 \end{align}
-% Sane way to do |S|:
-% https://tex.stackexchange.com/questions/43008/absolute-value-symbols
 
 模型的训练目标就是在数据集$S$上最大化给定$X$，$Y$的对数概率（Log Probability）：
 \begin{align}
@@ -50,7 +50,8 @@ RNN可分为单向RNN（Unidirectional RNN）
 
 \subsection{RNN语言模型}\label{subsec:RNNLM}
 % ---------------- RNNLM ------------------ %
-RNN语言模型通过循环神经网络估计给定序列$X=x_1, x_2, \cdots, x_n$的概率分布：
+RNN语言模型（RNNLM）
+通过循环神经网络估计给定序列$X=x_1, x_2, \cdots, x_n$的概率分布：
 \begin{align}
     p(X) = \prod_{i=1}^{n} p(x_i|x_1, x_2, \cdots, x_{i-1})
     \label{eqn:language_model_probability} \\
@@ -72,7 +73,18 @@ RNN语言模型在训练时最大化训练集上的句子的对数概率：
     \mathit{L(X)} = \sum_{i=1}^n \log p(x_i|x_1, x_2, \cdots, x_{i-1})
 \end{align}
 
-在解码时，RNN语言模型通过预测下一个单词，从一个全零的初态开始生成句子。
+用于生成式模型的RNN语言模型与用于语言建模的有些不同。
+如图~\ref{fig:RNNLM_as_generative}~所示，
+模型在每个时刻的输入是消息$X$的当前单词$x_i$，
+输出是响应的当前单词$y_i$的概率。
+初始隐藏状态$h_0$一般设置为全零。
+\begin{figure}
+    \centering
+%    \includegraphics[width=0.4\textwidth]{figure/RNNLM.jpg}
+    \includegraphics[width=0.5\textwidth]{figure/drawio/RNNLM-1_v2.pdf}
+    \caption{RNNLM用于生成式模型}
+    \label{fig:RNNLM_as_generative}
+\end{figure}
 
 \subsection{Seq2Seq框架}\label{subsec:Seq2Seq}
 % ------------------ Seq2Seq ------------------ %
@@ -81,8 +93,7 @@ Seq2Seq框架使用两个有着独立参数的RNN分别作为编码器和解码�
 首先，编码器把输入序列$X$编码成一个定长向量$v$。
 该向量又称为思考向量（Though Vector），
 是编码器的最后一个隐藏状态（Last Hidden State）。
-接着，解码器以$v$为初始隐藏状态（Initial Hidden State），
-像RNN语言模型一样生成输出序列。
+接着，解码器以$v$为初始隐藏状态（Initial Hidden State）生成输出序列。
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figure/Seq2Seq.png}

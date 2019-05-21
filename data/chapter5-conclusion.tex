@@ -6,5 +6,51 @@
 \addcontentsline{toc}{chapter}{结论}
 
 \section{总结}\label{sec:conclusion}
+% -- Related Work -- %
+本文对生成式对话领域的模型，数据集和指标进行了一次深入考察。
+我们首先介绍了生成式对话领域的兴起过程中一些重要的模型，比如
+Ritter等人的SMT模型\upcite{Ritter11}，
+Sordoni等人的DCGM模型\upcite{DCGM}和Vinyals等人的
+NCM模型\upcite{GoogleChatbot}。
+接着，在相关工作中，我们介绍了生成式模型的定义，
+模型的核心组件RNN，和几种常见的生成式模型，包括最简单的RNN语言模型，
+广为流行的Seq2Seq框架和多层编解码器HRED。
+我们还介绍了本领域用到过的一些指标，包括基于词重叠的BLEU，
+ROUGE和METEOR，基于词嵌入的Average，Extrema和Greedy，
+衡量概率语言模型性能的困惑度，以及专门为生成式对话设计的ADEM和RUBER。
+最后，我们介绍了生成式对话文献中常见的数据集，
+包括Twitter Dialogue Corpus，Ubuntu Dialogue Corpus和
+OpenSubtitles等等。
+
+% -- Method -- %
+在众多模型，数据集和指标中，我们选择了Serban等人在\cite{VHRED}
+中使用的三个模型HRED，LSTM和VHRED。
+这三个模型有着成熟的实现，易于其他人复现我们的实验。
+在数据集方面，我们选择了公开而且易得的三个代表了不同领域的数据集，
+分别是Ubuntu Dialogue Corpus，OpenSubtitles和LSDSCC。
+这些数据集都是本领域文献中常用的。
+在指标方面，我们尽可能涵盖了对话领域使用过或者提出的指标，
+在配置方面与\cite{HowNot}大致对齐。
+我们的主要工作主要是：
+\begin{enumerate}
+    \item 在多个数据集上训练多个模型。
+    \item 在训练结果上运行多个评价指标。
+    \item 对指标数据进行多种分析。
+\end{enumerate}
+我们的实验数据是多个模型和数据集的组合在不同指标上的系统层面和句子层面
+得分，以及这些模型输出的响应。
+由于时间关系，我们只能分析得分的数据。
+
+我们探索了系统层面和句子层面的实验结果。
+系统层面得分是是对一个模型在一个数据集上的表现的粗粒度考察，
+它可能掩盖了一些事实，
+但是方便我们综合考察模型、数据集和指标三者的整体关系。
+我们参考\cite{HowNot}，将指标的数据进行分组，并按照指标的分组
+组织所有的分析。我们把BLEU的N取不同值的指标分为一组，
+把ROUGE的所有变形分为一组，把词嵌入的指标和ADEM分为一组，
+把剩下的METEOR，Distinct-N和句子长度归到一组。
+分组的最初目的是便于呈现大量图表，合理利用有限的页面空间，
+但是它也让数据分析更加有条理。
+
 
 \section{展望}\label{sec:future_work}

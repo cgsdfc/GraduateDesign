@@ -1,7 +1,0 @@
-# If this flag is on, the model will collapse to a standard RNN:
-# 1) The utterance+dialogue encoder input to the utterance decoder will be zero
-# 2) The utterance decoder will never be reset
-# Note this model will always be initialized with a hidden state equal to zero.
-state['collapse_to_standard_rnn'] = False
-
-# this option controll the LSTM model.

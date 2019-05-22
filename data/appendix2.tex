@@ -2,17 +2,18 @@
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
 
-\chapter{不同模型的系统得分}\label{ch:model_system_dist}
-我们在这里展示了不同模型的不同指标的箱体图。
-横坐标是模型，每一个箱子概括了三个数据集的情况。
-箱子的上面和下面的黑线是模型得分的标准差，表示得分的变动范围。
-从这些图像我们可以清楚的看到模型在数据集上的平均水平以及模型得分的相对高低。
-这些图像从模型的维度再现了第~\ref{sec:system_scores}~节的结论。
-但是，由于数据集对指标得分的影响大于模型，一个模型在多个数据集上的分布
-有较大的方差。
+\chapter{各指标在不同数据集和模型上的概率分布}
+\label{ch:metric_dist}
+我们在这里展示了指标的句子层面得分在不同数据集和模型的组合上的概率分布。
+为了方便对比，我们把一个指标的分布画在一张矩阵图中，
+矩阵的每一行的模型相同，每一列的数据集相同。
+从这些图像中，我们可以同时在数据集和模型的维度观察句子层面得分分布
+的变化规律。
+一个主要的现象是，不同模型在相同数据集上具有相似的句子层面得分分布，
+同一个模型在不同数据集上的句子层面得分分布差异较大。
+这个现象再次说明了数据集对指标得分的影响比模型大。
 
-% -- Boxplot Model -- %
-\input{data/boxplot/model/BLEU.tex}
-\input{data/boxplot/model/ADEM_EB.tex}
-\input{data/boxplot/model/ROUGE.tex}
-\input{data/boxplot/model/Other.tex}
+\input{data/distplot_grid/v2/BLEU.tex}
+\input{data/distplot_grid/v2/ADEM_EB.tex}
+\input{data/distplot_grid/v2/ROUGE.tex}
+\input{data/distplot_grid/v2/Other.tex}

@@ -21,6 +21,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="HRED-VHRED" />
     <orderEntry type="module" module-name="Eval" />
+    <orderEntry type="module" module-name="Template" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />

@@ -78,7 +78,7 @@ RNN语言模型在训练时最大化训练集上的句子的对数概率：
 初始隐藏状态$h_0$一般设置为全零。
 \begin{figure}
     \centering
-%    \includegraphics[width=0.4\textwidth]{figure/RNNLM.jpg}
+    %    \includegraphics[width=0.4\textwidth]{figure/RNNLM.jpg}
     \includegraphics[width=0.5\textwidth]{figure/drawio/RNNLM-1_v2.pdf}
     \caption{RNNLM用于生成式模型}
     \label{fig:RNNLM_as_generative}
@@ -502,21 +502,29 @@ Li等人在\cite{Adversarial}中构建了完整的对抗生成网络，
     \caption{定性分析的例子\upcite{GoogleChatbot}}
     \label{tab:qualitative_analysis}
     \begin{tabular}{ll}
+        \toprule
+        \midrule
         \textbf{Human:} & what is the purpose of life ? \\
         \textbf{Machine:} & to serve the greater good .\\
+        \midrule
         \textbf{Human:} & what is the purpose of living ? \\
         \textbf{Machine:} & to live forever . \\
+        \midrule
         \textbf{Human:} & what is the purpose of existence ? \\
-        \textbf{Machine:} & to find out what happens when we get
-        to the planet earth . \\
+        \textbf{Machine:} & to find out what happens when we get to the planet earth . \\
+        \midrule
         \textbf{Human:} & where are you now ? \\
         \textbf{Machine:} & i' m in the middle of nowhere . \\
+        \midrule
         \textbf{Human:} & what is the purpose of dying ? \\
         \textbf{Machine:} & to have a life . \\
+        \midrule
         \textbf{Human:} & what is the purpose of being intelligent ? \\
         \textbf{Machine:} & to find out what it is . \\
+        \midrule
         \textbf{Human:} & what is the purpose of emotions ? \\
-        \textbf{Machine:} & i don' t know .
+        \textbf{Machine:} & i don' t know . \\
+        \bottomrule
     \end{tabular}
 \end{table}
 
@@ -644,7 +652,7 @@ LSDSCC，A Large Scale Domain-Specific Conversational Corpus，是一个单一�
 他们还进一步让人类评价员对一个消息的所有响应进行分类，并
 基于这个测试集提出了三个面向多样性的评价指标，不过我们并未使用。
 
- % -- Conclusion -- %
+% -- Conclusion -- %
 \section{本章小结}\label{sec:rw_conclusion}
 本章从模型、指标和数据集三个方面回顾了本领域的研究成果和现存问题。
 在模型方面，基于Seq2Seq的对话系统能够直接生成响应，能端对端的训练，减少写死的规则（Hard Written Rules），

@@ -67,22 +67,6 @@ HRED和VHRED的上下文编码器（Context Encoder）
 在样本数多或者词汇表大的数据集上训练时，
 隐藏单元数量会相应的增多。
 
-\begin{table}[H]
-    \centering
-    \caption{句子解码器的隐藏状态单元数量}
-    \label{tab:utterance_decoder_hidden_units}
-    \begin{tabular}{llll}
-        \toprule
-        \midrule
-        & HRED & LSTM & VHRED \\
-        \midrule
-        LSDSCC & 1000 & 2000 & 1000 \\
-        OpenSubtitles & 1000 & 2000 & 1000 \\
-        Ubuntu & 500 & 2000 & 500 \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-
 % -- Direction of Utterance Encoder -- %
 Ubuntu上的模型的句子编码器都使用了单向RNN，
 而OpenSubtitles和LSDSCC上的模型的句子编码器则使用双向RNN。
@@ -91,20 +75,40 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 % -- Gate Type of Decoder -- %
 句子解码器的门单元类型如表~\ref{tab:utterance_decoder_gate_types}~所示
 \footnote{OpenSubtitles和LSDSCC上的LSTM模型的解码器都没有使用LSTM门单元，不过它们仍然是语言模型。}。
-\begin{table}[H]
+\begin{table}
     \centering
-    \caption{句子解码器的门单元类型}
-    \label{tab:utterance_decoder_gate_types}
-    \begin{tabular}{llll}
-        \toprule
-        \midrule
-        & HRED & LSTM & VHRED \\
-        \midrule
-        LSDSCC & LSTM & GRU & GRU \\
-        OpenSubtitles & LSTM & GRU & GRU \\
-        Ubuntu & LSTM & LSTM & LSTM \\
-        \bottomrule
-    \end{tabular}
+    \caption{句子解码器的配置情况}
+    \setlength{\tabcolsep}{0.11cm}%
+    \begin{subtable}{0.5\linewidth}
+        \centering
+        \caption{门单元类型}
+        \label{tab:utterance_decoder_gate_types}
+        \begin{tabular}{llll}
+            \toprule
+            \midrule
+            & HRED & LSTM & VHRED \\
+            \midrule
+            LSDSCC & LSTM & GRU & GRU \\
+            OpenSubtitles & LSTM & GRU & GRU \\
+            Ubuntu & LSTM & LSTM & LSTM \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}%
+    \begin{subtable}{0.4\linewidth}
+        \centering
+        \caption{隐藏状态单元数量}
+        \label{tab:utterance_decoder_hidden_units}
+        \begin{tabular}{lll}
+            \toprule
+            \midrule
+            HRED & LSTM & VHRED \\
+            \midrule
+            1000 & 2000 & 1000 \\
+            1000 & 2000 & 1000 \\
+            500 & 2000 & 500 \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
 \end{table}
 
 所有的模型都在一台GeForce GTX TITAN X上训练了至少1周。
@@ -114,7 +118,7 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 所有模型在Ubuntu上的学习率为0.0002，
 在OpenSubtitles和LSDSCC上的学习率为0.0001。
 在解码时，我们使用随机取样。
-\begin{table}[H]
+\begin{table}
     \centering
     \caption{模型收敛时的困惑度}
     \label{tab:converged_perplexity}

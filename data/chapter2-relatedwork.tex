@@ -437,7 +437,7 @@ $[1, 5]$的得分。
 
 公式~\ref{eqn:ADEM_score}~是ADEM的打分公式，$M, N$是可学习的
 参数矩阵，$\alpha, \beta$是缩放常量，使得分数落在$[1, 5]$区间。
-公式~\ref{eqn:ADEM_objective}~是模型训练的目标函数 ，
+模型训练的目标函数如公式~\ref{eqn:ADEM_objective}~所示，
 它是一个带L2正则化的均方误差。
 \begin{align}
     \textit{score}(c, r, \hat{r}) = (c^T M \hat{r} + r^T N \hat{r} - \alpha) / \beta
@@ -497,7 +497,7 @@ Li等人在\upcite{Adversarial}中构建了完整的对抗生成网络，
 但很少把指标作为评价系统的主要手段。
 此外，展示和对比不同模型的响应输出也是这个领域常见的分析手段，通常称为定性分析（Qualitative Analysis），比如
 表~\ref{tab:qualitative_analysis}~展示了模型GoogleChatbot对哲学问题的响应。
-\begin{table}[H]
+\begin{table}
     \centering
     \caption{定性分析的例子\upcite{GoogleChatbot}}
     \label{tab:qualitative_analysis}
@@ -593,7 +593,7 @@ Twitter相关的数据集由于隐私保护政策的原因，不能公开原始�
 Ubuntu Dialogue Corpus，OpenSubtitles，LSDSCC，
 它们代表了三个常见的对话领域，分别是：技术支持，电影字幕和在线论坛讨论。
 
-\begin{table}[H]
+\begin{table}
     \centering
     \caption{数据集一览}
     \label{tab:dataset_list}

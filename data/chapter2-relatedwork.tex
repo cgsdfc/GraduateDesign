@@ -484,7 +484,7 @@ Kannan等人初步尝试基于对抗生成网络的对抗式评价
 （Adversarial Evaluation） \upcite{AdverEval}，
 他们训练了一个鉴别器（Discriminator）来区分一个响应是来自系统还是来自人类，
 并且发现鉴别器能捕捉到基于Seq2Seq的模型倾向于生成短句子和通用句子的缺点。
-Li等人在\cite{Adversarial}中构建了完整的对抗生成网络，
+Li等人在\upcite{Adversarial}中构建了完整的对抗生成网络，
 提出了训练和对抗式评价的一体框架。
 由于篇幅有限，不再描述。
 
@@ -584,9 +584,9 @@ Vinyals等人对他们提出的基于Seq2Seq的对话系统
 大规模是指对话数量在1M以上的，中等规模是指对话数量在50K--1M之间的\footnote{1K = 1024，1M = 1024 K，1G = 1024 M。}。
 Sina Weibo Corpus是一个中文数据集，其他都是英文数据集。
 Twitter相关的数据集由于隐私保护政策的原因，不能公开原始数据。
-数据集\cite{supreme,wiki_pages,tennis_corpus,parliamentary,gone_awry,movie_dialogs_corpus,DailyDialog}都具有元信息，
+数据集\upcite{supreme,wiki_pages,tennis_corpus,parliamentary,gone_awry,movie_dialogs_corpus,DailyDialog}都具有元信息，
 如时间戳，对话双方身份信息等等。
-数据集\cite{DailyDialog,LSDSCC,DCGM}有人类标注信息，
+数据集\upcite{DailyDialog,LSDSCC,DCGM}有人类标注信息，
 如情感、话题和方面（Aspect）等。
 元信息和人类标注信息提供了额外的表征，对构建更智能的对话系统很有帮助。
 本文把注意力集中在三个数据集上：
@@ -635,9 +635,9 @@ OpenSubtitles是The Open Parallel Corpus，OPUS项目的一部分。
 由于OPUS的目的是收集机器翻译所用到的双语文库（Parallel Corpus），OpenSubtitles也是一个双语文库，
 它里面并没有对话数据集所需要的轮换信息（Turn-Taking），
 而且也没有区分旁白、独白和对白。
-Sordoni等人在\cite{GoogleChatbot}中把OpenSubtitles用到对话领域，
+Sordoni等人在\upcite{GoogleChatbot}中把OpenSubtitles用到对话领域，
 他们把相邻的两个句子视为消息和响应，并且每一个句子既是消息又是响应。
-Li等人在\cite{MMI,persona,Future,DiverseBeam,
+Li等人在\upcite{MMI,persona,Future,DiverseBeam,
 Distill,deep_RL,Adversarial}中也采用了类似的办法。
 尽管充满噪音，OpenSubtitles仍然是目前最大规模的电影字幕数据集。
 
@@ -648,7 +648,7 @@ LSDSCC，A Large Scale Domain-Specific Conversational Corpus，是一个单一�
 作者从Reddit的电影板块\footnote{\url{https://www.reddit.com/r/datasets}}中获取了原始数据，
 设计了一套尽可能保留语料信息的清理程序，还使用人类评价员对消息和响应的相关度进行评价，
 最终得到一个高质量的信息-响应对（Query-Response Pair）文库。
-在构建测试集方面，作者用类似\cite{DCGM}的IR方法构建了一个多重参考评测集。
+在构建测试集方面，作者用类似\upcite{DCGM}的IR方法构建了一个多重参考评测集。
 他们还进一步让人类评价员对一个消息的所有响应进行分类，并
 基于这个测试集提出了三个面向多样性的评价指标，不过我们并未使用。
 

@@ -23,14 +23,14 @@ ROUGE和METEOR，基于词嵌入的Average，Extrema和Greedy，
 OpenSubtitles等等。
 
 % -- Method -- %
-在众多模型，数据集和指标中，我们选择了Serban等人在\cite{VHRED}
+在众多模型，数据集和指标中，我们选择了Serban等人在\upcite{VHRED}
 中使用的三个模型HRED，LSTM和VHRED。
 这三个模型有着成熟的实现，易于其他人复现我们的实验。
 在数据集方面，我们选择了公开的，代表了不同领域的三个数据集，
 分别是Ubuntu Dialogue Corpus，OpenSubtitles和LSDSCC。
 %这些数据集的领域都是文献中常见的。
 在指标方面，我们尽可能涵盖了对话领域使用过或者提出的指标，
-在配置方面与\cite{HowNot}大致对齐。
+在配置方面与\upcite{HowNot}大致对齐。
 实验的主要工作是：
 \begin{enumerate}
     \item 在多个数据集上训练多个模型。
@@ -45,7 +45,7 @@ OpenSubtitles等等。
 系统层面得分是是对一个模型在一个数据集上的表现的粗粒度考察，
 它可能掩盖了一些事实，
 但是方便我们综合考察模型、数据集和指标三者的整体关系。
-我们参考\cite{HowNot}，将指标的数据进行分组，
+我们参考\upcite{HowNot}，将指标的数据进行分组，
 并以此组织所有的分析。我们把BLEU的N取不同值的指标分为一组，
 把ROUGE的所有变形分为一组，把词嵌入的指标和ADEM分为一组，
 把剩下的METEOR，Distinct-N和句子长度归到一组。
@@ -86,7 +86,7 @@ OpenSubtitles等等。
 使用集束搜索可以产生语法错误较少的响应。
 我们没有针对特定数据集做参数的调优，
 导致模型在有些数据集上的表现没有达到最优。
-我们也没有像\cite{VHRED}那样用预训练的HRED初始化VHRED的参数，
+我们也没有像\upcite{VHRED}那样用预训练的HRED初始化VHRED的参数，
 结果VHRED的性能没有达到最优。
 我们将汲取经验教训，尽量减少实验程序带来的噪音。
 
@@ -106,7 +106,7 @@ Seq2Seq框架本质上是一种带注意力的基于RNN的编解码器结构，
 我们可以尝试其他编解码器结构，
 比如Transformer\upcite{Transformer}。
 我们还可以尝试对抗生产网络和强化学习，
-正如Li等人在\cite{deep_RL,Adversarial}所做的那样。
+正如Li等人在\upcite{deep_RL,Adversarial}所做的那样。
 另一方面，我们可以加入感情色彩\upcite{ECM}，
 主题词\upcite{Topic_Aware}以及
 对话者身份信息\upcite{persona}
@@ -141,7 +141,7 @@ Seq2Seq框架本质上是一种带注意力的基于RNN的编解码器结构，
 这样有助于我们理解在这个数据集上训练模型的难度。
 
 % -- Metric -- %
-在指标方面，我们的实验大体上验证了\cite{HowNot}的结论。
+在指标方面，我们的实验大体上验证了\upcite{HowNot}的结论。
 我们认为生成式对话的评价指标首先要解决一个重要的问题，
 即什么样的对话才是好的对话。
 这个问题之所以重要，是因为它不仅能指导指标的构建，

@@ -45,7 +45,7 @@ $(m, d) \in M \times D$在训练集上进行训练，
 
 \section{模型超参数设置}\label{sec:model_hparams}
 % ------ Model setup ----------- %
-在模型超参数方面，我们的设置大致和\cite{VHRED}相同。
+在模型超参数方面，我们的设置大致和\upcite{VHRED}相同。
 我们用Adam\upcite{AdamOpt}来优化所有模型，
 一个小批（Mini-batch）处理20个样本。
 % -- Dimension of Word Embeddings -- %
@@ -109,7 +109,7 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 
 所有的模型都在一台GeForce GTX TITAN X上训练了至少1周。
 模型收敛时的困惑度如表~\ref{tab:converged_perplexity}~所示。
-与\cite{VHRED}不同的是，我们没有用预训练的HRED的参数来初始化对应的VHRED。
+与\upcite{VHRED}不同的是，我们没有用预训练的HRED的参数来初始化对应的VHRED。
 所有的模型都使用了梯度剪裁，阈值为1。
 所有模型在Ubuntu上的学习率为0.0002，
 在OpenSubtitles和LSDSCC上的学习率为0.0001。
@@ -203,7 +203,7 @@ LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google
 % -- Metric Config -- %
 \section{指标配置}\label{sec:metric_config}
 我们尽可能使用业界公认的指标实现和推荐的指标参数。
-和\cite{HowNot}一样，我们只考虑单轮对话，
+和\upcite{HowNot}一样，我们只考虑单轮对话，
 并且每个系统输出响应都只有单个参考响应。
 % -- BLEU -- %
 我们使用NLTK\footnote{\url{https://www.nltk.org/}}提供的BLEU实现，

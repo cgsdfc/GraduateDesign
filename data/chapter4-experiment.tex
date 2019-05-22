@@ -44,7 +44,6 @@ VHRED取得了3个指标的最优。
 \input{data/system_scores.tex}
 
 % -- BLEU -- %
-\input{data/barplot_group/BLEU.tex}
 图~\ref{fig:BLEU_system}~是BLEU的系统得分柱形图。
 BLEU-1和BLEU-2的情况比较类似：
 从总体上看，模型在Ubuntu的得分普遍高于在另外两个数据集上的得分，
@@ -63,16 +62,16 @@ VHRED在OpenSubtitles上大幅度的超过了HRED，
 但在另外两个数据集上，HRED都超过了VHRED。
 从绝对数量的角度来看，BLEU的得分随着N的增大而减小，
 这可能是因为两个句子的n-gram共现数随着$N$的增大而减少。
+\input{data/barplot_group/BLEU.tex}
 
 % -- ADEM_AND_EMB -- %
-\input{data/barplot_group/ADEM_EB.tex}
 图~\ref{fig:ADEM_EB_system}~是基于词嵌入的指标和ADEM的系统得分柱形图。
 有趣的是，ADEM对所有数据集上的所有模型的打分都非常接近2.6。
-从表~\ref{tab:systemScoresAll}~看出，
+从表~\ref{tab:ADEM_system}~看出，
 当数据集不同时，ADEM的分数在百分位变化，
 当数据集相同而模型不同时，ADEM的分数在千分位或之后变化，
 这表明数据集对ADEM得分的影响要大于模型的影响。
-\begin{table}[H]
+\begin{table}
     \centering
     \caption{ADEM的系统层面打分}
     \label{tab:ADEM_system}
@@ -86,7 +85,6 @@ VHRED在OpenSubtitles上大幅度的超过了HRED，
         \bottomrule
     \end{tabular}
 \end{table}
-如表~\ref{tab:ADEM_system}~所示，
 从数据集的角度，所有模型在Ubuntu上的得分好于在OpenSubtitles的得分，
 而后者要好于在LSDSCC上的得分。
 从模型的角度，在LSDSCC上，HRED的得分好于VHRED的得分，
@@ -110,12 +108,12 @@ Average，Greedy和Extrema三种指标虽然在绝对数值上有些差异，
 事实上，所有模型在LSDSCC上的某个指标都倾向于得到相同的分数。
 我们猜测这是因为LSDSCC的测试集样本太少（300个），
 没有足够多的样本令模型之间的差异展现出来。
-在测试集样本数比较多的OpenSubtitles上，三个模型的区别比在LSDSCC上明显，
+在测试集样本数比较多的OpenSubtitles上，三个模型的区别比较明显，
 但是由于OpenSubtitles的噪音比较大，话题比较分散，
 模型相对比较容易产生话题相关的响应，
 导致三个模型的区分不是特别明显。
-在Ubuntu上，三个模型具有最明显的区分，
-HRED和VHRED超过了LSTM并拉开了较大距离。
+在Ubuntu上，三个模型的区分最明显，
+HRED和VHRED超过了LSTM，拉开了较大距离。
 我们猜测这是因为Ubuntu是一个技术领域的数据集，
 含有大量技术词汇，如\texttt{apt-get}，\texttt{java}等等。
 模型必须能捕捉到消息中的技术相关的语义并生成相关的句子才能的高分，
@@ -124,9 +122,9 @@ HRED和VHRED比LSTM多了编码器结构，可以肯定它们捕捉消息主题�
 此外，模型在三个数据集上的区分度的不同也和数据集的对话轮数有关，
 LSDSCC是单轮对话，OpenSubtitles是3轮对话，而Ubuntu是多轮对话。
 多轮对话数据集更有利于能够利用它们的HRED和VHRED。
+\input{data/barplot_group/ADEM_EB.tex}
 
 % -- ROUGE -- %
-\input{data/barplot_group/ROUGE.tex}
 图~\ref{fig:ROUGE_system}~是ROUGE的系统得分柱形图。
 从总体上看，
 不同数据集上的模型在ROUGE-1，ROUGE-2，ROUGE-L和ROUGE-W的得分都不为0，
@@ -144,9 +142,9 @@ ROUGE-1，ROUGE-L和ROUGE-W的图像非常相似。
 在Ubuntu上，所有模型的得分都很低。
 令人注目的是，VHRED在OpenSubtitles和LSDSCC上都取得了不错的成绩，
 而HRED的表现在LSDSCC上较好，在OpenSubtitles上较差。
+\input{data/barplot_group/ROUGE.tex}
 
 % -- Other -- %
-\input{data/barplot_group/Other.tex}
 图~\ref{fig:Other_system}~是Distinct-N，
 METEOR和句子长度的系统得分图。
 在Ubuntu上的模型的句子长度明显大于
@@ -166,6 +164,7 @@ METEOR似乎受句子长度的影响较大，
 而LSDSCC上的METEOR也比OpenSubtitles上的得分略高。
 METEOR对不同模型的区分度不是很大，
 但从总体上看，HRED和VHRED比LSTM的表现要好。
+\input{data/barplot_group/Other.tex}
 
 % -- Conclusion -- %
 本节利用柱状图分析了模型，数据集和指标的系统层面得分。

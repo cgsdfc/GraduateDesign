@@ -37,7 +37,7 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
 和随机取样（Random Sample）等等，产生一个次优解。
 设$X$为输入句子，$Y$为输出句子，$U$是全部句子的集合，生成式模型的一般表示为：
 \begin{align}
-    Y = \argmax_{Y\in U} \left(p(Y|X)\right)
+    Y = \argmax_{Y\in U} p(Y|X)
 \end{align}
 实际中$\argmax$会被某种搜索算法代替。
 

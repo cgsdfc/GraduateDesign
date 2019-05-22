@@ -235,7 +235,6 @@ Lowe在\upcite{ADEM}中指出，ADEM倾向于保守打分，
 说明它不倾向于打高分或者低分。
 
 % -- ROUGE -- %
-\input{data/distplot_group/ROUGE.tex}
 图~\ref{fig:ROUGE_dist}~是ROUGE系列指标的分布图。
 从曲线的形状来看，大致可分为两类：
 ROUGE-1，ROUGE-L，ROUGE-W是一类，
@@ -249,17 +248,11 @@ ROUGE-2这类图像的特点是几乎所有句子的得分都集中在均值，
 另一方面，ROUGE-1类指标更像是BLEU-1指标的噪化版本，
 它们都是双峰曲线，而且第一个峰值对应的点$(x_1, y_1)$和
 第二个峰值对应的点$(x_2, y_2)$都有相似的坐标。
-读者可以验证以下取值范围对BLEU-1，ROUGE-1，ROUGE-L，ROUGE-W都成立：
-\begin{align}
-    -1 < x_1 < 0, 1 < y_1 < 1.5 \\
-    0 < x_2 < 2, 0 < y_2 < 0.5
-\end{align}
-
 我们猜想上述现象的原因是所有的响应和参考基本上没有$N > 1$的n-gram重叠，
 因此基于最长公共子序列的匹配退化成了一元词匹配。
+\input{data/distplot_group/ROUGE.tex}
 
 % -- Other -- %
-\input{data/distplot_group/Other.tex}
 图~\ref{fig:Other_dist}~是Distinct-N，METEOR和\#words的分布图。
 我们发现Distinct-1的分布呈现两极分化，
 在均值附近和均值右边较远处都聚集了大量句子。
@@ -291,6 +284,7 @@ METEOR的图像表现出了和其他基于词重叠的指标（BLEU，ROUGE）�
 本质上，METEOR是基于一元词匹配的，
 但是我们尚不清楚METEOR的多种匹配模块，对齐算法和惩罚系数如何
 使它的分布变得与BLEU-1等指标的分布如此不同。
+\input{data/distplot_group/Other.tex}
 
 % -- Conclusion -- %
 中心极限定理（Central Limit Theorems）表明：

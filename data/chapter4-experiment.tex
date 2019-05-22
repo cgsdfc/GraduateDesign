@@ -99,6 +99,7 @@ LSTM在三个数据集上排名各不相同。
 而且各个数据集上模型的排名都不相同，但是还是可以看出，
 HRED在ADEM指标上表现较好，而VHRED则较差。
 这可能是因为我们没有用预训练的HRED初始化VHRED。
+\input{data/barplot_group/ADEM_EB.tex}
 
 和ADEM相比，基于词嵌入的指标表现的更具有一致性。
 Average，Greedy和Extrema三种指标虽然在绝对数值上有些差异，
@@ -122,9 +123,9 @@ HRED和VHRED比LSTM多了编码器结构，可以肯定它们捕捉消息主题�
 此外，模型在三个数据集上的区分度的不同也和数据集的对话轮数有关，
 LSDSCC是单轮对话，OpenSubtitles是3轮对话，而Ubuntu是多轮对话。
 多轮对话数据集更有利于能够利用它们的HRED和VHRED。
-\input{data/barplot_group/ADEM_EB.tex}
 
 % -- ROUGE -- %
+\input{data/barplot_group/ROUGE.tex}
 图~\ref{fig:ROUGE_system}~是ROUGE的系统得分柱形图。
 从总体上看，
 不同数据集上的模型在ROUGE-1，ROUGE-2，ROUGE-L和ROUGE-W的得分都不为0，
@@ -142,7 +143,6 @@ ROUGE-1，ROUGE-L和ROUGE-W的图像非常相似。
 在Ubuntu上，所有模型的得分都很低。
 令人注目的是，VHRED在OpenSubtitles和LSDSCC上都取得了不错的成绩，
 而HRED的表现在LSDSCC上较好，在OpenSubtitles上较差。
-\input{data/barplot_group/ROUGE.tex}
 
 % -- Other -- %
 图~\ref{fig:Other_system}~是Distinct-N，
@@ -235,6 +235,7 @@ Lowe在\upcite{ADEM}中指出，ADEM倾向于保守打分，
 说明它不倾向于打高分或者低分。
 
 % -- ROUGE -- %
+\input{data/distplot_group/ROUGE.tex}
 图~\ref{fig:ROUGE_dist}~是ROUGE系列指标的分布图。
 从曲线的形状来看，大致可分为两类：
 ROUGE-1，ROUGE-L，ROUGE-W是一类，
@@ -250,7 +251,6 @@ ROUGE-2这类图像的特点是几乎所有句子的得分都集中在均值，
 第二个峰值对应的点$(x_2, y_2)$都有相似的坐标。
 我们猜想上述现象的原因是所有的响应和参考基本上没有$N > 1$的n-gram重叠，
 因此基于最长公共子序列的匹配退化成了一元词匹配。
-\input{data/distplot_group/ROUGE.tex}
 
 % -- Other -- %
 图~\ref{fig:Other_dist}~是Distinct-N，METEOR和\#words的分布图。
@@ -275,6 +275,7 @@ Distinct-2的图像没有出现两极分化，
 这可以理解为模型在应对不同的消息时，
 生成的句子质量不一，对一部分消息产生了多样的响应，
 对另一部分消息却产生了单调的响应。
+\input{data/distplot_group/Other.tex}
 
 % -- METEOR -- %
 尽管通常被分类成基于词重叠的指标，
@@ -284,7 +285,6 @@ METEOR的图像表现出了和其他基于词重叠的指标（BLEU，ROUGE）�
 本质上，METEOR是基于一元词匹配的，
 但是我们尚不清楚METEOR的多种匹配模块，对齐算法和惩罚系数如何
 使它的分布变得与BLEU-1等指标的分布如此不同。
-\input{data/distplot_group/Other.tex}
 
 % -- Conclusion -- %
 中心极限定理（Central Limit Theorems）表明：

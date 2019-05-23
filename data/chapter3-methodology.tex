@@ -154,7 +154,7 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google.com/file/d/1nbpbnhwNP14xAc4SAc1 NN5lvEr01dQb/view?usp=sharing}}。
 由于它的词汇数量多达50K，为了使内存不至于溢出，我们将其词汇表裁剪至35000个最常见的单词。
 此外，由于我们只使用单个参考的指标，因此对LSDSCC的测试集中的多个参考，我们只取第一个参考。
-剩下的处理过程类似OpenSubData的处理。
+剩下的处理过程类似OpenSubtitles的处理。
 
 表~\ref{tab:train_set_stats}~是三个数据集的训练集的一些统计数据。
 从表中可以看到，OpenSubtitles的样本数量要远远超过其他两个数据集，

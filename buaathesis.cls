@@ -36,8 +36,6 @@ The LaTeX template for thesis of BUAA]
 % 引用ctexbook及基本设置
 \LoadClass[zihao=-4,a4paper]{ctexbook}[2007/10/19]
 
-
-
 %%%%%%%%%% global package %%%%%%%%%%
 % 全局通用宏包
 

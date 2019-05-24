@@ -1,5 +1,3 @@
-\usepackage{graphicx}
-
 % !Mode:: "TeX:UTF-8"
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
@@ -198,10 +196,10 @@ LSTM正是通过这些复杂的门运算实现对较长的序列的记忆。
     \centering
     \includegraphics[width=\textwidth]{figure/HRED.png}
     \caption{HRED的计算图\upcite{HRED}}
-    \label{fig:HRED_computation_graph}
+    \label{fig:HRED}
 \end{figure}
 
-如图~\ref{fig:HRED_computation_graph}~所示，
+如图~\ref{fig:HRED}~所示，
 HRED由三个部件组成：
 句子编码器（Utterance Encoder）负责把每一个句子编码成一个固定长度的句子向量（Utterance Vector）$e_u$，
 上下文编码器（Context Encoder）负责把$m$个句子向量$e_{u,1}, \dots, e_{u,m}$编码为一个对话向量（Dialogue Vector）$e_d$，

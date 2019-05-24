@@ -219,6 +219,19 @@ $w_{m, <n}$表示第$m$个句子的第$n$个单词之前的单词序列。
 
 
 \subsection{VHRED模型}\label{subsec:VHRED}
+VHRED（Latent Variable Hierarchical Recurrent Encoder-Decoder）是HRED的扩展，
+它在句子解码器中加入了潜随机变量。
+\begin{align}
+    P_{\theta}(z_n|w_1, \dots, w_{n-1}) = \mathcal{N}(\mu_{\text{prior}}(w_1, \dots, w_{n-1}), \Sigma_{\text{prior}}(w_1, \dots, w_{n-1})) \\
+    P_{\theta}(w_n|z_n, w_1, \dots, w_{n-1}) = \prod_{m=1}^{M_n}P_{\theta}(w_{n, m}|z_n, w_1, \dots, w_{n-1}, w_{n, 1}, \dots, w_{n, m-1})
+\end{align}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figure/VHRED.png}
+    \caption{VHRED的计算图\upcite{VHRED}}
+    \label{fig:VHRED}
+\end{figure}
 
 \section{模型超参数设置}\label{sec:model_hparams}
 % ------ Model setup ----------- %

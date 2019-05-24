@@ -5,6 +5,20 @@
 \chapter{研究方法}\label{ch:method}
 
 \section{实验框架}\label{sec:eval_framework}
+% -- Purposes of Experiment -- %
+目前，学界普遍认为自动评价指标和人类评价没有很强的相关性\upcite{HowNot}，
+但是不同指标之间的一致性似乎还没有得到充分的研究。
+另一方面，生成式对话系统在不同数据集上的迁移能力似乎是一个研究的比较少的问题。
+开放领域的对话数据集所具有的大量噪音，
+多样的话题和较弱的语法正确度对模型质量的影响似乎还没有引起学者们的重视。
+通过实验，我们试图对上述问题进行初步的考察，
+具体来说，我们试图回答以下问题：
+\begin{enumerate}
+    \item 模型的性能在不同数据集之间能否保持而没有大幅度下降？
+    \item 不同的指标在评价同一个数据集上的模型时有没有一致性？
+    \item 模型和数据集，哪一个对得分的影响较大？
+\end{enumerate}
+
 % -- Terms and Definitions -- %
 我们的实验涉及在多个数据集上训练多个模型，
 然后用多种指标测量句子层面得分和系统层面得分。
@@ -73,6 +87,55 @@ $n$是测试集的样本数，$(m, d, s)$是模型，数据集和指标组成的
     \includegraphics[width=0.8\textwidth]{figure/drawio/eval_v4.pdf}
     \caption{实验框架}
     \label{fig:framework}
+\end{figure}
+
+% why did you choose these models?
+% Show me you really understand these model.
+% Why the selection of models is important?
+\section{模型选取}\label{sec:model_selection}
+第~\ref{ch:related_work}~章已经介绍了生成式模型的基本概念和数据集、指标的基本情况。
+和相对有限的数据集和指标相比，生成式模型的发展呈现出日新月异的态势，
+光是我们了解到的不同的模型，就有不下十几个。
+然而我们的时间和精力是有限的，只能根据实验的需求选取几个有代表性的模型进行实验，
+这是一个无可奈何的选择。
+
+% -- 实验目的！！
+我们实验的主要
+
+% show the power of Serban
+
+\subsection{多层编解码器}\label{subsec:HRED}
+多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}是一种能利用多轮对话结构的生成式模型。
+它把一个对话看做一个两层序列结构：一个对话$D$由$M$个句子组成，每个句子由$N_m$个单词组成：
+\begin{align}
+    D &= \{ U_1, \cdots, U_M \} \\
+    U_m &= \{ w_{m, 1}, \cdots, w_{m, N_m} \}
+\end{align}
+
+HRED由三个RNN组成：一个编码RNN（Encoder RNN）负责把每一个句子编码成一个固定长度的向量，称为句子向量（Utterance Vector）；
+一个上下文RNN（Context RNN）负责迭代的处理句子向量，
+把直到并且包括当前轮$m$的所有轮的句子$U_1, \cdots, U_m$编码成一个对话向量（Dialogue Vector）；
+最后，一个解码RNN（Decoder RNN）负责以对话向量为条件，生成对话的下一个句子$U_{m+1}$。
+三个RNN的协作关系如~图\ref{fig:HRED_computation_graph}~所示。
+本质上，HRED通过把对话分解为句子的序列，
+把句子分解为单词的序列，估计了一个对话$D$的概率$P_{\theta}(D)$：
+\begin{align}
+    P_{\theta}(D) &= P_{\theta}(U_1, \cdots, U_M) \\
+    &= \prod_{m=1}^M P_{\theta}(U_m|U_{<m}) \\
+    &= \prod_{m=1}^M \prod_{n=1}^{N_m} P_{\theta}( w_{m, n} |w_{m, <n}, U_{<m} )
+\end{align}
+
+$\theta$是HRED模型的参数，
+$U_{<m}$表示$U_m$之前的句子序列：
+$U_{<m} = \{ U_1, \cdots, U_{m-1} \}$，
+$w_{m, <n}$表示第$m$个句子的第$n$个单词之前的单词序列：
+$w_{m, <n} = \{ w_{m, 1}, \cdots, w_{m, n-1} \}$。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figure/HRED.png}
+    \caption{HRED的计算图\upcite{HRED}}
+    \label{fig:HRED_computation_graph}
 \end{figure}
 
 \section{模型超参数设置}\label{sec:model_hparams}

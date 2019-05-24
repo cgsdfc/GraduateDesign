@@ -78,7 +78,6 @@ RNN语言模型在训练时最大化训练集上的句子的对数概率：
 初始隐藏状态$h_0$一般设置为全零。
 \begin{figure}
     \centering
-    %    \includegraphics[width=0.4\textwidth]{figure/RNNLM.jpg}
     \includegraphics[width=0.5\textwidth]{figure/drawio/RNNLM-1_v2.pdf}
     \caption{RNNLM用于生成式模型}
     \label{fig:RNNLM_as_generative}
@@ -118,44 +117,6 @@ Seq2Seq一般引入注意力机制（Attention Mechanism）
 使输入序列的信息不必全部通过固定长度的向量$v$传递。
 该机制使解码器能自动关注和当前输出最相关的输入部分，
 实现输入序列与输出序列的对自动对齐（Automatic Alignment）。
-
-
-\subsection{多层编解码器}\label{subsec:hierarchical_rnn}
-多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}是一种能利用多轮对话结构的生成式模型。
-它把一个对话看做一个两层序列结构：一个对话$D$由$M$个句子组成，每个句子由$N_m$个单词组成：
-\begin{align}
-    D &= \{ U_1, \cdots, U_M \} \\
-    U_m &= \{ w_{m, 1}, \cdots, w_{m, N_m} \}
-\end{align}
-
-HRED由三个RNN组成：一个编码RNN（Encoder RNN）负责把每一个句子编码成一个固定长度的向量，称为句子向量（Utterance Vector）；
-一个上下文RNN（Context RNN）负责迭代的处理句子向量，
-把直到并且包括当前轮$m$的所有轮的句子$U_1, \cdots, U_m$编码成一个对话向量（Dialogue Vector）；
-最后，一个解码RNN（Decoder RNN）负责以对话向量为条件，生成对话的下一个句子$U_{m+1}$。
-三个RNN的协作关系如~图\ref{fig:HRED_computation_graph}~所示。
-本质上，HRED通过把对话分解为句子的序列，
-把句子分解为单词的序列，估计了一个对话$D$的概率$P_{\theta}(D)$：
-\begin{align}
-    P_{\theta}(D) &= P_{\theta}(U_1, \cdots, U_M) \\
-    &= \prod_{m=1}^M P_{\theta}(U_m|U_{<m}) \\
-    &= \prod_{m=1}^M \prod_{n=1}^{N_m} P_{\theta}(
-    w_{m, n} |w_{m, <n}, U_{<m}
-    )
-\end{align}
-
-$\theta$是HRED模型的参数，
-$U_{<m}$表示$U_m$之前的句子序列：
-$U_{<m} = \{ U_1, \cdots, U_{m-1} \}$，
-$w_{m, <n}$表示第$m$个句子的第$n$个单词之前的单词序列：
-$w_{m, <n} = \{ w_{m, 1}, \cdots, w_{m, n-1} \}$。
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{figure/HRED.png}
-    \caption{HRED的计算图\upcite{HRED}}
-    \label{fig:HRED_computation_graph}
-\end{figure}
-
 
 % ------------------ Decoding ------------------ %
 \subsection{解码算法}\label{subsec:decode}

@@ -123,7 +123,7 @@ HRED和VHRED很好的符合了我们的需求。
 % show the power of Serban
 \subsection{LSTM模型}\label{subsec:LSTM}
 LSTM是一种改进的循环神经网络，用于解决长时间依赖问题\upcite{LSTM}。
-LSTM用多种门结构代替了普通RNN中隐藏矩阵$W_{hh}$，这些门实际上是一个个单层神经网络。
+LSTM用多个门结构代替了普通RNN中隐藏矩阵$W_{hh}$。
 \begin{align}
     f_t &= \sigma(W_f \cdot [h_{t-1}, x_t] + b_f) \\
     i_t &= \sigma(W_i \cdot [h_{t-1}, x_t] + b_i) \\
@@ -140,10 +140,9 @@ $h_{t-1}$是$t-1$时刻的隐藏状态，
 $C_{t-1}$是$t-1$时刻的单元状态（Cell State），
 $f_t$是遗忘门（Forget Gate）的输出，
 $i_t$是输入门（Input Gate）的输出，
-$\hat{C}_t$是候选单元门（Candidate Cell Gate）的输出，
 $o_t$是输出门（Output Gate）的输出；
-$W_f, W_i, W_C, W_o$是四个门的权重矩阵，
-$b_f, b_i, b_C, b_o$是四个门的偏置向量，
+$W_f, W_i, W_o$是三个门的权重矩阵，
+$b_f, b_i, b_o$是三个门的偏置向量，
 $h_t$是通过一系列门运算后得出的$t$时刻的隐藏状态。
 图~\ref{fig:LSTM_structure}~直观的
 展现了LSTM内部各个门的连接方式和数据的流动，

@@ -1,3 +1,5 @@
+\usepackage{graphicx}
+
 % !Mode:: "TeX:UTF-8"
 % Author: Zhengxi Tian
 % Email: zhengxi.tian@hotmail.com
@@ -8,7 +10,8 @@
 % -- Purposes of Experiment -- %
 目前，学界普遍认为自动评价指标和人类评价没有很强的相关性\upcite{HowNot}，
 但是不同指标之间的一致性似乎还没有得到充分的研究。
-另一方面，生成式对话系统在不同数据集上的迁移能力似乎是一个研究的比较少的问题。
+另一方面，生成式对话系统在不同数据集上的迁移能力（Transferability）
+似乎是一个研究的比较少的问题。
 开放领域的对话数据集所具有的大量噪音，
 多样的话题和较弱的语法正确度对模型质量的影响似乎还没有引起学者们的重视。
 通过实验，我们试图对上述问题进行初步的考察，
@@ -92,19 +95,52 @@ $n$是测试集的样本数，$(m, d, s)$是模型，数据集和指标组成的
 % why did you choose these models?
 % Show me you really understand these model.
 % Why the selection of models is important?
+% Two reasons: 1. they are seq2seq based. we only investigate s2s.
+% 2. they are trained on 2 corpuses before. Their transferability
 \section{模型选取}\label{sec:model_selection}
 第~\ref{ch:related_work}~章已经介绍了生成式模型的基本概念和数据集、指标的基本情况。
-和相对有限的数据集和指标相比，生成式模型的发展呈现出日新月异的态势，
-光是我们了解到的不同的模型，就有不下十几个。
-然而我们的时间和精力是有限的，只能根据实验的需求选取几个有代表性的模型进行实验，
-这是一个无可奈何的选择。
+和相对有限的数据集和指标相比，生成式模型的数量众多，
+光是我们了解到的不同的模型就有不下十几个。
+由于时间有限，
+我们把考察的范围限定在基于Seq2Seq框架的生成式模型。
+Serban等人在\upcite{HRED,VHRED,MrRNN,A_Short_Review}
+中提出或者使用了LSTM，HRED，VHRED和MrRNN等模型，
+它们大多是Seq2Seq框架在体系结构上的扩展。
+除了LSTM是作为基线的RNN语言模型外，这些模型都各具特色：
+HRED能利用长期对话历史，
+VHRED能捕捉对话中的不确定性（Uncertainty）和歧义性（Ambiguity），
+MrRNN能生成带有高级组合结构（Compositional Structure）的响应。
+而且，HRED和VHRED都在Ubuntu Dialogue Corpus和
+Twitter Triple Corpus两个数据集上取得了不错的成绩，
+说明它们在迁移能力方面是比较强的基线。
+是否基于Seq2Seq框架和迁移能力是我们选择模型的两大依据，
+HRED和VHRED很好的符合了我们的需求。
 
-% -- 实验目的！！
-我们实验的主要
+我们没有选取普遍的Seq2Seq模型作为基线，
+而是选取了LSTM语言模型，因为它足够简单而且是一个非Seq2Seq结构，
+作为基线模型已经足够好了。
+我们把加入普通的Seq2Seq模型作为以后的工作。
+下面将会详细介绍LSTM，HRED和VHRED三个模型。
 
 % show the power of Serban
+\subsection{LSTM语言模型}\label{subsec:LSTM}
 
-\subsection{多层编解码器}\label{subsec:HRED}
+\begin{align}
+    f_t &= \sigma(W_f \cdot [h_{t-1}, x_t] + b_f) \\
+    i_t &= \sigma(W_i \cdot [h_{t-1}, x_t] + b_i) \\
+    \hat{C}_t &= \tanh(W_C \cdot [h_{t-1}, x_t] + b_C) \\
+    C_t &= f_t \times C_{t-1} + i_t \times \hat{C}_t \\
+    o_t &= \sigma(W_o \cdot [h_{t-1}, x_t] + b_o) \\
+    h_t &= o_t \times \tanh(C_t)
+\end{align}
+\begin{figure}
+    \includegraphics[width=0.6\textwidth]{figure/drawio/LSTM_v5.pdf}
+    \centering
+    \caption{LSTM内部连接图}
+    \label{fig:LSTM_Internal}
+\end{figure}
+
+\subsection{HRED模型}\label{subsec:HRED}
 多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}是一种能利用多轮对话结构的生成式模型。
 它把一个对话看做一个两层序列结构：一个对话$D$由$M$个句子组成，每个句子由$N_m$个单词组成：
 \begin{align}
@@ -137,6 +173,8 @@ $w_{m, <n} = \{ w_{m, 1}, \cdots, w_{m, n-1} \}$。
     \caption{HRED的计算图\upcite{HRED}}
     \label{fig:HRED_computation_graph}
 \end{figure}
+
+\subsection{VHRED模型}\label{subsec:VHRED}
 
 \section{模型超参数设置}\label{sec:model_hparams}
 % ------ Model setup ----------- %

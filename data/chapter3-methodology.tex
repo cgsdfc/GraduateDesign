@@ -31,42 +31,42 @@
 一个模型$m \in M$指的是一种生成式模型的体系结构，而不是指一个训练好的模型实例。
 一个数据集$d \in D$是指某个领域的全部对话的一个子集，它本身又被分为训练集，验证集和测试集三个子集，
 一个指标$s \in S$是指一种能把上下文$c$，参考$r$和响应$\hat{r}$映射为一个实数的函数$f_s(c, r, \hat{r})$。
-在不引起歧义时，在数据集$d$上训练指的是在$d$的训练集上训练，在数据集$d$上测试指的是在$d$的测试集上测试。
-把模型$m$在数据集$d$上训练的实例记为$(m, d)$。
+在不引起歧义时，在数据集$d$上训练指的是在$d$的训练集上训练，在数据集$d$上解码指的是在$d$的测试集上解码，
+把模型$m$在数据集$d$上完成了训练的实例记为$(m, d)$。
 
 % -- Framework -- %
 如图~\ref{fig:framework}~所示，
-我们的实验首先让每一个模型$m$和数据集$d$的组合
-$(m, d) \in M \times D$在训练集上进行训练，
-并让训练好的模型实例$(m, d)$在测试集上解码产生响应$r$，
+我们的实验首先让每一个模型$m$在每一个数据集$d$上训练，
+并让训练好的模型实例$(m, d)$在$d$上解码产生响应$r$，
 然后再用每一个指标$s \in S$给$r$在句子层面打分，给$(m, d)$在系统层面打分，
 分别得到$\lambda_{u}$和$\lambda_{s}$。
-一组实验的最终结果是一个5元组$(m, d, s, \lambda_{u}, \lambda_{s})$，
+一组实验的最终结果是一个5元组$(m, d, s, \lambda_{s}, \lambda_{u})$，
 表示在数据集$d$上训练的模型$m$在指标$s$
-的评价下所得的句子层面得分$\lambda_u$和系统层面得分$\lambda_s$。
+的评价下所得的系统层面得分$\lambda_s$和句子层面得分$\lambda_u$。
 
 % -- Data Analysis -- %
-我们用pandas\footnote{\url{https://pandas.pydata.org/}}承载实验数据，
+我们用pandas\footnote{\url{https://pandas.pydata.org/}}装载实验数据，
 用seaborn\footnote{\url{http://seaborn.pydata.org/}}进行数据可视化。
-系统层面得分的数据由三个类别变量（Categorical Variable）：模型，
-数据集和指标和一个数值变量（Numerical Variable）：得分组成，
-因此我们采用面向类别变量的柱形图（Bar Plot）和箱体图（Box Plot）作为分析方法。
-柱形图最大程度保留了所有数据的细节，展示了不同模型在不同数据集和指标上的系统得分，
-是最为精确的表达，我们在正文对它进行了详细分析。
+系统层面得分的数据由$(m, d, s, \lambda_s)$四元组组成，
+$m, d, s$都是类别变量（Categorical Variable），
+$\lambda_s$是数值变量（Numerical Variable）。
+由于数据中的类别变量较多，
+可视化采用面向类别变量的柱形图（Bar Plot）和箱体图（Box Plot）。
+我们用柱形图详细分析了不同模型在不同数据集和指标上的系统得分。
 但是，某些模型在某些数据集上的得分过于接近，柱形图难以区分各个模型得分的高低。
-于是我们分别从数据集和模型两个维度绘制了箱体图，牺牲了一些精确性，但是加强了得分在某个维度上的区分程度。
+于是我们分别从数据集和模型两个维度绘制了箱体图，加强了得分在某个维度上的区分程度。
 这些箱体图作为辅助分析方法，放在附录~\ref{ch:dataset_system_dist}。
 
-句子层面的得分的数据主要由一个数值变量：得分组成，
-因此我们采用面向数值变量的分布图（Distribution Plot）进行分析。
+句子层面的得分$\lambda_u$是一个数值变量，
+我们采用分布图（Distribution Plot）进行分析。
 一组待分析的句子层面得分是一个$n$维实值向量： $U_{(m, d, s)} = x_1, x_2, \dots, x_n$，
 $n$是测试集的样本数，$(m, d, s)$是模型，数据集和指标组成的三元组，$x_i$是某个样本的得分。
-这个实值向量可以看做是从一个总体的取样，
-由于总体服从的分布的数学形式是未知的，
-我们使用无参估计法之一的核密度估计（Kernel Density Estimation，KDE）来估计总体的分布。
-由于句子层面得分比系统层面得分的粒度更细，数据也更多了，为了分析的效率，
-我们选择了案例分析，固定$m = m', d = d'$，而分析了所有指标在$(m', d')$上的情况。
-我们在附录~\ref{ch:metric_dist}~呈现了完整的数据。
+句子层面得分可以看做是从一个分布的数学形式未知的总体的取样，
+可以使用无参估计法之一的核密度估计（Kernel Density Estimation，KDE）来估计总体的分布。
+句子层面得分比系统层面得分的粒度更细，数据也更多了，为了分析的效率，
+我们选择了案例分析。
+我们固定$m = m', d = d'$，分析所有指标在$(m', d')$上的情况。
+附录~\ref{ch:metric_dist}~呈现了完整的数据。
 
 \begin{table}[H]
     \centering
@@ -100,32 +100,32 @@ $n$是测试集的样本数，$(m, d, s)$是模型，数据集和指标组成的
 \section{模型选取}\label{sec:model_selection}
 第~\ref{ch:related_work}~章已经介绍了生成式模型的基本概念和数据集、指标的基本情况。
 和相对有限的数据集和指标相比，生成式模型的数量众多，
-光是我们了解到的不同的模型就有不下十几个。
 由于时间有限，
 我们把考察的范围限定在基于Seq2Seq框架的生成式模型。
-Serban等人在\upcite{HRED,VHRED,MrRNN,A_Short_Review}
-中提出或者使用了LSTM，HRED，VHRED和MrRNN等模型，
-它们大多是Seq2Seq框架在体系结构上的扩展。
-除了LSTM是作为基线的RNN语言模型外，这些模型都各具特色：
+Serban等人在\upcite{HRED,VHRED,MrRNN}
+中提出HRED，VHRED和MrRNN模型，
+它们是Seq2Seq框架在体系结构上的扩展。
+这些模型都各具特色：
 HRED能利用长期对话历史，
 VHRED能捕捉对话中的不确定性（Uncertainty）和歧义性（Ambiguity），
-MrRNN能生成带有高级组合结构（Compositional Structure）的响应。
+MrRNN能生成带有高层次组合结构（Compositional Structure）的响应。
 而且，HRED和VHRED都在Ubuntu Dialogue Corpus和
 Twitter Triple Corpus两个数据集上取得了不错的成绩，
 说明它们在迁移能力方面是比较强的基线。
 是否基于Seq2Seq框架和迁移能力是我们选择模型的两大依据，
 HRED和VHRED很好的符合了我们的需求。
 
-我们没有选取普遍的Seq2Seq模型作为基线，
-而是选取了LSTM语言模型，因为它足够简单而且是一个非Seq2Seq结构，
-作为基线模型已经足够好了。
-我们把加入普通的Seq2Seq模型作为以后的工作。
-下面将会详细介绍LSTM，HRED和VHRED三个模型。
+我们没有选取普通Seq2Seq模型作为基线，
+而是选取了Serban等人使用的基线LSTM模型。
+一方面，这是为了让实验设置尽可能和Serban等人的接近，方便学者复现我们的实验；
+另一方面，LSTM模型的体系结构很简单，我们认为基线模型不应该太复杂。
+我们把加入普通Seq2Seq模型作为以后的工作。
+下面将详细介绍LSTM，HRED和VHRED三个模型。
 
 % show the power of Serban
-\subsection{LSTM语言模型}\label{subsec:LSTM}
+\subsection{LSTM模型}\label{subsec:LSTM}
 LSTM是一种改进的循环神经网络，用于解决长时间依赖问题\upcite{LSTM}。
-LSTM用多种“门”代替了普通RNN中单一的隐藏矩阵$W_{hh}$，这些门实际上是一个个单层神经网络。
+LSTM用多种门结构代替了普通RNN中隐藏矩阵$W_{hh}$，这些门实际上是一个个单层神经网络。
 \begin{align}
     f_t &= \sigma(W_f \cdot [h_{t-1}, x_t] + b_f) \\
     i_t &= \sigma(W_i \cdot [h_{t-1}, x_t] + b_i) \\
@@ -139,13 +139,14 @@ LSTM用多种“门”代替了普通RNN中单一的隐藏矩阵$W_{hh}$，这�
 在公式~\ref{eqn:LSTM_formula}~中，
 $x_t$是$t$时刻的输入，
 $h_{t-1}$是$t-1$时刻的隐藏状态，
+$C_{t-1}$是$t-1$时刻的单元状态（Cell State），
 $f_t$是遗忘门（Forget Gate）的输出，
 $i_t$是输入门（Input Gate）的输出，
 $\hat{C}_t$是候选单元门（Candidate Cell Gate）的输出，
 $o_t$是输出门（Output Gate）的输出；
 $W_f, W_i, W_C, W_o$是四个门的权重矩阵，
 $b_f, b_i, b_C, b_o$是四个门的偏置向量，
-$h_t$是通过一系列运算后得出的$t$时刻的隐藏状态。
+$h_t$是通过一系列门运算后得出的$t$时刻的隐藏状态。
 图~\ref{fig:LSTM_structure}~直观的
 展现了LSTM内部各个门的连接方式和数据的流动，
 LSTM正是通过这些复杂的门运算实现对较长的序列的记忆。
@@ -187,7 +188,6 @@ LSTM正是通过这些复杂的门运算实现对较长的序列的记忆。
     \label{fig:LSTM_IO}
 \end{figure}
 
-
 \subsection{HRED模型}\label{subsec:HRED}
 多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}
 是一种能利用多轮对话结构的生成式模型。
@@ -209,8 +209,9 @@ HRED由三个部件组成：
 本质上， 通过把对话分解为句子的序列， 把句子分解为单词的序列，
 HRED估计了一个对话$D$的概率$P_{\theta}(D)$：
 \begin{align}
-    P_{\theta}(D) = P_{\theta}(U_1, \dots, U_M) &= \prod_{m=1}^M P_{\theta}(U_m|U_{<m}) \\
-    &= \prod_{m=1}^M \prod_{n=1}^{N_m} P_{\theta}( w_{m, n} |w_{m, <n}, U_{<m} )
+    P_{\theta}(D) =
+    P_{\theta}(U_1, \dots, U_M) = \prod_{m=1}^M P_{\theta}(U_m|U_{<m})
+    = \prod_{m=1}^M \prod_{n=1}^{N_m} P_{\theta}( w_{m, n} |w_{m, <n}, U_{<m} )
 \end{align}
 
 $\theta$是HRED模型的参数，
@@ -222,8 +223,8 @@ $w_{m, <n}$表示第$m$个句子的第$n$个单词之前的单词序列。
 VHRED（Latent Variable Hierarchical Recurrent Encoder-Decoder）是HRED的扩展，
 它在句子解码器中加入了潜随机变量。
 如图~\ref{fig:VHRED}~所示，
-模型在生成响应时，除了生成对话向量，还产生一个随机变量$z_n$，
-并把$z_n$和对话向量连接到一起作为句子解码器的输入。
+模型在生成响应时，除了生成对话向量$e_d$外，还产生一个随机变量$z_n$，
+并把$z_n$和$e_d$连接到一起作为句子解码器的输入。
 随机变量$z_n$能有效增加响应的多样性。
 \begin{figure}[H]
     \centering
@@ -237,7 +238,7 @@ $z_n$服从多元高斯分布$\mathcal{N}(\mu_{\text{prior}},
 $\mu_{\text{prior}}$是分布的均值，
 $\Sigma_{\text{prior}}$是分布的协方差矩阵，
 这些参数
-由上下文编码器输出的对话向量经过一个两层的前馈神经网络编码得到。
+由对话向量经过一个两层的前馈神经网络编码得到。
 如公式~\ref{eqn:VHRED_random_variable}~所示，
 对于一个对话$D = \{ U_1, \dots, U_M \}$，
 每个句子
@@ -271,8 +272,7 @@ $P_{\theta}(U_n|U_1, \dots, U_{n-1})$
 % -- Hidden Units of Utterance Encoder -- %
 HRED和VHRED的句子编码器（Utterance Encoder）
 在Ubuntu上使用500个隐藏单元，
-在OpenSubtitles和LSDSCC上使用1000个隐藏单元
-\footnote{LSTM模型是一个语言模型，只有句子解码器。}。
+在OpenSubtitles和LSDSCC上使用1000个隐藏单元。
 % -- Hidden Units of Context Encoder -- %
 HRED和VHRED的上下文编码器（Context Encoder）
 在所有数据集上都使用1000个隐藏单元。
@@ -290,8 +290,7 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 % -- Gate Type of Utterance & Context Encoder -- %
 所有模型的句子编码器和上下文编码器（如果有）都使用GRU作为门单元。
 % -- Gate Type of Decoder -- %
-句子解码器的门单元类型如表~\ref{tab:utterance_decoder_gate_types}~所示
-\footnote{OpenSubtitles和LSDSCC上的LSTM模型的解码器都没有使用LSTM门单元，不过它们仍然是语言模型。}。
+句子解码器的门单元类型如表~\ref{tab:utterance_decoder_gate_types}~所示。
 \begin{table}
     \centering
     \caption{句子解码器的配置情况}
@@ -328,7 +327,7 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
     \end{subtable}
 \end{table}
 
-所有的模型都在一台GeForce GTX TITAN X上训练了至少1周。
+所有的模型都在一台Nvidia GTX上训练了至少1周。
 模型收敛时的困惑度如表~\ref{tab:converged_perplexity}~所示。
 与\upcite{VHRED}不同的是，我们没有用预训练的HRED的参数来初始化对应的VHRED。
 所有的模型都使用了梯度剪裁，阈值为1。
@@ -381,11 +380,6 @@ LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google
 其长度要远远超过OpenSubtitles的样本。
 这也导致了Ubuntu的样本数量少于LSDSCC，但是单词数量却超过了LSDSCC。
 测试集的统计数据如表~\ref{tab:test_set_stats}~所示。
-对于LSDSCC的测试集，我们其实可以从其训练集分一部分出来作为测试集，
-这样可以使样本数量更多。
-但是，为了是训练集尽可能大，
-我们选择了从LSDSCC的多重参考测评集中构造测试集，
-导致测试集的样本只有不到300个。
 \begin{table}[H]
     \centering
     \caption{数据集的统计数据}

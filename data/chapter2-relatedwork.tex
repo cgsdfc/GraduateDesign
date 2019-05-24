@@ -5,10 +5,10 @@
 % ------------------ Models ------------------ %
 \section{生成式模型}\label{sec:generative_model}
 \subsection{定义}\label{subsec:definition}
-一个生成式模型定义了给定输入序列$X = x_1, x_2, \cdots, x_n$，
-任意输出序列$Y = y_1, y_2, \cdots, y_m$的条件概率：
+一个生成式模型定义了给定输入序列$X = x_1, x_2, \dots, x_n$，
+任意输出序列$Y = y_1, y_2, \dots, y_m$的条件概率：
 \begin{align}
-    p(Y|X) = P(y_1, y_2, \cdots, y_m|x_1, x_2, \cdots, x_n)
+    p(Y|X) = P(y_1, y_2, \dots, y_m|x_1, x_2, \dots, x_n)
     \label{eqn:generative_conditional_probability}
 \end{align}
 
@@ -49,11 +49,11 @@ RNN可分为单向RNN（Unidirectional RNN）
 \subsection{RNN语言模型}\label{subsec:RNNLM}
 % ---------------- RNNLM ------------------ %
 RNN语言模型（RNNLM）
-通过循环神经网络估计给定序列$X=x_1, x_2, \cdots, x_n$的概率分布：
+通过循环神经网络估计给定序列$X=x_1, x_2, \dots, x_n$的概率分布：
 \begin{align}
-    p(X) = \prod_{i=1}^{n} p(x_i|x_1, x_2, \cdots, x_{i-1})
+    p(X) = \prod_{i=1}^{n} p(x_i|x_1, x_2, \dots, x_{i-1})
     \label{eqn:language_model_probability} \\
-    p(x_i = w|x_1, x_2, \cdots, x_{i-1}) = \frac{\exp{o_{tw}}}{\sum_{v=1}^V \exp{o_{tv}}}
+    p(x_i = w|x_1, x_2, \dots, x_{i-1}) = \frac{\exp{o_{tw}}}{\sum_{v=1}^V \exp{o_{tv}}}
     \label{eqn:language_model_estimation}
 \end{align}
 
@@ -68,7 +68,7 @@ $W_{in}$是输入矩阵，$W_{out}$是输出矩阵，$W_{hh}$是循环矩阵，
 $\sigma$是激活函数。
 RNN语言模型在训练时最大化训练集上的句子的对数概率：
 \begin{align}
-    \mathit{L(X)} = \sum_{i=1}^n \log p(x_i|x_1, x_2, \cdots, x_{i-1})
+    \mathit{L(X)} = \sum_{i=1}^n \log p(x_i|x_1, x_2, \dots, x_{i-1})
 \end{align}
 
 
@@ -93,8 +93,8 @@ Seq2Seq把公式~\ref{eqn:generative_conditional_probability}~作了如下转化
 \begin{align}
     h_i &= f(x_i ,h_{i-1}) \\
     v &= h_n \\
-    p(y_1, y_2, \cdots, y_m|x_1, x_2, \cdots, x_n) &=
-    \prod_{i=1}^m p(y_i|v, y_1, y_2, \cdots, y_{i-1})
+    p(y_1, y_2, \dots, y_m|x_1, x_2, \dots, x_n) &=
+    \prod_{i=1}^m p(y_i|v, y_1, y_2, \dots, y_{i-1})
 \end{align}
 
 $h_n$是编码器的最后一个隐藏状态， $f$是编码器采用的门单元函数。
@@ -113,14 +113,14 @@ Seq2Seq一般引入注意力机制（Attention Mechanism）
 在解码阶段，需要采用某种启发式搜索算法从概率分布中生成输出$Y$。
 最简单的搜索算法是贪心搜索（Greedy Search）：在每一时刻都输出条件概率最大的单词：
 \begin{align}
-    y_i = \argmax_{w \in V} p(w|y_1, y_2, \cdots, y_{i-1}, X)
+    y_i = \argmax_{w \in V} p(w|y_1, y_2, \dots, y_{i-1}, X)
 \end{align}
 因为各个$y_i$的概率都不是独立的，而是受之前输出的单词的影响，贪心搜索不能保证得到概率最大的输出序列。
 
 随机取样（Random Sampling）
 每生一步都从模型估计的全体词汇的离散概率分布中随机选取一个单词：
 \begin{align}
-    p(y_i = w) = p(w|y_1, y_2, \cdots, y_{i-1}, X), w \in V
+    p(y_i = w) = p(w|y_1, y_2, \dots, y_{i-1}, X), w \in V
 \end{align}
 Serban等人发现随机取样能避免单调响应的问题，并且能产生多样化的，
 话题相关的输出\upcite{HRED}，
@@ -343,7 +343,7 @@ $r$是参考输出，$\hat{r}$是系统输出，$w$是句子中的一个单词�
         \ \max d_i & \text{if}\ \max d_i \geq |\min d_i| \\
         \ \min d_i & \text{otherwise}
     \end{cases} \\
-    e_r^{ex} &= [\text{extrema}(d_1), \cdots, \text{extrema}(d_n)] \\
+    e_r^{ex} &= [\text{extrema}(d_1), \dots, \text{extrema}(d_n)] \\
     \textit{Vector-Extrema} &= \cos( e_r^{ex}, e_{\hat{r}}^{ex} )
 \end{align}
 $[\cdot, \cdot]$表示连接多个标量形成一个向量，
@@ -405,8 +405,8 @@ Tao等人提出了Referenced Metric and Unreferenced Metric Blended Evaluation R
 基于词嵌入的最大-最小池化（Max-Min Pooling）作为句子向量，
 衡量了消息和响应的相似度：
 \begin{align}
-    v_{max}[i] = \max \{ w_1[i], w_2[i], \cdots, w_n[i] \} \\
-    v_{min}[i] = \min \{ w_1[i], w_2[i], \cdots, w_n[i] \} \\
+    v_{max}[i] = \max \{ w_1[i], w_2[i], \dots, w_n[i] \} \\
+    v_{min}[i] = \min \{ w_1[i], w_2[i], \dots, w_n[i] \} \\
     v = [v_{max}; v_{min}] \\
     s_R(r, \hat{r}) = \cos(v_r, v_{\hat{r}}) = \frac{v_r^T v_{\hat{r}}}{\left\| v_r \right\| \cdot \left\| v_{\hat{r}} \right\|}
 \end{align}

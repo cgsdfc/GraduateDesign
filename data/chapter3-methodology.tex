@@ -59,7 +59,7 @@ $(m, d) \in M \times D$在训练集上进行训练，
 
 句子层面的得分的数据主要由一个数值变量：得分组成，
 因此我们采用面向数值变量的分布图（Distribution Plot）进行分析。
-一组待分析的句子层面得分是一个$n$维实值向量： $U_{(m, d, s)} = x_1, x_2, \cdots, x_n$，
+一组待分析的句子层面得分是一个$n$维实值向量： $U_{(m, d, s)} = x_1, x_2, \dots, x_n$，
 $n$是测试集的样本数，$(m, d, s)$是模型，数据集和指标组成的三元组，$x_i$是某个样本的得分。
 这个实值向量可以看做是从一个总体的取样，
 由于总体服从的分布的数学形式是未知的，
@@ -192,8 +192,8 @@ LSTM正是通过这些复杂的门运算实现对较长的序列的记忆。
 多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}
 是一种能利用多轮对话结构的生成式模型。
 它把一个对话看做一个两层序列结构，
-一个对话$D$由$M$个句子组成：$D = \{ U_1, \cdots, U_M \}$，
-每个句子由$N_m$个单词组成：$U_m = \{ w_{m, 1}, \cdots, w_{m, N_m} \}$。
+一个对话$D$由$M$个句子组成：$D = \{ U_1, \dots, U_M \}$，
+每个句子由$N_m$个单词组成：$U_m = \{ w_{m, 1}, \dots, w_{m, N_m} \}$。
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figure/HRED.png}
@@ -204,12 +204,12 @@ LSTM正是通过这些复杂的门运算实现对较长的序列的记忆。
 如图~\ref{fig:HRED_computation_graph}~所示，
 HRED由三个部件组成：
 句子编码器（Utterance Encoder）负责把每一个句子编码成一个固定长度的句子向量（Utterance Vector）$e_u$，
-上下文编码器（Context Encoder）负责把$m$个句子向量$e_{u,1}, \cdots, e_{u,m}$编码为一个对话向量（Dialogue Vector）$e_d$，
+上下文编码器（Context Encoder）负责把$m$个句子向量$e_{u,1}, \dots, e_{u,m}$编码为一个对话向量（Dialogue Vector）$e_d$，
 最后，句子解码器（Utterance Decoder）以对话向量$e_d$为输入，生成对话的下一个句子$U_{m+1}$。
 本质上， 通过把对话分解为句子的序列， 把句子分解为单词的序列，
 HRED估计了一个对话$D$的概率$P_{\theta}(D)$：
 \begin{align}
-    P_{\theta}(D) = P_{\theta}(U_1, \cdots, U_M) &= \prod_{m=1}^M P_{\theta}(U_m|U_{<m}) \\
+    P_{\theta}(D) = P_{\theta}(U_1, \dots, U_M) &= \prod_{m=1}^M P_{\theta}(U_m|U_{<m}) \\
     &= \prod_{m=1}^M \prod_{n=1}^{N_m} P_{\theta}( w_{m, n} |w_{m, <n}, U_{<m} )
 \end{align}
 

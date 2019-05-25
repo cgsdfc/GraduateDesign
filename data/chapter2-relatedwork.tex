@@ -88,8 +88,7 @@ Seq2Seq框架使用两个有着独立参数的RNN分别作为编码器和解码�
 再把$v$还原为另一个序列$Y$，
 Seq2Seq把公式~\ref{eqn:generative_conditional_probability}~作了如下转化：
 \begin{align}
-    h_i &= f(x_i ,h_{i-1}) \\
-    v &= h_n \\
+    h_i &= f(x_i ,h_{i-1}), v = h_n \\
     p(y_1, y_2, \dots, y_m|x_1, x_2, \dots, x_n) &=
     \prod_{i=1}^m p(y_i|v, y_1, y_2, \dots, y_{i-1})
 \end{align}
@@ -324,7 +323,7 @@ $p(x_i)$是模型估计的概率。
 再用余弦相似度（Cosine Similarity）测量两个句子向量的相似程度\upcite{VectorCompose}：
 \begin{align}
     \text{cos}(x, y) = \frac{x\cdot y}
-    {\left\| x \right\| \cdot \left\| y \right\|} \\
+    {\left\| x \right\| \cdot \left\| y \right\|}
 \end{align}
 最常见组合方式是对单词向量取平均值，类似于词袋表示（Bag-of-Words），对应的指标就是向量平均值（Vector Average）：
 \begin{align}

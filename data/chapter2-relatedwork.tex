@@ -20,7 +20,8 @@
 生成式模型需要把一个长度可变的序列$X$映射到另一个长度可变的序列$Y$，且$X$和$Y$的长度可以不相等。
 循环神经网络（RNN）为这个问题提供了自然的解决方案。
 RNN的基本思想是：序列由有序的元素组成，每一个时刻（Time Step）输入一个元素，同时更新内部的隐藏状态（Hidden State），然后输出一个元素。
-如图~\ref{fig:RNN_unrolled}\footnote{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}~所示，
+如图~\ref{fig:RNN_unrolled}
+\footnote{\url{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}}~所示，
 在时间轴上展开的RNN和一般的前馈神经网络（Feed Forward Neural Networks）很像，不过每一个时刻的权重矩阵都是共享的。
 这个共享的权重矩阵$A$又被称为循环矩阵（Recurrent Matrix），
 它的作用是对输入序列进行某种保持顺序信息的编码。
@@ -175,8 +176,8 @@ TER\upcite{TER}等等。
 在考察本领域对自动指标的使用情况之前，先对各种指标作一个简要介绍。
 
 % --------------- BLEU ------------------ %
-BLEU，Bilingual Evaluation Understudy\upcite{BLEU}是Papineni在2002年提出的，
-用于机器翻译的自动评价指标。它是一个系统层面的评价指标，即评价一个系统在整个测试集上的性能。
+双语评估指标（Bilingual Evaluation Understudy，BLEU）\upcite{BLEU}是机器翻译领域的经典指标。
+它是一个系统层面的评价指标，即评价一个系统在整个测试集上的性能。
 BLEU指标只有一个参数$N$，表示要计算的各阶n-gram准确率的最大值；例如$N = 4$表示要计算1-gram到4-gram的准确率。
 准确率指的是系统输出和参考输出之间的n-gram重叠数占系统输出总的n-gram的比例。
 BLEU由在整个数据集上计算的各阶n-gram准确率的几何平均值（Geometric Mean）和简短惩罚系数（Brevity Penalty）相乘得到。
@@ -213,10 +214,12 @@ BLEU的最终公式为：
 本文在使用BLEU时也采用了一种平滑处理。
 
 % ------------ ROUGE -------------- %
-ROUGE，Recall-Oriented Understudy for Gisting Evaluation\upcite{ROUGE}是一种基于召回率的自动摘要领域的指标。
-它有多个变形：ROUGE-N，ROUGE-L，ROUGE-W，ROUGE-S，以及ROUGE-SU，
-分别使用了不同的计数单元（Counting Unit），如n-gram共现数、最长公共子序列（Longest Common Subsequence，LCS）和二元跳词（Skip-Bigram）等等。
-这些指标的基础是信息检索领域常用的F-measure，即准确率和召回率的加权调和平均值：
+面向召回率的摘要评估指标
+（Recall-Oriented Understudy for Gisting Evaluation，ROUGE）\upcite{ROUGE}
+是自动摘要领域（Automatic Summarization）的经典指标。
+它的变形有ROUGE-N，ROUGE-L，ROUGE-W和ROUGE-S等，分别使用了不同的特征，
+如n-gram共现数、最长公共子序列（Longest Common Subsequence，LCS）和二元跳词（Skip-Bigram）等。
+这些指标的基础是信息检索领域常用的F得分（F-measure），即准确率和召回率的加权调和平均值：
 \begin{align}
     \textit{F-measure} = \frac{(1 + \beta^2) RP}{R + \beta^2 P}
 \end{align}
@@ -275,7 +278,8 @@ $C(\cdot, \cdot)$为组合数。
 ROUGE-SU是ROUGE-S加入了Unigram的扩展。
 
 % ----------------- METEOR ----------------- %
-METEOR，Metric for Evaluation of Translation with Explicit ORdering
+基于显式次序的翻译指标（
+Metric for Evaluation of Translation with Explicit ORdering，METEOR）
 \upcite{METEOR}是针对BLEU的一些弱点提出的机器翻译的指标。
 与BLEU相比，METEOR在句子水平上与人类评价有更好的相关性。
 METEOR首先计算系统输出和参考输出之间的Unigram匹配，这些匹配由多个可配置的模块组成，
@@ -408,7 +412,7 @@ Tao等人提出了Referenced Metric and Unreferenced Metric Blended Evaluation R
 \end{align}
 无参考的指标通过如图~\ref{fig:RUBER_unref_model}~所示的神经网络来估计，
 使用无监督的负采样（Negative Sampling）来训练。
-该指标在中文数据集豆瓣网\footnote{http://www.douban.com}上取得了很高的人类评价相关性。
+该指标在中文数据集豆瓣网\footnote{\url{http://www.douban.com}}上取得了很高的人类评价相关性。
 \begin{figure}[H]
     \begin{subfigure}{0.5\linewidth}
         \centering
@@ -536,7 +540,7 @@ Twitter相关的数据集由于隐私保护政策的原因，不能公开原始�
 如情感、话题和方面（Aspect）等。
 元信息和人类标注信息提供了额外的表征，对构建更智能的对话系统很有帮助。
 本文把注意力集中在三个数据集上：
-Ubuntu Dialogue Corpus，OpenSubtitles，LSDSCC，
+Ubuntu对话数据集，OpenSubtitles，LSDSCC，
 它们代表了三个常见的对话领域，分别是：技术支持，电影字幕和在线论坛讨论。
 
 \begin{table}
@@ -568,7 +572,8 @@ Ubuntu Dialogue Corpus，OpenSubtitles，LSDSCC，
 \end{table}
 
 % --------- Ubuntu ---------- %
-Ubuntu Dialogue Corpus是Lowe等人从Freenode IRC网络的Ubuntu板块的聊天日志\footnote{\url{https://irclogs.ubuntu.com/}}
+Ubuntu对话数据集（以下简称Ubuntu）
+是Lowe等人从Freenode IRC网络的Ubuntu板块的聊天日志\footnote{\url{https://irclogs.ubuntu.com/}}
 中获取的技术性两人多轮对话。这个数据集中包含了大量技术符号，比如路径、命令、URL，还有笔误（Typo），缩写（Abbreviation）和俚语（Slang）。
 它的对话数量多达930,000（接近1M），庞大的数据量为数据驱动的模型提供了极佳的试验场。
 它的多轮特性为模型提供了更长的上下文，有助于能利用多轮对话的模型生成更有意义的响应。
@@ -578,7 +583,7 @@ OpenSubtitles是The Open Parallel Corpus，OPUS项目的一部分。
 它是从一个人们可以自由上传和下载电影字幕的网站\footnote{\url{http://www.opensubtitles.org}}的数据库中获取的，
 庞大而充满噪音的开放领域数据集。
 它的对话数量达到了80M。
-由于OPUS的目的是收集机器翻译所用到的双语文库（Parallel Corpus），OpenSubtitles也是一个双语文库，
+由于OPUS的目的是收集机器翻译所用到的双语数据集（Parallel Corpus），OpenSubtitles也是一个双语数据集，
 它里面并没有对话数据集所需要的轮换信息（Turn-Taking），
 而且也没有区分旁白、独白和对白。
 Sordoni等人在\upcite{GoogleChatbot}中把OpenSubtitles用到对话领域，
@@ -593,7 +598,7 @@ LSDSCC，A Large Scale Domain-Specific Conversational Corpus，是一个单一�
 它有738,095个对话，词汇表比较大，达到了50K。
 作者从Reddit的电影板块\footnote{\url{https://www.reddit.com/r/datasets}}中获取了原始数据，
 设计了一套尽可能保留语料信息的清理程序，还使用人类评价员对消息和响应的相关度进行评价，
-最终得到一个高质量的信息-响应对（Query-Response Pair）文库。
+最终得到一个高质量的信息-响应对（Query-Response Pair）数据集。
 在构建测试集方面，作者用类似\upcite{DCGM}的IR方法构建了一个多重参考评测集。
 他们还进一步让人类评价员对一个消息的所有响应进行分类，并
 基于这个测试集提出了三个面向多样性的评价指标，不过本文并未使用。
@@ -614,10 +619,12 @@ LSDSCC，A Large Scale Domain-Specific Conversational Corpus，是一个单一�
 2. 单纯使用衡量相似性的指标无法捕捉多样性的维度，从而与人类评价不符。
 
 在数据集方面，本领域已经积累了各种领域（Domain）的数据，从技术性问答、社交媒体闲聊，到电影对白和字幕等等。
-因为数据集的增多，一些数据集在领域上出现了重合，
-比如Movie Dialogs Corpus，MovieTriples和Movie-DiC都是
-电影对白领域；OpenSubtitles和SubTle都是电影字幕领域，
-Twitter Corpus和Sina Weibo Corpus都是短文本闲聊等等。
+因为数量的增多，一些数据集在领域上出现了重合，
+比如电影对话数据集（Movie Dialogs Corpus），
+电影三元组数据集（MovieTriples）和Movie-DiC的领域都是电影对白；
+OpenSubtitles和SubTle的领域都是电影字幕；
+Twitter数据集（Twitter Corpus），Twitter对话数据集和Twitter三元组数据集的领域都是Twitter短文本闲聊。
+% 新浪微博数据集（Sina Weibo Corpus）
 尽管人类标注是对话文本的重要补充，但是由于其代价的高昂，
 所得的数据量往往比较少；
 另一方面，元信息是一类在数据采集过程中伴随对话文本同时获得的描述性信息，

@@ -51,7 +51,7 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
 \end{align}
 实际中$\argmax$会被某种搜索算法代替。
 
-检索式系统根据输入句子从一个文库$C$中检索输出句子。
+检索式系统根据输入句子从一个数据集$C$中检索输出句子。
 $C$通常由人类撰写的语句组成，并且足够大，使得输出句子不容易重复。
 系统通过某种打分机制，如词频-逆文档频率（Term Frequency-Inverse Document Frequency，TF-IDF）或语义相似度（Semantic Similarity），
 对数据库中的候选句子进行打分，并把得分较高的候选句子作为输出：
@@ -78,7 +78,7 @@ Seq2Seq框架在自然语言处理的多项任务上都超过了之前的最佳�
 在国外，最早把Seq2Seq用到对话生成领域的是Vinyals等人\upcite{GoogleChatbot}，
 他们在OpenSubtitles\upcite{opensub}
 上训练的模型能回答简单的常识问题，
-并且比基于规则的系统CleverBot\footnote{http://www.cleverbot.com/}获得了更高的人类评价得分。
+并且比基于规则的系统CleverBot\footnote{\url{http://www.cleverbot.com/}}获得了更高的人类评价得分。
 
 % -- Li -- %
 Li等人提出了一系列基于Seq2Seq框架的对话系统，包括
@@ -136,9 +136,10 @@ Chen Xing等人加入了从预训练LDA模型中获取的主题词（Topic Words
 \end{table}
 
 这种固有的多样性决定了评价响应生成系统的困难。
-Liu等人在文献\cite{HowNot}中研究了两类指标，分别是基于词重叠的指标（Word Overlap Based）
-和基于词嵌入的指标（Embedding Based），并且发现这些指标在非技术性的Twitter数据集上和人类评价只有弱相关性，
-在技术性的Ubuntu Dialogue Corpus\upcite{ubuntu_corpus}没有相关性。
+Liu等人在文献\cite{HowNot}中研究了两类指标，分别是基于词重叠的指标（Word Overlap Based Metrics）
+和基于词嵌入的指标（Embedding Based Metrics），并且发现这些指标在非技术性的Twitter对话数据集
+（Twitter Dialogue Corpus）上和人类评价只有弱相关性，
+在技术性的Ubuntu对话数据集（Ubuntu Dialogue Corpus）\upcite{ubuntu_corpus}没有相关性。
 朝着Liu等人提出的新方向，许多学者提出了新的对话指标。
 
 本课题延续Liu等人的工作，对自动评价指标进行深入研究。
@@ -150,7 +151,7 @@ Liu等人已经研究了评价指标与人类评价的相关性，并且发现�
 \section{课题研究内容}\label{sec:reseach_content}
 本课题以文献\cite{VHRED}的实验中使用的三个模型LSTM，HRED，VHRED为基线，
 扩展了文献\cite{HowNot}中考察的两类指标，
-并在三个具有代表性的公开数据集：Ubuntu Dialogue Corpus，OpenSubtitles和LSDSCC\upcite{LSDSCC}上进行了实验。
+并在三个具有代表性的公开数据集：Ubuntu对话数据集，OpenSubtitles和LSDSCC\upcite{LSDSCC}上进行了实验。
 尽管没有进行人类评价，但是本文对指标之间和模型之间的一致性分析还是取得了有意义的结论。
 % 具体是什么结论，现在还不是很清楚。到时候实验一章写完之后，这里再修改。
 

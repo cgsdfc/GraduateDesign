@@ -15,15 +15,14 @@ NCM模型\upcite{GoogleChatbot}。
 ROUGE和METEOR，基于词嵌入的Average，Extrema和Greedy，
 衡量概率语言模型性能的困惑度，以及专门为生成式对话设计的ADEM和RUBER。
 最后，本文介绍了生成式对话文献中常见的数据集，
-包括Twitter Dialogue Corpus，Ubuntu Dialogue Corpus和
-OpenSubtitles等等。
+包括Twitter对话数据集，Ubuntu对话数据集和OpenSubtitles等等。
 
 % -- Method -- %
 在众多模型，数据集和指标中，本文选择了Serban等人在文献\cite{VHRED}
 中使用的三个模型HRED，LSTM和VHRED。
 这三个模型有着成熟的实现，易于其他人复现本文的实验。
 在数据集方面，本文选择了公开的，代表了不同领域的三个数据集，
-分别是Ubuntu Dialogue Corpus，OpenSubtitles和LSDSCC。
+分别是Ubuntu对话数据集，OpenSubtitles和LSDSCC。
 %这些数据集的领域都是文献中常见的。
 在指标方面，本文尽可能涵盖了对话领域使用过或者提出的指标，
 在配置方面与文献\cite{HowNot}大致对齐。
@@ -50,11 +49,11 @@ OpenSubtitles等等。
 比较稳定的是同一个数据集和指标上各个模型的排名，
 一般HRED和VHRED比LSTM好，
 有时优势不太明显，有时会出现LSTM反超的情况。
-模型在Ubuntu Dialogue Corpus上的各项指标通常更好，
+模型在Ubuntu对话数据集上的各项指标通常更好，
 但是有时候某些指标在另外两个数据集上的得分会反超。
 从附录~\ref{ch:dataset_system_dist}~可以发现，
 数据集和模型对得分都有影响，
-从大体上看，HRED和VHRED优于LSTM，Ubuntu Dialogue Corpus的得分
+从大体上看，HRED和VHRED优于LSTM，Ubuntu对话数据集的得分
 高于其他数据集，但是这不是绝对的，实验数据中存在许多反例。
 除了实验过程本身带来的噪音外，
 主要的原因是数据集的特征变化太大，
@@ -132,10 +131,10 @@ Li等人在这方面已经获得了意义重大的进展\upcite{deep_RL,Adversar
 从实用的角度，
 可以通过实验发现在某些数据集上好的对话应有的特征。
 直观的来说，
-在Ubuntu Dialogue Corpus上，好的对话应该和具体的技术话题
+在Ubuntu对话数据集上，好的对话应该和具体的技术话题
 有较高的相关性，因为这个数据集上的对话以“提问-解决问题”为主，
 好的对话应该能帮助人们解决问题；
-而在Twitter Dialogue Corpus上，好的对话应该考虑情感因素，
+而在Twitter对话数据集上，好的对话应该考虑情感因素，
 关注主题的同时又具有一定的多样性，
 因为人们在Twitter上主要发布个人的状态信息，
 经常带有感情色彩，

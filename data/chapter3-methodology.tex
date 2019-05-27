@@ -103,8 +103,8 @@ Serban等人在文献\cite{HRED,VHRED,MrRNN}
 HRED能利用长期对话历史，
 VHRED能捕捉对话中的不确定性（Uncertainty）和歧义性（Ambiguity），
 MrRNN能生成带有高层次组合结构（Compositional Structure）的响应。
-而且，HRED和VHRED都在Ubuntu Dialogue Corpus和
-Twitter Triple Corpus两个数据集上取得了不错的成绩，
+而且，HRED和VHRED都在Ubuntu对话数据集和
+Twitter三元组数据集两个数据集上取得了不错的成绩，
 说明它们在迁移能力方面是比较强的基线。
 是否基于Seq2Seq框架和迁移能力是本章选择模型的两大依据，
 HRED和VHRED很好的符合了本章的需求。
@@ -345,7 +345,7 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 % -- Dataset Preprocessing -- %
 \section{数据集预处理}
 \label{sec:dataset_proprecessing}
-本文使用的Ubuntu Dialogue Corpus直接来自Serban等人的项目
+本文使用的Ubuntu对话数据集直接来自Serban等人的项目
 \footnote{\url{https://github.com/julianser/hed-dlg-truncated.git}}，没有经过任何额外处理。
 本文从Li等人的项目
 \footnote{\url{https://github.com/jiweil/Neural-Dialogue-Generation.git}}
@@ -432,7 +432,7 @@ ROUGE-W的权重设置为1.2 。
 关于词嵌入的指标，
 本文改写了Serban等人的\texttt{embedding\_metrics.py}，
 使之能测量句子层面的得分；
-和他们一样，本文使用在谷歌新闻文库（Google News Corpus）上预训练的
+和他们一样，本文使用在谷歌新闻数据集（Google News Corpus）上预训练的
 word2vec词嵌入\footnote{\url{https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM}}。
 % -- ADEM -- %
 关于ADEM指标，本文使用作者提供的代码库

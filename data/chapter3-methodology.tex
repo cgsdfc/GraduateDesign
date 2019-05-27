@@ -269,54 +269,32 @@ HRED和VHRED的句子编码器（Utterance Encoder）
 HRED和VHRED的上下文编码器（Context Encoder）
 在所有数据集上都使用1000个隐藏单元。
 % -- Hidden Units of Utterance Decoder -- %
-不同模型的句子解码器（Utterance Decoder）
-在不同数据集上的隐藏单元数量
-如表~\ref{tab:utterance_decoder_hidden_units}~所示。
+模型的句子解码器（Utterance Decoder）配置如
+表~\ref{tab:utterance_decoder_config}~所示。
 一般根据数据集的特点来设置不同RNN的隐藏单元数量，
 在样本数多或者词汇表大的数据集上训练时，
 隐藏单元数量会相应的增多。
-
 % -- Direction of Utterance Encoder -- %
 Ubuntu上的模型的句子编码器都使用了单向RNN，
 而OpenSubtitles和LSDSCC上的模型的句子编码器则使用双向RNN。
 % -- Gate Type of Utterance & Context Encoder -- %
 所有模型的句子编码器和上下文编码器（如果有）都使用GRU作为门单元。
-% -- Gate Type of Decoder -- %
-句子解码器的门单元类型如表~\ref{tab:utterance_decoder_gate_types}~所示。
-\begin{table}
+\begin{table}[H]
     \centering
     \caption{句子解码器的配置情况}
-    \setlength{\tabcolsep}{0.11cm}%
-    \begin{subtable}{0.5\linewidth}
-        \centering
-        \caption{门单元类型}
-        \label{tab:utterance_decoder_gate_types}
-        \begin{tabular}{llll}
-            \toprule
-            \midrule
-            & HRED & LSTM & VHRED \\
-            \midrule
-            LSDSCC & LSTM & GRU & GRU \\
-            OpenSubtitles & LSTM & GRU & GRU \\
-            Ubuntu & LSTM & LSTM & LSTM \\
-            \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{0.4\linewidth}
-        \centering
-        \caption{隐藏状态单元数量}
-        \label{tab:utterance_decoder_hidden_units}
-        \begin{tabular}{lll}
-            \toprule
-            \midrule
-            HRED & LSTM & VHRED \\
-            \midrule
-            1000 & 2000 & 1000 \\
-            1000 & 2000 & 1000 \\
-            500 & 2000 & 500 \\
-            \bottomrule
-        \end{tabular}
-    \end{subtable}
+    \label{tab:utterance_decoder_config}
+    \begin{tabular}{*{8}{l}}
+        \toprule
+        \midrule
+        & \multicolumn{3}{c}{门单元类型} & & \multicolumn{3}{c}{隐藏状态单元数量} \\
+        \midrule
+        & HRED & LSTM & VHRED & & HRED & LSTM & VHRED \\
+        \midrule
+        LSDSCC & LSTM & GRU & GRU & LSDSCC & 1000 & 2000 & 1000 \\
+        OpenSubtitles & LSTM & GRU & GRU & OpenSubtitles & 1000 & 2000 & 1000 \\
+        Ubuntu & LSTM & LSTM & LSTM & 500 & Ubuntu & 2000 & 500 \\
+        \bottomrule
+    \end{tabular}
 \end{table}
 
 所有的模型都在一台Nvidia GTX上训练了至少1周。
@@ -364,47 +342,29 @@ LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google
 此外，由于本文只使用单个参考的指标，因此对LSDSCC的测试集中的多个参考，本文只取第一个参考。
 剩下的处理过程类似OpenSubtitles的处理。
 
-表~\ref{tab:train_set_stats}~是三个数据集的训练集的一些统计数据。
+表~\ref{tab:dataset_stats}~是三个数据集的训练集（左）和测试集（右）的一些统计数据。
 从表中可以看到，OpenSubtitles的样本数量要远远超过其他两个数据集，
 是Ubuntu的26倍， 是LSDSCC的16倍。
 但是，从单词数量来看，OpenSubtitles超过另外两个数据集的倍数却小得多，
 这是因为Ubuntu的每一个样本包含了多个句子，
 其长度要远远超过OpenSubtitles的样本。
 这也导致了Ubuntu的样本数量少于LSDSCC，但是单词数量却超过了LSDSCC。
-测试集的统计数据如表~\ref{tab:test_set_stats}~所示。
 \begin{table}[H]
     \centering
     \caption{数据集的统计数据}
-    \begin{subtable}{0.6\linewidth}
-        \centering
-        \caption{训练集}
-        \label{tab:train_set_stats}
-        \begin{tabular}{lllll}
-            \toprule
-            \midrule
-            数据集 & 词汇数量 & 样本数量 & 单词数量 & 轮数 \\
-            \midrule
-            Ubuntu & 20000 & 448833 & 45697699 & 多轮 \\
-            OpenSubtitles & 23876 & 11771393 & 379346841 & 多轮 \\
-            LSDSCC & 35008 & 738095 & 32355628 & 单轮 \\
-            \bottomrule
-        \end{tabular}
-    \end{subtable}%
-    \begin{subtable}{0.3\linewidth}
-        \centering
-        \caption{测试集}
-        \label{tab:test_set_stats}
-        \begin{tabular}{lll}
-            \toprule
-            \midrule
-            样本数量 & 单词数量 \\
-            \midrule
-            18920 & 2045082   \\
-            14714 & 474074 \\
-            299 & 10914 \\
-            \bottomrule
-        \end{tabular}
-    \end{subtable}
+    \label{tab:dataset_stats}
+    \begin{tabular}{*{8}{l}}
+        \toprule
+        \midrule
+        & \multicolumn{4}{c}{训练集} & & \multicolumn{2}{c}{测试集} \\
+        \midrule
+        数据集 & 词汇数量 & 样本数量 & 单词数量 & 轮数 & 数据集 & 样本数量 & 单词数量 \\
+        \midrule
+        Ubuntu & 20000 & 448833 & 45697699 & 多轮 & Ubuntu & 18920 & 2045082   \\
+        OpenSubtitles & 23876 & 11771393 & 379346841 & 多轮 & OpenSubtitles & 14714 & 474074 \\
+        LSDSCC & 35008 & 738095 & 32355628 & 单轮 & LSDSCC & 299 & 10914 \\
+        \bottomrule
+    \end{tabular}
 \end{table}
 
 % -- Metric Config -- %

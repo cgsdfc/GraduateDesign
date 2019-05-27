@@ -55,7 +55,7 @@ RNN语言模型（RNNLM）
 \end{align}
 
 $o_t$是RNN的在$t$时刻的输出向量，$V$是词汇表的大小，
-RNN语言模型\footnote{为了简洁起见，我们描述了不使用任何门单元的RNN。LSTM和GRU有着更复杂的数学表达式。}通过如下公式计算出$o_t$：
+RNN语言模型\footnote{为了简洁起见，本章描述了不使用任何门单元的RNN。LSTM和GRU有着更复杂的数学表达式。}通过如下公式计算出$o_t$：
 \begin{align}
     o_i &= h_i^T W_{out} \\
     h_i &= \sigma \left( x_i^T W_{in} + h_{i-1}^T W_{hh} \right)
@@ -596,7 +596,7 @@ LSDSCC，A Large Scale Domain-Specific Conversational Corpus，是一个单一�
 最终得到一个高质量的信息-响应对（Query-Response Pair）文库。
 在构建测试集方面，作者用类似\upcite{DCGM}的IR方法构建了一个多重参考评测集。
 他们还进一步让人类评价员对一个消息的所有响应进行分类，并
-基于这个测试集提出了三个面向多样性的评价指标，不过我们并未使用。
+基于这个测试集提出了三个面向多样性的评价指标，不过本文并未使用。
 
 % -- Conclusion -- %
 \section{本章小结}\label{sec:rw_conclusion}

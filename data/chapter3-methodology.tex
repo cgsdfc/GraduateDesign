@@ -8,8 +8,8 @@
 似乎是一个研究的比较少的问题。
 开放领域的对话数据集所具有的大量噪音，
 多样的话题和较弱的语法正确度对模型质量的影响似乎还没有引起学者们的重视。
-通过实验，我们试图对上述问题进行初步的考察，
-具体来说，我们试图回答以下问题：
+通过实验，本文试图对上述问题进行初步的考察，
+具体来说，本文试图回答以下问题：
 \begin{enumerate}
     \item 模型的性能是否可以在不同数据集之间保持？
     \item 不同的指标在评价同一个数据集上的模型时有没有一致性？
@@ -17,11 +17,11 @@
 \end{enumerate}
 
 % -- Terms and Definitions -- %
-我们的实验涉及在多个数据集上训练多个模型，
+本文的实验涉及在多个数据集上训练多个模型，
 然后用多种指标测量句子层面得分和系统层面得分。
 表~\ref{tab:experiment_triples}~展示了实验所使用的模型，数据集和指标。
 记模型的集合为$M$，数据集的集合为$D$，指标的集合为$S$，
-为了避免术语上的模糊，我们指明：
+为了避免术语上的模糊，本章指明：
 一个模型$m \in M$指的是一种生成式模型的体系结构，而不是指一个训练好的模型实例。
 一个数据集$d \in D$是指某个领域的全部对话的一个子集，它本身又被分为训练集，验证集和测试集三个子集，
 一个指标$s \in S$是指一种能把上下文$c$，参考$r$和响应$\hat{r}$映射为一个实数的函数$f_s(c, r, \hat{r})$。
@@ -30,7 +30,7 @@
 
 % -- Framework -- %
 如图~\ref{fig:framework}~所示，
-我们的实验首先让每一个模型$m$在每一个数据集$d$上训练，
+本文的实验首先让每一个模型$m$在每一个数据集$d$上训练，
 并让训练好的模型实例$(m, d)$在$d$上解码产生响应$r$，
 然后再用每一个指标$s \in S$给$r$在句子层面打分，给$(m, d)$在系统层面打分，
 分别得到$\lambda_{u}$和$\lambda_{s}$。
@@ -39,27 +39,27 @@
 的评价下所得的系统层面得分$\lambda_s$和句子层面得分$\lambda_u$。
 
 % -- Data Analysis -- %
-我们用pandas\footnote{\url{https://pandas.pydata.org/}}装载实验数据，
+本文用pandas\footnote{\url{https://pandas.pydata.org/}}装载实验数据，
 用seaborn\footnote{\url{http://seaborn.pydata.org/}}进行数据可视化。
 系统层面得分的数据由$(m, d, s, \lambda_s)$四元组组成，
 $m, d, s$都是类别变量（Categorical Variable），
 $\lambda_s$是数值变量（Numerical Variable）。
 由于数据中的类别变量较多，
 可视化采用面向类别变量的柱形图和箱体图。
-我们用柱形图详细分析了不同模型在不同数据集和指标上的系统得分。
+本章用柱形图详细分析了不同模型在不同数据集和指标上的系统得分。
 但是，某些模型在某些数据集上的得分过于接近，柱形图难以区分各个模型得分的高低。
-于是我们分别从数据集和模型两个维度绘制了箱体图，加强了得分在某个维度上的区分程度。
+于是本章分别从数据集和模型两个维度绘制了箱体图，加强了得分在某个维度上的区分程度。
 这些箱体图作为辅助分析方法，放在附录~\ref{ch:dataset_system_dist}。
 
 句子层面的得分$\lambda_u$是一个数值变量，
-我们采用频数分布直方图进行分析。
+本章采用频数分布直方图进行分析。
 一组待分析的句子层面得分是一个$n$维实值向量： $U_{(m, d, s)} = x_1, x_2, \dots, x_n$，
 $n$是测试集的样本数，$(m, d, s)$是模型，数据集和指标组成的三元组，$x_i$是某个样本的得分。
 句子层面得分可以看做是从一个分布的数学形式未知的总体的取样，
 可以使用无参估计法之一的核密度估计（Kernel Density Estimation，KDE）来估计总体的分布。
 句子层面得分比系统层面得分的粒度更细，数据也更多了，为了分析的效率，
-我们选择了案例分析。
-我们固定$m = m', d = d'$，分析所有指标在$(m', d')$上的情况。
+本章选择了案例分析。
+本章固定$m = m', d = d'$，分析所有指标在$(m', d')$上的情况。
 附录~\ref{ch:metric_dist}~呈现了完整的数据。
 
 \begin{table}[H]
@@ -95,7 +95,7 @@ $n$是测试集的样本数，$(m, d, s)$是模型，数据集和指标组成的
 第~\ref{ch:related_work}~章已经介绍了生成式模型的基本概念和数据集、指标的基本情况。
 和相对有限的数据集和指标相比，生成式模型的数量众多，
 由于时间有限，
-我们把考察的范围限定在基于Seq2Seq框架的生成式模型。
+本文把考察的范围限定在基于Seq2Seq框架的生成式模型。
 Serban等人在\upcite{HRED,VHRED,MrRNN}
 中提出HRED，VHRED和MrRNN模型，
 它们是Seq2Seq框架在体系结构上的扩展。
@@ -106,14 +106,13 @@ MrRNN能生成带有高层次组合结构（Compositional Structure）的响应�
 而且，HRED和VHRED都在Ubuntu Dialogue Corpus和
 Twitter Triple Corpus两个数据集上取得了不错的成绩，
 说明它们在迁移能力方面是比较强的基线。
-是否基于Seq2Seq框架和迁移能力是我们选择模型的两大依据，
-HRED和VHRED很好的符合了我们的需求。
+是否基于Seq2Seq框架和迁移能力是本章选择模型的两大依据，
+HRED和VHRED很好的符合了本章的需求。
 
-我们没有选取普通Seq2Seq模型作为基线，
+本章没有选取普通Seq2Seq模型作为基线，
 而是选取了Serban等人使用的基线LSTM模型。
-一方面，这是为了让实验设置尽可能和Serban等人的接近，方便学者复现我们的实验；
-另一方面，LSTM模型的体系结构很简单，我们认为基线模型不应该太复杂。
-我们把加入普通Seq2Seq模型作为以后的工作。
+这是为了让实验设置尽可能接近Serban等人的设置，方便复现本文的实验；
+本文把加入普通Seq2Seq模型作为以后的工作。
 下面将详细介绍LSTM，HRED和VHRED三个模型。
 
 % show the power of Serban
@@ -162,7 +161,7 @@ LSTM正是通过这些复杂的门运算实现对较长的序列的记忆。
 模型需要重建条件概率$p(Y|X)$，
 在$t$时刻，模型的输入是$X$序列的第$t$个元素，
 模型的输出$y_t$将和$Y$序列的第$t$个元素$Y_t$对比，并进行梯度下降。
-我们的实验使用的是作为生成式模型的LSTM。
+本文的实验使用的是作为生成式模型的LSTM。
 \begin{figure}[H]
     \begin{subfigure}{0.4\linewidth}
         \includegraphics[width=\linewidth]{figure/drawio/RNNLM_lm_v2.pdf}
@@ -256,11 +255,11 @@ $P_{\theta}(U_n|U_1, \dots, U_{n-1})$
 
 \section{模型超参数设置}\label{sec:model_hparams}
 % ------ Model setup ----------- %
-在模型超参数方面，我们的设置大致和\upcite{VHRED}相同。
-我们用Adam\upcite{AdamOpt}来优化所有模型，
+在模型超参数方面，本文的设置大致和\upcite{VHRED}相同。
+本文用Adam\upcite{AdamOpt}来优化所有模型，
 一个小批（Mini-batch）处理20个样本。
 % -- Dimension of Word Embeddings -- %
-我们在Ubuntu上使用维度是300的词嵌入，
+本文在Ubuntu上使用维度是300的词嵌入，
 在OpenSubtitles和LSDSCC上使用维度是400的词嵌入。
 % -- Hidden Units of Utterance Encoder -- %
 HRED和VHRED的句子编码器（Utterance Encoder）
@@ -322,11 +321,11 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 
 所有的模型都在一台Nvidia GTX上训练了至少1周。
 模型收敛时的困惑度如表~\ref{tab:converged_perplexity}~所示。
-与\upcite{VHRED}不同的是，我们没有用预训练的HRED的参数来初始化对应的VHRED。
+与\upcite{VHRED}不同的是，本文没有用预训练的HRED的参数来初始化对应的VHRED。
 所有的模型都使用了梯度剪裁，阈值为1。
 所有模型在Ubuntu上的学习率为0.0002，
 在OpenSubtitles和LSDSCC上的学习率为0.0001。
-在解码时，我们使用随机取样。
+在解码时，本文使用随机取样。
 \begin{table}
     \centering
     \caption{模型收敛时的困惑度}
@@ -346,9 +345,9 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 % -- Dataset Preprocessing -- %
 \section{数据集预处理}
 \label{sec:dataset_proprecessing}
-我们使用的Ubuntu Dialogue Corpus直接来自Serban等人的项目
+本文使用的Ubuntu Dialogue Corpus直接来自Serban等人的项目
 \footnote{\url{https://github.com/julianser/hed-dlg-truncated.git}}，没有经过任何额外处理。
-我们从Li等人的项目
+本文从Li等人的项目
 \footnote{\url{https://github.com/jiweil/Neural-Dialogue-Generation.git}}
 中获取了经过预处理的OpenSubtitles数据，并作了如下处理：
 \begin{enumerate}
@@ -361,8 +360,8 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 \end{enumerate}
 
 LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google.com/file/d/1nbpbnhwNP14xAc4SAc1 NN5lvEr01dQb/view?usp=sharing}}。
-由于它的词汇数量多达50K，为了使内存不至于溢出，我们将其词汇表裁剪至35000个最常见的单词。
-此外，由于我们只使用单个参考的指标，因此对LSDSCC的测试集中的多个参考，我们只取第一个参考。
+由于它的词汇数量多达50K，为了使内存不至于溢出，本文将其词汇表裁剪至35000个最常见的单词。
+此外，由于本文只使用单个参考的指标，因此对LSDSCC的测试集中的多个参考，本文只取第一个参考。
 剩下的处理过程类似OpenSubtitles的处理。
 
 表~\ref{tab:train_set_stats}~是三个数据集的训练集的一些统计数据。
@@ -410,41 +409,41 @@ LSDSCC也是一个经过预处理的数据集\footnote{\url{https://drive.google
 
 % -- Metric Config -- %
 \section{指标配置}\label{sec:metric_config}
-我们尽可能使用业界公认的指标实现和推荐的指标参数。
-和\upcite{HowNot}一样，我们只考虑单轮对话，
+本文尽可能使用业界公认的指标实现和推荐的指标参数。
+和\upcite{HowNot}一样，本文只考虑单轮对话，
 并且每个系统输出响应都只有单个参考响应。
 % -- BLEU -- %
-我们使用NLTK\footnote{\url{https://www.nltk.org/}}提供的BLEU实现，
+本文使用NLTK\footnote{\url{https://www.nltk.org/}}提供的BLEU实现，
 并且加入了平滑处理。
 % -- ROUGE -- %
-我们实现了的ROUGE的一个版本，并将准确率和召回率的比例设置为1:9，
+本文实现了的ROUGE的一个版本，并将准确率和召回率的比例设置为1:9，
 因为在机器翻译领域，
 召回率和人类评价的相关性比准确率高\upcite{METEOR}。
 ROUGE-W的权重设置为1.2 。
 % -- METEOR -- %
-我们使用了METEOR的官方实现\texttt{meteor-1.5.jar}，并且按照官方文档
+本文使用了METEOR的官方实现\texttt{meteor-1.5.jar}，并且按照官方文档
 \footnote{\url{http://www.cs.cmu.edu/~alavie/METEOR/README.html}}的说明，
 加入对特定语言（英语）的正则化处理。
 % -- PPL -- %
-我们使用Serban等人的\texttt{evaluate.py}脚本测量模型的困惑度，
-由于该程序对测试样本进行了随机取样，我们无法得知某个样本的确切得分，
+本文使用Serban等人的\texttt{evaluate.py}脚本测量模型的困惑度，
+由于该程序对测试样本进行了随机取样，本文无法得知某个样本的确切得分，
 所以只测得了系统层面的得分。
 % -- EB -- %
 关于词嵌入的指标，
-我们改写了Serban等人的\texttt{embedding\_metrics.py}，
+本文改写了Serban等人的\texttt{embedding\_metrics.py}，
 使之能测量句子层面的得分；
-和他们一样，我们使用在谷歌新闻文库（Google News Corpus）上预训练的
+和他们一样，本文使用在谷歌新闻文库（Google News Corpus）上预训练的
 word2vec词嵌入\footnote{\url{https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM}}。
 % -- ADEM -- %
-关于ADEM指标，我们使用作者提供的代码库
+关于ADEM指标，本文使用作者提供的代码库
 \footnote{\url{https://github.com/mike-n-7/ADEM.git}}
 和预训练模型\footnote{\url{https://drive.google.com/file/d/0B-nb1w_dNuMLY0Fad3N1YU9ZOU0/view?usp=sharing}}。
 % -- Distinct-N -- %
-我们实现了比较简单的Distinct-N指标。
-我们还测量了响应的句子长度$\textit{\#words}$，
+本文实现了比较简单的Distinct-N指标。
+本文还测量了响应的句子长度$\textit{\#words}$，
 以观察它对不同指标的得分的影响。
 
 \section{本章小结}\label{sec:method_conclusion}
 本章详细介绍了实验的各项设置，包括模型的超参数和训练过程，
 数据集的预处理操作和一些统计数据，以及指标的实现和参数选择。
-在下一章中，我们将展示实验的结果并进行讨论。
+在下一章中，本文将展示实验的结果并进行讨论。

@@ -19,14 +19,14 @@ ROUGE和METEOR，基于词嵌入的Average，Extrema和Greedy，
 OpenSubtitles等等。
 
 % -- Method -- %
-在众多模型，数据集和指标中，本文选择了Serban等人在\upcite{VHRED}
+在众多模型，数据集和指标中，本文选择了Serban等人在文献\cite{VHRED}
 中使用的三个模型HRED，LSTM和VHRED。
 这三个模型有着成熟的实现，易于其他人复现本文的实验。
 在数据集方面，本文选择了公开的，代表了不同领域的三个数据集，
 分别是Ubuntu Dialogue Corpus，OpenSubtitles和LSDSCC。
 %这些数据集的领域都是文献中常见的。
 在指标方面，本文尽可能涵盖了对话领域使用过或者提出的指标，
-在配置方面与\upcite{HowNot}大致对齐。
+在配置方面与文献\cite{HowNot}大致对齐。
 实验的主要工作是：
 \begin{enumerate}
     \item 在多个数据集上训练多个模型。
@@ -120,7 +120,7 @@ Li等人在这方面已经获得了意义重大的进展\upcite{deep_RL,Adversar
 了解数据集的统计特征有助于理解在这个数据集上训练模型的难度。
 
 % -- Metric -- %
-在指标方面，本文的实验大体上验证了\upcite{HowNot}的结论。
+在指标方面，本文的实验大体上验证了文献\cite{HowNot}的结论。
 在此基础上，本文提出了一个问题：什么样的对话才是好的对话？
 这是一个重要的问题，因为它不仅指导着指标的构建，还决定了模型优化的方向。
 这个问题的答案不是“语义相关性高”或者“n-gram多样性高”

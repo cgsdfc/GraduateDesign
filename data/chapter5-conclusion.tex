@@ -1,7 +1,11 @@
-\chapter*{结论\markboth{结论}{}}\label{ch:conclusion}
+% Hack to fix the section & chapter numbering
+%\setcounter{chapter}{5}
+%\setcounter{section}{0}
+\chapter*{结论}\label{ch:conclusion}
 \addcontentsline{toc}{chapter}{结论}
 
-\section{总结}\label{sec:conclusion}
+\section*{总结}\label{sec:conclusion}
+
 % -- Related Work -- %
 本文对生成式对话领域的模型，数据集和指标进行了一次深入考察。
 本文首先介绍了生成式对话领域的兴起过程中一些重要的模型，比如
@@ -76,7 +80,7 @@ ROUGE和METEOR，基于词嵌入的Average，Extrema和Greedy，
 本文发现了指标在大量句子上的统计规律，
 从统计的角度指出词嵌入指标更适合本领域。
 
-\section{展望}\label{sec:future_work}
+\section*{展望}\label{sec:future_work}
 在实验结论的基础上，
 本章对生成式对话领域的模型，数据集以及指标提出几点展望。
 % -- Model -- %

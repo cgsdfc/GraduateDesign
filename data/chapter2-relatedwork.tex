@@ -140,7 +140,7 @@ Li等人提出了Diverse Beam算法，
 即鼓励来自不同父节点的候选\upcite{DiverseBeam}。
 % -- formula too complex to add -- %
 % -- MMI -- %
-Li等人还提出了以最大互信息（MMI）为目标函数的解码算法\upcite{MMI}。
+Li等人还提出了以最大互信息（Maximum Mutual Information，MMI）为目标函数的解码算法\upcite{MMI}。
 本质上，他们训练了一个根据输入预测输出的正向模型（Forward Model）和
 一个根据输出预测输入的反向模型（Backward Model），
 再用反向模型的反向概率$p(Y|X)$对正向模型生成的候选集进行重新排序。

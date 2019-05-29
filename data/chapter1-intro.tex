@@ -18,23 +18,6 @@
 又称为面向闲聊的对话系统（Chat-oriented Dialogue System）。
 这种系统能根据对话的上下文和用户的提问产生语义相关的回答，
 用途有娱乐，语言教学和陪伴\upcite{HRED}等等。
-
-% -- Definitions -- %
-下面定义面向闲聊的对话系统的主要术语。
-本领域考察的场景是两个人交替的用文本（而不是语音）进行对话，
-两人有先后顺序的各说一段话$x, y$，称为一个回合$t = (x, y)$（Turn），
-也称为一轮对话（One Turn of Conversation）。
-一个对话数据样本$D$是回合的序列$D = t_1, t_2, \dots, t_n$，
-它至少包含一轮对话，
-样本的最后一个回合$t_n$称为当前轮（The Current Turn），
-序列$t_1, t_2, \dots, t_{n-1}$称为当前轮的上下文$c$，
-$x_n$称为当前轮的消息$m$，$y_n$称为当前轮的响应$r$，
-在不引起歧义的情况下，“当前轮”可以省略，
-若样本只有一轮对话，则上下文为空序列，也可笼统的把消息称为上下文。
-$c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
-给定上下文$c$和消息$m$，模型需要预测响应$r$，
-这就是对话响应生成（Dialogue Response Generation）问题。
-
 \begin{figure}[H]
     \includegraphics[width=0.6\textwidth]{figure/context_message_response.png}
     \centering
@@ -42,14 +25,29 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
     \label{fig:context_message_response}
 \end{figure}
 
+% -- Definitions -- %
+下面定义面向闲聊的对话系统的主要术语。
+本领域考察的场景是两个人交替的用文本（而不是语音）进行对话，
+两人有先后顺序的各说一段话$x, y$，称为一轮对话$t = (x, y)$（Turn），
+一个对话数据样本$D$是对话的序列$D = t_1, t_2, \dots, t_n$，
+它至少包含一轮对话，
+样本的最后一轮对话$t_n = (x_n, y_n)$称为当前轮，
+序列$t_1, t_2, \dots, t_{n-1}$称为当前轮的上下文$c$，
+$x_n$称为当前轮的消息$m$，$y_n$称为当前轮的响应$r$（在不引起歧义的情况下，“当前轮”可以省略）。
+若样本只有一轮对话，则上下文为空序列。
+$c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
+给定上下文$c$和消息$m$，模型需要预测响应$r$，
+这就是对话响应生成问题（Dialogue Response Generation）。
+
+
 % -- Generative System -- %
 面向闲聊的对话系统又可以分为生成式系统（Generative System）和检索式系统（Retrieval System）
-\upcite{corpus_survey,NUC}。
+\upcite{corpus_survey,NUC}，
 两者的主要区别是产生输出的机制不同。
 简单来说，如果一个系统能生成训练集里没有出现过的句子，
-就把它称为生成式系统\upcite{HowNot}，反之则称为检索式系统。
+就把它称为生成式系统，反之则称为检索式系统\upcite{HowNot}。
 生成式系统估计了给定输入特征$X$，预测结果为$Y$的条件概率$p(Y|X)$，
-并通过搜索概率分布空间产生句子。
+并输出使条件概率最大化的句子。
 设$U$是所有句子的集合，生成式模型的输出机制可以表示为：
 \begin{align}
     Y = \argmax_{Y'\in U} p(Y'|X)
@@ -57,7 +55,7 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
 
 % -- Retrieval System -- %
 检索式系统根据输入特征$X$和数据集$C$中的候选输出$Y'$计算评分$\textit{Score}(X, Y')$，
-并从$C$中检索出评分最高的候选。
+并选出评分最高的候选。
 为了使输出自然流畅而且不容易出现重复，$C$通常由大量人类撰写的语句组成。
 常见的评分机制有
 词频-逆文档频率（Term Frequency-Inverse Document Frequency，TF-IDF）
@@ -79,12 +77,12 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
 能避免梯度消失问题\upcite{VanishingGradient}的门单元，
 如长短期记忆（Long Short-Term Memory，LSTM）\upcite{LSTM}和
 带门循环单元（Gated Recurrent Unit，GRU）\upcite{GRU}，
-能端对端的映射序列的序列到序列框架（Sequence to Sequence Framework，Seq2Seq）\upcite{Seq2Seq,GRU}，
+能端对端训练的序列到序列框架（Sequence to Sequence Framework，Seq2Seq）\upcite{Seq2Seq,GRU}，
 以及能改善长期依赖问题（Long-span Dependency）的注意力机制\upcite{JointTransAlign,EffectiveAttention}。
-这些技术促进了基于神经网络的机器翻译（Neural Machine Translation，NMT）的发展，
-也促使学者们把机器翻译的技术应用到对话响应生成问题上。
 
 % -- Chatbots Based on Seq2Seq -- %
+这些技术促进了基于神经网络的机器翻译（Neural Machine Translation，NMT）的发展，
+也促使学者们把机器翻译的技术应用到生成式对话上。
 在国外，最早把Seq2Seq框架用到生成式对话的是Vinyals等人\upcite{GoogleChatbot}，
 他们在OpenSubtitles\upcite{opensub}
 上训练的模型能回答简单的常识问题，
@@ -92,7 +90,7 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
 
 % -- Li -- %
 Li等人在增加响应的多样性方面做了一系列的工作。
-他们提出使用最大互信息（Maximum Mutual Information，MMI）作为解码的目标函数\upcite{MMI}，
+他们提出把最大互信息作为解码的目标函数\upcite{MMI}，
 增加消息-响应和响应-消息两个方向的相关性。
 他们提出的Persona模型\upcite{persona}在解码器端加入了说话人身份（Speaker ID），
 有效的促进了响应的人格一致性（Personality Coherence）。
@@ -101,11 +99,9 @@ Li等人在增加响应的多样性方面做了一系列的工作。
 并取得了有意义的进展。
 
 % -- Serban -- %
-Serban等人扩展了Sordoni等人提出的
-多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}，
+Serban等人扩展了Sordoni等人提出的多层编解码器\upcite{hred-qs}，
 并将其应用到对话生成领域\upcite{HRED}。
-基于多层编解码器，Serban等人又提出了利用随机隐变量增加对话多样性的隐变量多层编解码器
-（Latent Variable Hierarchical Recurrent Encoder-Decoder，VHRED）\upcite{VHRED}，
+基于多层编解码器，Serban等人又提出了利用随机隐变量增加对话多样性的隐变量多层编解码器\upcite{VHRED}，
 以及加入了高层次抽象信息的多精度循环神经网络（Multiresolution Recurrent Neural Networks，MrRNN）\upcite{MrRNN}。
 
 % -- Shang -- %
@@ -159,15 +155,14 @@ Xing等人提出了能利用主题词的Seq2Seq模型\upcite{Topic_Aware}，
 尽管没有使用人类评价，本文对评价指标、模型和数据集的分析还是取得了有意义的结论。
 
 \section{课题研究内容}\label{sec:reseach_content}
-Liu等人发现自动评价指标在非技术性的Twitter对话数据集（Twitter Dialogue Corpus）上和人类评价只有弱相关性，
-在技术性的Ubuntu对话数据集（Ubuntu Dialogue Corpus）上和人类评价没有相关性\upcite{HowNot}。
+Liu等人发现自动评价指标在非技术性的Twitter对话数据集上和人类评价只有弱相关性，
+在技术性的Ubuntu对话数据集上和人类评价没有相关性\upcite{HowNot}。
 本课题延续Liu等人的工作，
 研究了评价指标之间的相关性，以及模型的性能在不同数据集上的迁移能力。
 
 本课题以Serban等人在文献\cite{VHRED}的实验中使用的三个模型LSTM，HRED，VHRED为基线，
-扩展了Liu等人在文献\cite{HowNot}中考察的两类指标，即基于词重叠的指标（Word-overlap-based Metrics）
-和基于词嵌入的指标（Word-embedding-based Metrics），
-在三个具有代表性的公开数据集，Ubuntu对话数据集，OpenSubtitles和LSDSCC\upcite{LSDSCC}上进行了实验。
+扩展了Liu等人在文献\cite{HowNot}中考察的两类指标，即基于词重叠的指标和基于词嵌入的指标，
+在三个具有代表性的公开数据集，Ubuntu对话数据集，OpenSubtitles和LSDSCC上进行了实验。
 
 \section{论文组织结构}\label{sec:paper_organization}
 本文的组织结构如下：

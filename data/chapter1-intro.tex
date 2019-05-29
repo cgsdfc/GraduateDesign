@@ -1,21 +1,21 @@
 \chapter{绪论}\label{ch:introduction}
 
 \section{课题研究背景}\label{sec:research_background}
-% -- Task-oriented -- %
+% -- Task-Oriented -- %
 传统的对话系统的主要用途是帮助用户用自然语言完成某项任务，
 比如技术支持（Technical Support），预订机票，预订餐馆的座位，查询航班等等。
-这种系统又被称为面向任务的对话系统（Task-oriented Dialogue System），
+这种系统又被称为面向任务的对话系统（Task-Oriented Dialogue System），
 它们的实现技术通常包括关键词匹配，规则和模板以及对话状态追踪（Dialogue State Tracking）等等。
 构建面向任务的对话系统往往需要写死的规则（Hard Written Rules）和大量人工标注的数据，
 并且它们只能处理特定领域的对话，不能回答开放性问题（Open-domain Problem），用途局限于特定领域
 \upcite{corpus_survey,Seq2Seq,Shang}。
 
-% -- Chat-oriented -- %
+% -- Chat-Oriented -- %
 随着在线聊天的流行，社交媒体和论坛积累了大量的对话语料数据，
 其中具有代表性的社交媒体和论坛有推特（Twitter），Reddit和新浪微博（Sina Weibo）等等。
-大量的对话数据使人们可以构建数据驱动的（Data-driven），
+大量的对话数据使人们可以构建数据驱动的（Data-Driven），
 能回答开放性问题的对话系统\upcite{Ritter11}，
-又称为面向闲聊的对话系统（Chat-oriented Dialogue System）。
+又称为面向闲聊的对话系统（Chat-Oriented Dialogue System）。
 这种系统能根据对话的上下文和用户的提问产生语义相关的回答，
 用途有娱乐，语言教学和陪伴\upcite{HRED}等等。
 \begin{figure}[H]
@@ -58,7 +58,7 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
 并选出评分最高的候选。
 为了使输出自然流畅而且不容易出现重复，$C$通常由大量人类撰写的语句组成。
 常见的评分机制有
-词频-逆文档频率（Term Frequency-Inverse Document Frequency，TF-IDF）
+词频-逆文档频率（Term Frequency Inverse Document Frequency，TF-IDF）
 和语义相似度（Semantic Similarity）等等。
 检索式系统的输出机制可以表示为：
 \begin{align}
@@ -78,7 +78,7 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
 如长短期记忆（Long Short-Term Memory，LSTM）\upcite{LSTM}和
 带门循环单元（Gated Recurrent Unit，GRU）\upcite{GRU}，
 能端对端训练的序列到序列框架（Sequence to Sequence Framework，Seq2Seq）\upcite{Seq2Seq,GRU}，
-以及能改善长期依赖问题（Long-span Dependency）的注意力机制\upcite{JointTransAlign,EffectiveAttention}。
+以及能改善长期依赖问题（Long-Span Dependency）的注意力机制\upcite{JointTransAlign,EffectiveAttention}。
 
 % -- Chatbots Based on Seq2Seq -- %
 这些技术促进了基于神经网络的机器翻译（Neural Machine Translation，NMT）的发展，

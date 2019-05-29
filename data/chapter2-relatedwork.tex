@@ -169,7 +169,7 @@ METEOR\upcite{METEOR}，
 BEER\upcite{beer}，
 CHRF\upcite{chrf}，
 TER\upcite{TER}等等。
-然而，适用于开放领域的，面向闲聊的对话系统的指标要少得多；
+然而，适用于开放领域的，面向闲聊的对话系统的指标为数不多。
 在考察本领域对自动指标的使用情况之前，先对各种指标作一个简要介绍。
 
 % --------------- BLEU ------------------ %
@@ -191,9 +191,9 @@ n-gram准确率的计算公式为：
     \textit{Count}(\textit{n-gram}')
     }
 \end{align}
-Candidates为系统输出的句子集合，$\textit{Count}_{\textit{clip}}(\textit{n-gram})$为截断的n-gram共现数，
-$\textit{Count}(\textit{n-gram}')$是Candidates中的总n-gram数。
-简短惩罚系数BP的计算公式为
+$\textit{Candidates}$为系统输出的句子集合，$\textit{Count}_{\textit{clip}}(\textit{n-gram})$为截断的n-gram共现数，
+$\textit{Count}(\textit{n-gram}')$是系统输出中的总n-gram数。
+简短惩罚系数BP的计算公式为：
 \begin{align}
     \textit{BP} =
     \begin{cases}
@@ -207,33 +207,33 @@ BLEU的最终公式为：
     \textit{BLEU} = \textit{BP} \cdot \exp \left( \sum_{n=1}^N w_n \log p_n \right)
 \end{align}
 实际使用中一般取$N = 4$，$w_n = 1 / N$。
-由于原始的BLEU容易在句子层面给出0分，人们提出了各种平滑处理\upcite{sBLEU-Smooth}。
+由于原始的BLEU容易在句子层面给出0分，人们提出了各种平滑处理方案\upcite{sBLEU-Smooth}。
 本文在使用BLEU时也采用了一种平滑处理。
 
 % ------------ ROUGE -------------- %
 面向召回率的摘要评估指标
-（Recall-Oriented Understudy for Gisting Evaluation，ROUGE）\upcite{ROUGE}
+（Recall-oriented Understudy for Gisting Evaluation，ROUGE）\upcite{ROUGE}
 是自动摘要领域（Automatic Summarization）的经典指标。
 它的变形有ROUGE-N，ROUGE-L，ROUGE-W和ROUGE-S等，分别使用了不同的特征，
 如n-gram共现数、最长公共子序列（Longest Common Subsequence，LCS）和二元跳词（Skip-Bigram）等。
-这些指标的基础是信息检索领域常用的F得分（F-measure），即准确率和召回率的加权调和平均值：
+这些指标的基础是信息检索领域常用的F1得分（F1-score），即准确率和召回率的加权调和平均值：
 \begin{align}
-    \textit{F-measure} = \frac{(1 + \beta^2) RP}{R + \beta^2 P}
+    \textit{F1-score} = \frac{(1 + \beta^2) RP}{R + \beta^2 P}
 \end{align}
-$\beta$控制准确率和召回率的相对重要性。
+参数$\beta$控制准确率和召回率的相对比例。
 以下无特殊说明时，当指标是句子层面的时候，$n$是系统句子的长度，$m$是参考句子的长度；
 当指标是摘要层面的时候，$n$是系统摘要的总单词数，$m$是参考摘要的总单词数。
 
 ROUGE-N利用了n-gram共现数，其公式为：
 \begin{align}
     \textit{ROUGE-N} = \frac{
-    \sum_{S \in \{\textit{ReferenceSummaries}\}}
-    \sum_{\textit{gram}_n \in S}
-    \textit{Count}_\textit{matched}(\textit{gram}_n)
+    \sum_{S \in \{\textit{Reference}\}}
+    \sum_{\textit{n-gram} \in S}
+    \textit{Count}_\textit{matched}(\textit{n-gram})
     }{
-    \sum_{S \in \{\textit{ReferenceSummaries}\}}
-    \sum_{\textit{gram}_n \in S}
-    \textit{Count}(\textit{gram}_n)
+    \sum_{S \in \{\textit{Reference}\}}
+    \sum_{\textit{n-gram} \in S}
+    \textit{Count}(\textit{n-gram})
     }
 \end{align}
 摘要层面的ROUGE-N具有相同的形式。
@@ -245,14 +245,15 @@ ROUGE-N利用了n-gram共现数，其公式为：
     \textit{ROUGE-L} &= \frac{(1 + \beta^2) R_{lcs}P_{lcs}}
     {R_{lcs} + \beta^2 P_{lcs}}
 \end{align}
-$LCS$是计算两个序列的最长公共子序列的长度的函数。
+$LCS$是两个序列的最长公共子序列的长度。
 摘要层面的ROUGE-L的公式为：
 \begin{align}
     R_{lcs} &= \frac{\sum_{i=1}^\mu \textit{LCS}_\cup(r_i, C)}{m} \\
     P_{lcs} &= \frac{\sum_{i=1}^\mu \textit{LCS}_\cup(r_i, C)}{n} \\
     \textit{ROUGE-L} &= \frac{(1 + \beta^2) R_{lcs}P_{lcs}}{R_{lcs} + \beta^2 P_{lcs}}
 \end{align}
-$\mu$是系统输出的摘要句子的数量， $\textit{LCS}_\cup(r_i, C)$计算了参考句子$r_i$和候选摘要$C$（由多个句子组成）的LCS的并集。
+$\mu$是系统摘要的句子数量，
+$\textit{LCS}_\cup(r_i, C)$是参考句子$r_i$和候选摘要$C$（由多个句子组成）的LCS的并集。
 
 句子层面的ROUGE-W的公式为：
 \begin{align}
@@ -260,7 +261,7 @@ $\mu$是系统输出的摘要句子的数量， $\textit{LCS}_\cup(r_i, C)$计�
     P_{wlcs} &= f^{-1} \left( \frac{\textit{WLCS}(X, Y)}{f(n)} \right) \\
     \textit{ROUGE-W} &= \frac{(1 + \beta^2) R_{wlcs}P_{wlcs}}{R_{wlcs} + \beta^2 P_{wlcs}}
 \end{align}
-$\textit{WLCS}$是一个计算两个序列的加权LCS的算法，它奖励较长的连续的LCS。
+$\textit{WLCS}$是两个序列的加权LCS，它奖励连续的最长公共子序列。
 摘要层面的ROUGE-W与摘要层面的ROUGE-L类似。
 
 二元跳词是句子中顺序不变的一对单词，两个单词之间可以有任意数量的其他单词。
@@ -272,16 +273,17 @@ $\textit{WLCS}$是一个计算两个序列的加权LCS的算法，它奖励较�
 \end{align}
 $C(\cdot, \cdot)$为组合数。
 摘要层面的ROUGE-S相当于把摘要看作首尾相连的句子来计算。
-ROUGE-SU是ROUGE-S加入了Unigram的扩展。
+ROUGE-SU是ROUGE-S加入了一元词匹配（Unigram Matching）的扩展。
 
 % ----------------- METEOR ----------------- %
 基于显式次序的翻译指标（
 Metric for Evaluation of Translation with Explicit ORdering，METEOR）
-\upcite{METEOR}是针对BLEU的一些弱点提出的机器翻译的指标。
+\upcite{METEOR}是针对BLEU的一些弱点作了改进的机器翻译的指标。
 与BLEU相比，METEOR在句子水平上与人类评价有更好的相关性。
-METEOR首先计算系统输出和参考输出之间的Unigram匹配，这些匹配由多个可配置的模块组成，
-包括Exact，Porter-stem，WordNet-synonymy，分别表示严格匹配，Porter词根匹配和WordNet同义词匹配。
-接着，METEOR在Unigram匹配上计算一个对齐，并得到基于Unigram匹配的准确率和召回率，进而得到二者的加权调和平均值：
+METEOR首先计算系统输出和参考输出之间的一元词匹配，这些匹配由多个可配置的模块计算产生，
+包括Exact，Porter-stem，WordNet-synonymy等等，
+分别表示严格匹配，Porter词根匹配和WordNet同义词匹配。
+接着，METEOR在一元词匹配上计算一个对齐，并得到准确率和召回率，进而得到F1得分：
 \begin{align}
     \textit{Fmean} = \frac{10PR}{R + 9P}
 \end{align}
@@ -289,8 +291,8 @@ METEOR还加入了对较短的n-gram匹配的惩罚系数：
 \begin{align}
     \textit{Penalty} = 0.5 * \left( \frac{\#chunks}{\#unigrams\_matched} \right)
 \end{align}
-$\#unigrams\_matched$是所有匹配的Unigram的数量；
-一个Unigram匹配越短，$\#chunks$就越大。
+$\#unigrams\_matched$是所有匹配的一元词的数量；
+一元词匹配的长度越短，$\#chunks$就越大。
 METEOR的最终公式为：
 \begin{align}
     \textit{METEOR} = \textit{Fmean} * (1 - \textit{Penalty})
@@ -298,42 +300,41 @@ METEOR的最终公式为：
 
 % --------- Perplexity ------------ %
 困惑度（Perplexity，PPL）是一种衡量统计语言模型性能的指标。
-一个模型的困惑度为$P$可以形象的表述为：
-该模型在预测一个词的时候，平均需要从$P$个词中等可能的选出一个。
-因此，困惑度越低，语言模型在选择一个词时就越不“困惑”。
+困惑度为$P$的一个模型可以形象的描述为
+该模型在预测一个词的时候，平均需要从大约$P$个单词中等可能的选出一个。
+因此，困惑度越低，语言模型在选择一个单词时就越不“困惑”。
 困惑度的计算公式为：
 \begin{align}
-    \textit{PPL} = \exp(-\frac{1}{N} \sum_{i=1}^N \log p(x_i))
+    \textit{Perplexity} = \frac{1}{\#\textit{words}} \exp(-\frac{1}{N} \sum_{i=1}^N \log p(x_i))
 \end{align}
-$N$是测试集的样本数，$x_i$是一个样本，在语言模型中它是一个句子，
-在生成式模型中它是一对输入输出序列$(X, Y)$。
-$p(x_i)$是模型估计的概率。
-一个好的模型应该给测试集的样本估计较高的概率， 所以好的模型PPL较低。
-实际在自然语言处理中使用的PPL还要除以文本中的总单词数，
-得到平均每个词的困惑度（Perplexity per-word）：
-\begin{align}
-    \textit{PPL-w} = \frac{1}{\#\textit{words}} \exp(-\frac{1}{N} \sum_{i=1}^N \log p(x_i))
-\end{align}
+$\#words$是样本的总单词数，
+$N$是用于测试的样本数，$x_i$是一个样本，在语言模型中它是一个句子，
+在生成式模型中它是一对输入输出序列$(X, Y)$；
+$p(x_i)$是模型估计的概率，
+一个好的模型应该对测试集的样本给出较高的概率。
 
 % --------- embedding based ------------ %
-词嵌入（Word Embedding）指标是一类建立在分布式假设
-\upcite{distributed_hypothesis,Mathematical_structures_of_language}（Distributed Hypothesis）上，
-用分布式语义（Distributed Semantic）来衡量两个句子的相似程度的指标，
-常用于句子文本相似性（Sentence Textual Similarity）和学生输入自动打分\upcite{GreedyAndOptimal}等任务中。
-这类指标一般用某种组合方式从单词的向量表示得到句子的向量表示，
-再用余弦相似度（Cosine Similarity）测量两个句子向量的相似程度\upcite{VectorCompose}：
+基于词嵌入的指标是一类基于分布式假设
+（Distributed Hypothesis）\upcite{distributed_hypothesis,Mathematical_structures_of_language}，
+用分布式语义（Distributed Semantic）来衡量两个句子的相似程度的指标。
+它们常用于句子文本相似性（Sentence Textual Similarity）和学生输入自动打分\upcite{GreedyAndOptimal}等任务中。
+这类指标一般用某种组合方式从句子的词向量中得到句子的向量表示，
+再用余弦相似度（Cosine Similarity）测量两个句子向量的相似程度\upcite{VectorCompose}，
+如公式~\ref{eqn:cosine}~所示：
 \begin{align}
     \text{cos}(x, y) = \frac{x\cdot y}
     {\left\| x \right\| \cdot \left\| y \right\|}
+    \label{eqn:cosine}
 \end{align}
-最常见组合方式是对单词向量取平均值，类似于词袋表示（Bag-of-Words），对应的指标就是向量平均值（Vector Average）：
+最常见组合方式是对词向量取平均值，类似于词袋表示（Bag-of-Words），对应的指标就是向量平均值（Vector Average）：
 \begin{align}
     \bar{e_r} &= \frac{\sum_{w \in r} e_w}{|\sum_{w' \in r} e_{w'}|} \\
     \textit{Vector-Average} &= \cos(\bar{e_r}, \bar{e}_{\hat{r}})
 \end{align}
 $r$是参考输出，$\hat{r}$是系统输出，$w$是句子中的一个单词。
 
-另外一种组合方式是向量极值（Vector Extrema），它把单词向量每个维度上的极端值作为句子向量在该维度上的值\upcite{Vector_Extrema}：
+另外一种组合方式是向量极值（Vector Extrema），
+它把词向量每个维度上的极端值作为句子向量在该维度上的值\upcite{Vector_Extrema}：
 \begin{align}
     \text{extrema}(d_i) &=
     \begin{cases}
@@ -347,9 +348,9 @@ $[\cdot, \cdot]$表示连接多个标量形成一个向量，
 $e_r^{ex}$是参考输出的向量极值表示，$e_{\hat{r}}^{ex}$是系统输出的向量极值表示。
 
 贪心匹配（Greedy Matching）
-得名于边加权的二部图（Weighted Bipartite Graph）的最大匹配问题\upcite{GreedyAndOptimal}：
-把两个句子的单词看做二部图的节点，任意两个节点之间有一条边，边的权重定义为两个单词的余弦相似度，一个匹配
-定义为一对点，问如何构造一个匹配的集合，使其权重之和最大。贪心匹配给出了一种贪心算法：
+得名于加权二部图（Weighted Bipartite Graph）的最大匹配问题\upcite{GreedyAndOptimal}：
+把两个句子的单词看做二部图的节点，任意两个节点之间有一条边，定义边上的权重为两个单词的余弦相似度，
+问如何构造一个匹配，使其中的边的权重之和最大。贪心匹配给出了一种贪心算法：
 \begin{align}
     G(r, \hat{r}) = \frac{
     \sum_{w \in r} \max_{\hat{w} \in \hat{r}} \cos(e_w, e_{\hat{w}})
@@ -361,20 +362,20 @@ $e_r^{ex}$是参考输出的向量极值表示，$e_{\hat{r}}^{ex}$是系统输�
 除了上述三种组合方法外，还有很多其他方法\upcite{VectorCompose}。
 
 % -------- Distinct-N ---------- %
-Distinct-N是Li等人提出的衡量句子层面的n-gram多样性的指标\upcite{MMI}：
+如公式~\ref{eqn:distinct_n}~所示，Distinct-N是Li等人提出的衡量句子n-gram多样性的指标\upcite{MMI}，
+$\#\textit{unique-ngrams}$是句子中不重复的n-gram数量，$\#\textit{words}$是句子的总单词数。
 \begin{align}
     \textit{Distinct-N} = \frac{\#\textit{unique-ngrams}}{\#\textit{words}}
+    \label{eqn:distinct_n}
 \end{align}
 
 % ------- ADEM ------------ %
-Lowe等人从自动图灵测试（Automatic Turing Test）得到灵感，
-提出了自动化对话评价模型（Automatic Dialogue Evaluation Model，ADEM）\upcite{ADEM}。
-如图~\ref{fig:ADEM_model}~所示，ADEM采用VHRED的多层编码器
-（Hierarchical Encoder）分别对上下文$c$，参考$r$和响应$\hat{r}$
-进行编码，然后简单的将三者的编码线性组合到一起，并经过归一化得到区间在
-$[1, 5]$的得分。
-模型通过最小化和人类评价的均方误差（Mean Squared Error，MSE），
-可以端对端的训练。
+Lowe等人提出了基于神经网络的自动化对话评价模型
+（Automatic Dialogue Evaluation Model，ADEM）\upcite{ADEM}。
+如图~\ref{fig:ADEM_model}~所示，
+ADEM采用VHRED的多层编码器分别对上下文$c$，参考$r$和响应$\hat{r}$
+进行编码，然后简单的将三者的编码线性组合到一起，并经过归一化，得到落在区间$[1, 5]$的得分。
+模型通过最小化和人类评价的均方误差（Mean Squared Error，MSE）端对端的训练。
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{figure/ADEM.pdf}
@@ -383,67 +384,73 @@ $[1, 5]$的得分。
 \end{figure}
 
 公式~\ref{eqn:ADEM_score}~是ADEM的打分公式，$M, N$是可学习的
-参数矩阵，$\alpha, \beta$是缩放常量，使得分数落在$[1, 5]$区间。
-模型训练的目标函数如公式~\ref{eqn:ADEM_objective}~所示，
-它是一个带L2正则化的均方误差。
+参数矩阵，$\alpha, \beta$是缩放常量，使得分落在$[1, 5]$区间。
+如公式~\ref{eqn:ADEM_objective}~所示，
+模型的训练目标函数是一个带L2正则化的均方误差。
 \begin{align}
     \textit{score}(c, r, \hat{r}) = (c^T M \hat{r} + r^T N \hat{r} - \alpha) / \beta
     \label{eqn:ADEM_score} \\
     \mathcal{L} = \sum_{i=1:K} [\textit{score}(c_i, r_i, \hat{r}_i) - \textit{human}_i]^2 + \gamma \left\| \theta \right\| _2
     \label{eqn:ADEM_objective}
 \end{align}
-Lowe等人在一个带人类评价的Twitter数据集上训练并且评估了ADEM模型，
-发现它和人类评价的相关性在句子水平和系统水平都达到了很高水平。
+ADEM在一个带人类评价的Twitter数据集上训练并评估，
+它的打分和人类评价的相关性在句子水平和系统水平都达到了较高水平。
 
 % ------ RUBER --------- %
-Tao等人提出了Referenced Metric and Unreferenced Metric Blended Evaluation Routine\upcite{RUBER}，简称RUBER。
-如图~\ref{fig:RUBER_components}~所示，RUBER由带参考的指标（Referenced Score）和无参考的指标（Unreferenced Score）组成。
-带参考的指标使用了
+Tao等人提出了带参考和无参考的混合指标
+（Referenced Metric and Unreferenced Metric Blended Evaluation Routine，RUBER）\upcite{RUBER}。
+如图~\ref{fig:RUBER_components}~所示，
+RUBER由带参考的指标（Referenced Score）和无参考的指标（Unreferenced Score）两部分组成。
+带参考的指标使用
 基于词嵌入的最大-最小池化（Max-Min Pooling）作为句子向量，
-衡量了消息和响应的相似度：
+衡量了消息和响应的相似度，公式如下：
 \begin{align}
     v_{max}[i] = \max \{ w_1[i], w_2[i], \dots, w_n[i] \} \\
     v_{min}[i] = \min \{ w_1[i], w_2[i], \dots, w_n[i] \} \\
     v = [v_{max}; v_{min}] \\
-    s_R(r, \hat{r}) = \cos(v_r, v_{\hat{r}}) = \frac{v_r^T v_{\hat{r}}}{\left\| v_r \right\| \cdot \left\| v_{\hat{r}} \right\|}
+    s_R(r, \hat{r}) = \cos(v_r, v_{\hat{r}}) =
+    \frac{v_r^T v_{\hat{r}}}{\left\| v_r \right\| \cdot \left\| v_{\hat{r}} \right\|}
 \end{align}
-无参考的指标通过如图~\ref{fig:RUBER_unref_model}~所示的神经网络来估计，
-使用无监督的负采样（Negative Sampling）来训练。
-该指标在中文数据集豆瓣网\footnote{\url{http://www.douban.com}}上取得了很高的人类评价相关性。
+
+无参考的指标通过如图~\ref{fig:RUBER_unref_model}~所示的神经网络估计响应和消息的相关程度。
+该模型用负采样（Negative Sampling）训练，不需要人类评价作为监督信号。
+RUBER在中文数据集豆瓣\footnote{\url{http://www.douban.com}}上取得了较高的人类评价相关性。
 \begin{figure}[H]
-    \begin{subfigure}{0.5\linewidth}
+    \begin{subfigure}{0.45\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figure/RUBER_overview.png}
-        \caption{分数组成}
+        \caption{RUBER的分数组成}
         \label{fig:RUBER_components}
     \end{subfigure}%
-    \begin{subfigure}{0.5\linewidth}
+    \begin{subfigure}{0.45\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figure/RUBER_model.png}
         \caption{无参考指标的模型结构}
         \label{fig:RUBER_unref_model}
     \end{subfigure}
+    \centering
     \caption{RUBER指标}
 \end{figure}
 
 % ------- AdverEval --------- %
-Kannan等人初步尝试基于对抗生成网络的对抗式评价
-（Adversarial Evaluation） \upcite{AdverEval}，
+Kannan等人初步尝试了基于对抗生成网络的对抗式评价
+（Adversarial Evaluation）\upcite{AdverEval}。
 他们训练了一个鉴别器（Discriminator）来区分一个响应是来自系统还是来自人类，
 并且发现鉴别器能捕捉到基于Seq2Seq的模型倾向于生成短句子和通用句子的缺点。
-Li等人在\upcite{Adversarial}中构建了完整的对抗生成网络，
-提出了训练和对抗式评价的一体框架。
-由于篇幅有限，不再描述。
-
+基于相似的思路，Li等人在文献\cite{Adversarial}中构建了完整的对抗生成网络，
+提出了训练和评价的一体框架。
+关于对抗生成网络的内容超出了本文的范围，所以不再描述。
 
 % -- Usage of Metrics -- %
-\subsection{评价指标使用情况}\label{subsec:metrics_usage}
-生成式对话系统还没有公认的，与人类评价相关度较高的评价指标，
-对话的研究者们很早就意识到了这一点\upcite{Ritter11,GoogleChatbot,Shang,HRED}，
-所以他们常常使用人类评价作为核心的评判标准，有时用一些指标来衡量模型某一方面的性质，
+\subsection{评价指标的使用情况}\label{subsec:metrics_usage}
+生成式对话系统还没有公认的合适的评价指标。
+学者们很早就意识到了这一点\upcite{Ritter11,GoogleChatbot,Shang,HRED}，
+所以他们常常使用人类评价作为核心的评判标准，有时用指标来衡量模型某一方面的特性，
 但很少把指标作为评价系统的主要手段。
-此外，展示和对比不同模型的响应输出也是这个领域常见的分析手段，通常称为定性分析（Qualitative Analysis），比如
-表~\ref{tab:qualitative_analysis}~展示了模型GoogleChatbot对哲学问题的响应。
+除了人类评价和指标，
+展示并分析模型的输出也是衡量模型性能的常见方法，通常称为定性分析（Qualitative Analysis）。
+表~\ref{tab:qualitative_analysis}~展示了模型GoogleChatbot对哲学问题的响应，
+从中可以看出该模型对哲学问题的回答具有一定的语义相关性。
 \begin{table}
     \centering
     \caption{定性分析的例子\upcite{GoogleChatbot}}
@@ -451,75 +458,76 @@ Li等人在\upcite{Adversarial}中构建了完整的对抗生成网络，
     \begin{tabular}{ll}
         \toprule
         \midrule
-        \textbf{Human:} & what is the purpose of life ? \\
-        \textbf{Machine:} & to serve the greater good .\\
+        \textbf{人类：} & what is the purpose of life ? \\
+        \textbf{模型：} & to serve the greater good .\\
         \midrule
-        \textbf{Human:} & what is the purpose of living ? \\
-        \textbf{Machine:} & to live forever . \\
+        \textbf{人类：} & what is the purpose of living ? \\
+        \textbf{模型：} & to live forever . \\
         \midrule
-        \textbf{Human:} & what is the purpose of existence ? \\
-        \textbf{Machine:} & to find out what happens when we get to the planet earth . \\
+        \textbf{人类：} & what is the purpose of existence ? \\
+        \textbf{模型：} & to find out what happens when we get to the planet earth . \\
         \midrule
-        \textbf{Human:} & where are you now ? \\
-        \textbf{Machine:} & i' m in the middle of nowhere . \\
+        \textbf{人类：} & where are you now ? \\
+        \textbf{模型：} & i' m in the middle of nowhere . \\
         \midrule
-        \textbf{Human:} & what is the purpose of dying ? \\
-        \textbf{Machine:} & to have a life . \\
+        \textbf{人类：} & what is the purpose of dying ? \\
+        \textbf{模型：} & to have a life . \\
         \midrule
-        \textbf{Human:} & what is the purpose of being intelligent ? \\
-        \textbf{Machine:} & to find out what it is . \\
+        \textbf{人类：} & what is the purpose of being intelligent ? \\
+        \textbf{模型：} & to find out what it is . \\
         \midrule
-        \textbf{Human:} & what is the purpose of emotions ? \\
-        \textbf{Machine:} & i don' t know . \\
+        \textbf{人类：} & what is the purpose of emotions ? \\
+        \textbf{模型：} & i don' t know . \\
         \bottomrule
     \end{tabular}
 \end{table}
 
 % Ritter -- MT-chat
 Ritter等人首次尝试了数据驱动的，面向闲聊的对话响应生成\upcite{Ritter11}。
-因为不清楚面向任务的指标能不能用于评价生成式模型，他们就用了基于Amazon Mechanical Turk的人类评价。
-他们利用人类评价的数据考察了BLEU在这方面的适用性，并发现系统的BLEU得分非常低，和人类评价的相关性也不是很高，
-因此他们认为BLEU不能直接应用到本领域。
-
-% We use abbreviation hereby. Remember to introduce their fullname before!
+因为不清楚面向任务的指标能不能用于评价生成式模型，
+他们就使用了亚马逊众包平台（Amazon Mechanical Turk，AMT）的人工评价。
+他们利用人类评价的数据考察了BLEU在这方面的适用性，
+并发现BLEU的系统层面得分非常低，和人类评价的相关性也不是很高。
+据此他们认为BLEU不能直接应用到本领域。
 
 % Shang -- NRM
-Shang等人在评价他们的NRM模型时分析了几种指标在本领域的适用性\upcite{Shang}。
-他们认为BLEU并不适用，因为合理的响应的范围实在是太大了，参考响应不可能完全覆盖到；
-而常用于语言模型的指标困惑度（Perplexity，PPL）也不适用，因为它不能测量响应的自然程度及其对消息的相关程度。
+Shang等人在评价他们的模型时分析了几种指标在本领域的适用性\upcite{Shang}。
+他们认为BLEU并不适用，因为合理的响应的空间太大了，参考响应不可能完全覆盖到；
+而常用于评价语言模型的困惑度也不适用，因为它不能测量响应的自然程度及其对消息的相关程度。
 最后他们选择了人类评价。
 
 % Sordoni -- DCGM-1-2
-Sordoni在DCGM的评价时采用了BLEU和METEOR两种自动指标\upcite{DCGM}。
-为了处理庞大而且多样的响应空间，他们用信息检索（Information Retrieval，IR）的方法从数据集中挖掘潜在的合理响应，
+Sordoni在评价他们的模型时采用了BLEU和METEOR两种指标\upcite{DCGM}。
+为了处理庞大而多样的响应空间，他们用信息检索（Information Retrieval，IR）的方法从数据集中挖掘潜在的合理响应，
 并让人类评估员对其合适度（Appropriateness）打分，
 从而构造了一个多重参考评测集（Multiple-Responses Benchmark Dataset）。
 在这样的评测集上，他们发现BLEU对系统的排名和人类评价非常一致。
-这种构建多重响应测评集的方法也见于LSDSCC\upcite{LSDSCC}的测评集的构造方法，
+这种构建方法也见于LSDSCC\upcite{LSDSCC}的测试集的构造，
 以及DeltaBLEU\upcite{deltaBLEU}指标的设计思路。
 
 % Serban -- HRED
 Serban等人在HRED模型的评价中使用了困惑度和单词分类错误（Word Classification Error，WCE）\upcite{HRED}。
-低的困惑度表示模型对数据的概率分布的拟合程度好。
-Serban等人认为困惑度是适用的，因为在存在多个合理输出的情况下，困惑度总是衡量生成单一参考输出的概率，
+他们认为困惑度是适用的，因为在存在多个合理输出的情况下，困惑度总是衡量生成单一参考输出的概率，
 这意味着它能可靠的衡量模型的质量。
-WCE计算模型的输出中正确预测的单词占整个数据集单词数量的比例，
-这里的“正确预测”要求单词在句子中的顺序也要正确，所以它是一个比困惑度更严苛的指标。
-尽管使用了自动化指标，Serban等人指出：这些指标与他们想要衡量的语法正确度（Grammatical Correctness）
-和语义连贯性（Semantic Coherence）之间的相关性并不明朗。
+单词分类错误是模型的输出中正确预测的单词占整个数据集的单词的比例。
+这里的“正确预测”要求单词在句子中的顺序也要正确，所以它比困惑度更严苛。
+尽管使用了自动化指标，
+Serban等人指出：这些指标与语法正确度（Grammatical Correctness）
+和语义连贯度（Semantic Coherence）之间的相关性并不明确。
 值得注意的是，他们并没有使用人类评价。
 
 % Serban -- VHRED
-Serban等人在VHRED模型的评价中主要使用了基于词嵌入的指标\upcite{VHRED}和人类评价。
-Serban等人认为，虽然这些基于词嵌入的指标和人类评价的相关度不高，但是它们可以用于测量话题相似性（Topic Similarity），
-也就是模型的输出和参考输出的语义内容是否相近。
-模型的输出和参考输出可能没有n-gram重叠，但分布式语义可以给出非0的相似性。
+Serban等人在VHRED模型的评价中使用了基于词嵌入的指标\upcite{VHRED}和人类评价。
+他们认为，虽然基于词嵌入的指标和人类评价的相关度不高，
+但是它们可以衡量话题相似性（Topic Similarity），
+即模型的响应和参考之间的语义是否相似。
+他们用人类评价和定性分析验证了基于词嵌入的指标所衡量的话题相似性。
 
 % Vinyals -- Google Chatbot
-Vinyals等人对他们提出的基于Seq2Seq的对话系统
-\upcite{GoogleChatbot}的评估使用了困惑度，定性分析和人类评价。
-但是，他们认为这些测评方法都存在明显的弊端，
-而设计出能快速评价对话模型的高质量指标仍有待学界研究。
+Vinyals等人在评价他们的模型时使用了困惑度，定性分析和人类评价\upcite{GoogleChatbot}。
+尽管他们的模型在上述评价中都打败了基线模型，
+但是他们认为这些评价方法都存在许多弊端。
+能快速并且准确的评价系统性能的指标仍有待学界研究。
 
 % -- Dataset -- %
 \section{生成式对话的数据集}\label{sec:public_dataset}

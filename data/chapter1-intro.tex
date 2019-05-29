@@ -62,7 +62,7 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
 和语义相似度（Semantic Similarity）等等。
 检索式系统的输出机制可以表示为：
 \begin{align}
-    Y = \argmax_{Y\in C} \textit{Score}(Y, X)
+    Y = \argmax_{Y'\in C} \textit{Score}(Y', X)
 \end{align}
 
 这两种方法各有优劣：检索式系统的输出没有语法错误并且可以对输出内容进行限制\upcite{NUC}，但是不能生成新句子；
@@ -134,6 +134,7 @@ Xing等人提出了能利用主题词的Seq2Seq模型\upcite{Topic_Aware}，
     \label{tab:multiple_valid_responses}
     \begin{tabular}{rl}
         \toprule
+        \midrule
         \textbf{消息：} & 为什么不领养一个？ \\
         & Why not adopt one? \\
         \textbf{参考：} & 我也想领养，但是不好找。 \\

@@ -500,8 +500,8 @@ Shang等人在评价他们的模型时分析了几种指标在本领域的适用
 Sordoni在评价他们的模型时采用了BLEU和METEOR两种指标\upcite{DCGM}。
 为了处理庞大而多样的响应空间，他们用信息检索（Information Retrieval，IR）的方法从数据集中挖掘潜在的合理响应，
 并让人类评估员对其合适度（Appropriateness）打分，
-从而构造了一个多重参考评测集（Multiple-Responses Benchmark Dataset）。
-在这样的评测集上，他们发现BLEU对系统的排名和人类评价非常一致。
+从而构造了一个多重参考测评集（Multiple-Responses Benchmark Dataset）。
+在这样的测评集上，他们发现BLEU对系统的排名和人类评价非常一致。
 这种构建方法也见于LSDSCC\upcite{LSDSCC}的测试集的构造，
 以及DeltaBLEU\upcite{deltaBLEU}指标的设计思路。
 
@@ -530,27 +530,27 @@ Vinyals等人在评价他们的模型时使用了困惑度，定性分析和人�
 能快速并且准确的评价系统性能的指标仍有待学界研究。
 
 % -- Dataset -- %
-\section{生成式对话的数据集}\label{sec:public_dataset}
-本领域所使用的数据集一般称为开放领域的对话数据集
-（Open-domain Conversation Corpus），
-它和传统的面向任务的数据集相比，话题开放， 语法形式多样，
+\section{开放领域的对话数据集}\label{sec:public_dataset}
+本领域所使用的数据集一般称为开放领域的对话数据集（Open-Domain Dialogue Corpus）。
+和传统的面向任务的数据集相比，它们的话题广泛，语法形式多样，
 而且常带有非自然语言符号（表情符号，URL等等）\upcite{corpus_survey}。
-表~\ref{tab:dataset_list}~列举了一些常见数据集，
-大规模是指对话数量在1M以上的，中等规模是指对话数量在50K--1M之间的\footnote{1K = 1024，1M = 1024 K，1G = 1024 M。}。
-Sina Weibo Corpus是一个中文数据集，其他都是英文数据集。
-Twitter相关的数据集由于隐私保护政策的原因，不能公开原始数据。
+表~\ref{tab:dataset_list}~列举了一些常见的数据集，
+大规模是指样本数量在1M及以上的，
+中等规模是指样本数量在50K--1M之间的\footnote{1K = 1024，1M = 1024 K，1G = 1024 M。}。
+新浪微博数据集（Sina Weibo Corpus）是一个中文数据集，其他都是英文数据集。
+与Twitter相关的数据集由于隐私保护政策的原因，不能公开原始数据。
 数据集\upcite{supreme,wiki_pages,tennis_corpus,parliamentary,gone_awry,movie_dialogs_corpus,DailyDialog}都具有元信息，
 如时间戳，对话双方身份信息等等。
-数据集\upcite{DailyDialog,LSDSCC,DCGM}有人类标注信息，
+数据集\upcite{DailyDialog,LSDSCC,DCGM}都有人类标注信息，
 如情感、话题和方面（Aspect）等。
 元信息和人类标注信息提供了额外的表征，对构建更智能的对话系统很有帮助。
 本文把注意力集中在三个数据集上：
-Ubuntu对话数据集，OpenSubtitles，LSDSCC，
-它们代表了三个常见的对话领域，分别是：技术支持，电影字幕和在线论坛讨论。
-
+Ubuntu对话数据集（Ubuntu Dialogue Corpus），OpenSubtitles，
+LSDSCC数据集（A Large Scale Domain-Specific Conversation Corpus），
+它们代表了三个常见的对话领域：技术支持，电影字幕和在线论坛。
 \begin{table}
     \centering
-    \caption{数据集一览}
+    \caption{开放领域的对话数据集}
     \label{tab:dataset_list}
     \begin{tabular}{llll}
         \toprule
@@ -577,59 +577,64 @@ Ubuntu对话数据集，OpenSubtitles，LSDSCC，
 \end{table}
 
 % --------- Ubuntu ---------- %
-Ubuntu对话数据集（以下简称Ubuntu）
+Ubuntu对话数据集（下文简称Ubuntu）
 是Lowe等人从Freenode IRC网络的Ubuntu板块的聊天日志\footnote{\url{https://irclogs.ubuntu.com/}}
-中获取的技术性两人多轮对话。这个数据集中包含了大量技术符号，比如路径、命令、URL，还有笔误（Typo），缩写（Abbreviation）和俚语（Slang）。
-它的对话数量多达930,000（接近1M），庞大的数据量为数据驱动的模型提供了极佳的试验场。
-它的多轮特性为模型提供了更长的上下文，有助于能利用多轮对话的模型生成更有意义的响应。
+中获取的技术性两人多轮对话。
+这个数据集包含了大量技术符号，比如路径，命令，URL，还有笔误（Typo），缩写（Abbreviation）和俚语（Slang）。
+它的样本数量多达930,000（接近1M），庞大的数据量为数据驱动的模型提供了极佳的试验场。
+它的多轮特性为模型提供了更长的上下文，有助于模型生成更有意义的响应。
 
 % --------- OpenSubtitles -------- %
-OpenSubtitles是The Open Parallel Corpus，OPUS项目的一部分。
+OpenSubtitles是开源双语数据集项目（The Open Parallel Corpus，OPUS）的一部分。
 它是从一个人们可以自由上传和下载电影字幕的网站\footnote{\url{http://www.opensubtitles.org}}的数据库中获取的，
-庞大而充满噪音的开放领域数据集。
-它的对话数量达到了80M。
-由于OPUS的目的是收集机器翻译所用到的双语数据集（Parallel Corpus），OpenSubtitles也是一个双语数据集，
-它里面并没有对话数据集所需要的轮换信息（Turn-Taking），
-而且也没有区分旁白、独白和对白。
-Sordoni等人在\upcite{GoogleChatbot}中把OpenSubtitles用到对话领域，
-他们把相邻的两个句子视为消息和响应，并且每一个句子既是消息又是响应。
-Li等人在\upcite{MMI,persona,Future,DiverseBeam,
-Distill,deep_RL,Adversarial}中也采用了类似的办法。
-尽管充满噪音，OpenSubtitles仍然是目前最大规模的电影字幕数据集。
+庞大而充满噪音的开放领域数据集，对话数量高达80M。
+由于OPUS的目的是收集机器翻译所需要的双语数据集（Parallel Corpus），OpenSubtitles也是一个双语数据集，
+它里面并没有对话数据集所需要的轮信息（Turn Information），
+而且也没有区分旁白，独白和对白。
+Sordoni等人把OpenSubtitles用到对话领域\upcite{GoogleChatbot}，
+他们把相邻的两个句子分别视为消息和响应，并且每一个句子既是消息又是响应。
+Li等人对OpenSubtitles也采用了类似的办法\upcite{MMI,persona,Future,DiverseBeam,
+Distill,deep_RL,Adversarial}。
 
 % --------- LSDSCC ------------- %
-LSDSCC，A Large Scale Domain-Specific Conversational Corpus，是一个单一领域的单轮对话数据集\upcite{LSDSCC}。
-有研究认为，单一领域和专注的话题有助于模型规避单调的响应。
-它有738,095个对话，词汇表比较大，达到了50K。
-作者从Reddit的电影板块\footnote{\url{https://www.reddit.com/r/datasets}}中获取了原始数据，
-设计了一套尽可能保留语料信息的清理程序，还使用人类评价员对消息和响应的相关度进行评价，
-最终得到一个高质量的信息-响应对（Query-Response Pair）数据集。
-在构建测试集方面，作者用类似\upcite{DCGM}的IR方法构建了一个多重参考评测集。
-他们还进一步让人类评价员对一个消息的所有响应进行分类，并
-基于这个测试集提出了三个面向多样性的评价指标，不过本文并未使用。
+大规模特定领域对话数据集（A Large Scale Domain-Specific Conversational Corpus，LSDSCC）
+是一个特定领域的单轮对话数据集\upcite{LSDSCC}。
+它的训练集包含738,095个样本；它的词汇表比较大，达到了50K。
+作者从Reddit的电影板块\footnote{\url{https://www.reddit.com/r/datasets}}中获取原始数据，
+设计了一套尽可能保留语料信息的清理程序，还使让人类评价员对消息和响应的相关度进行评价，
+最终得到一个高质量的消息-响应对数据集（Query-Reply Pair Corpus）。
+作者还用信息检索的方法构建了一个多重参考测评集，并基于此提出了一系列衡量响应多样性的指标。
 
 % -- Conclusion -- %
+% to be short? move to exp.
 \section{本章小结}\label{sec:rw_conclusion}
-本章从模型、指标和数据集三个方面回顾了本领域的研究成果和现存问题。
-在模型方面，基于Seq2Seq的对话系统能够直接生成响应，能端对端的训练，减少写死的规则（Hard Written Rules），
-能从大量语料数据中自动学习语言规律，能利用话题和情感等多种表征，具有巨大的优越性。
-然而，这类系统也有弊端，比如无法准确控制生成的内容，偏向于生成单调的响应，
+本章从模型，指标和数据集三个方面回顾了本领域的研究现状。
+在模型方面，基于Seq2Seq的对话系统有多种优势，例如：
+能够直接生成响应，
+能端对端的训练，
+能从大量语料数据中自动学习语言规律，减少写死的规则，
+能利用话题和情感等多种表征，等等。
+然而这类系统也有弊端，
+比如无法准确控制生成的内容，
+偏向于生成单调的响应，
 没有人格一致性等等。
 
-在指标方面，对话系统的指标还不能像机器翻译的指标那样准确的评价对话系统。
-可能最大的问题就是，如何提高指标和人类评价的相关性。
+在指标方面，对话系统的指标还不能像机器翻译的指标那样准确的评价系统的性能。
+% -- this is totally disscusion.
+目前最大的问题可能是如何提高指标和人类评价的相关性。
 导致这个困境的核心原因可能是对话的响应具有固有的语义多样性，
 这个事实可能导致两个结果：1. 用机器翻译的表征，比如单词层面的n-gram，字符层面的n-gram，
 对齐等等，无法有效捕捉语义层面的信息。
 2. 单纯使用衡量相似性的指标无法捕捉多样性的维度，从而与人类评价不符。
 
-在数据集方面，本领域已经积累了各种领域（Domain）的数据，从技术性问答、社交媒体闲聊，到电影对白和字幕等等。
-因为数量的增多，一些数据集在领域上出现了重合，
+在数据集方面，本领域已经积累了来自不同领域的数据，例如技术性问答，社交媒体上的闲聊，电影对白和字幕，等等。
+一些数据集在领域上出现了重合，
 比如电影对话数据集（Movie Dialogs Corpus），
 电影三元组数据集（MovieTriples）和Movie-DiC的领域都是电影对白；
 OpenSubtitles和SubTle的领域都是电影字幕；
-Twitter数据集（Twitter Corpus），Twitter对话数据集和Twitter三元组数据集的领域都是Twitter短文本闲聊。
-% 新浪微博数据集（Sina Weibo Corpus）
+Twitter数据集（Twitter Corpus），
+Twitter对话数据集和Twitter三元组数据集的领域都是Twitter短文本闲聊。
+% -- This is totally future_work.
 尽管人类标注是对话文本的重要补充，但是由于其代价的高昂，
 所得的数据量往往比较少；
 另一方面，元信息是一类在数据采集过程中伴随对话文本同时获得的描述性信息，

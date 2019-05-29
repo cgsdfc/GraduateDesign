@@ -12,50 +12,50 @@
     测定不同指标的系统层面得分和句子层面得分。
     本文发现，不同数据集上的模型在不同指标上的得分没有完全的一致性。
     总体来说，数据集对得分的影响大于模型对得分的影响，
-    使用相同特征的指标具有相似的句子层面得分分布。
+    而使用相同特征的指标具有相似的句子层面得分分布。
     本文从经验上总结了上述现象的原因，包括
     合理的响应空间过于庞大，给评价增加了难度；
     模型在不同数据集上的泛化能力有待加强；
-    指标的分布各异，给评价造成了混乱。
-    本文为解决上述问题提出了若干方向，
+    指标的分布各异，给评价造成了混乱等等。
+    最后，本文提出了关于上述问题的若干研究方向，
     包括使用新的模型体系结构，
-    研究开放式领域对话数据集的统计规律
-    和发展特定数据集上的指标等等。
+    研究开放领域对话数据集的统计规律和发展特定数据集上的指标等等。
 \end{cabstract}
 
+% -- 除了pros and cons 还有transferrability，可迁移性。
 \begin{eabstract}
     Although the Seq2Seq-based generative dialogue systems are
     able to generate natural and
     fluent responses,
-    they have been widely known for preferring to generate
+    they have been known for preferring to generate
     simple and repeated responses.
     Towards the goal of generating diverse, meaningful and
     engaging dialogues,
-    many researchers proposed various methods to address the
-    problem of low-quality responses.
-    However, it is known that the
+    many researchers proposed methods to address the
+    problems of low-quality responses.
+    However, it is also known that the
     lack of good automatic evaluation metrics
-    has led field to rely heavily on human evaluation,
-    which is both expensive and unscalable.
+    has led the field to rely heavily on human evaluation,
+    which is expensive and unscalable.
     To better understand the pros and cons of various
     evaluation metrics,
     we trained three generative models on
     three public-available datasets and measured their
-    performances with various metrics on system level
-    as well as utterance level.
-    We found that there is no universal consistency among
-    the scores of all models on all datasets with all metrics.
-    However, the datasets generally pose a heavier impact on
-    the scores than the models do.
+    performances with various metrics on both system level
+    and utterance level.
+    We found that there is no observable consistency among scores
+    across various models, datasets and metrics.
+    However, on a per-metric basis, datasets generally pose a larger impact on
+    the scores than models do.
     In addition, the distributions of
-    utterance-level scores are similar if the metrics use the same
-    set of features.
-    We made empirical explanation on the
-    observation that the enormous space for reasonable responses
-    makes the evaluation harder to tackle.
+    utterance-level scores tend to have similar shape if the corresponding metrics
+    use the same set of features as measurement.
+    We owe the experimental observations to the facts
+    that the enormous space for reasonable responses
+    makes the evaluation hard to tackle.
     Meanwhile, the ability of the models to generalize across
     various datasets remain highly enhanceable.
-    Worse still, the highly diversed distributions of scores
+    Finally, the highly diversed distributions of scores
     of various metrics makes the results somehow confusing.
     Based on the empirical results, we pointed out several
     directions for future work, including using new model

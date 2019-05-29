@@ -24,7 +24,7 @@ RNN的基本思想是：序列由有序的元素组成，每一个时刻（Time 
 \footnote{\url{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}}~所示，
 在时间轴上展开的RNN和一般的前馈神经网络（Feed Forward Neural Networks）很像，不过每一个时刻的权重矩阵都是共享的。
 这个共享的权重矩阵$A$又被称为循环矩阵（Recurrent Matrix），
-它的作用是对输入序列进行某种保持顺序信息的编码。
+它能对输入序列的位置信息进行编码。
 
 \begin{figure}[H]
     \centering
@@ -527,7 +527,7 @@ Vinyals等人对他们提出的基于Seq2Seq的对话系统
 % -- Dataset -- %
 \section{生成式对话的数据集}\label{sec:public_dataset}
 本领域所使用的数据集一般称为开放领域的对话数据集
-（Open-Domain Conversation Corpus），
+（Open-domain Conversation Corpus），
 它和传统的面向任务的数据集相比，话题开放， 语法形式多样，
 而且常带有非自然语言符号（表情符号，URL等等）\upcite{corpus_survey}。
 表~\ref{tab:dataset_list}~列举了一些常见数据集，

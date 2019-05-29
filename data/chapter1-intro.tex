@@ -1,32 +1,39 @@
 \chapter{绪论}\label{ch:introduction}
 
 \section{课题研究背景}\label{sec:research_background}
-% Task-Oriented and Chat-Oriented.
-早期的对话系统的主要用途是帮助用户用自然语言完成某项任务，
-比如技术支持（Technical Support），预订机票、预订餐馆的座位、查询航班等。
-这类系统又被称为面向任务的系统（Task-Oriented Dialogue System），
-它们的实现技术包括关键词匹配、规则和模板以及对话状态追踪
-（Dialogue State Tracking）等等，
-往往需要大量人工标注的数据。
-这些系统只能处理特定领域内的对话，不能回答开放性问题，用途局限于特定领域
+% -- Task-oriented -- %
+传统的对话系统的主要用途是帮助用户用自然语言完成某项任务，
+比如技术支持（Technical Support），预订机票，预订餐馆的座位，查询航班等等。
+这种系统又被称为面向任务的对话系统（Task-oriented Dialogue System），
+它们的实现技术通常包括关键词匹配，规则和模板以及对话状态追踪（Dialogue State Tracking）等等。
+构建面向任务的对话系统往往需要写死的规则（Hard Written Rules）和大量人工标注的数据，
+并且它们只能处理特定领域的对话，不能回答开放性问题（Open-domain Problem），用途局限于特定领域
 \upcite{corpus_survey,Seq2Seq,Shang}。
 
-随着在线聊天的流行，社交媒体和互联网论坛积累了大量的聊天语料数据，
-具有代表性的社交媒体和论坛有Twitter，Reddit和微博。
-大量的数据使人们可以构建数据驱动的（Data-Driven），
-开放领域（Open-Domain）的对话系统\upcite{Ritter11}，
-这类对话系统又称为面向闲聊的系统（Chat-Oriented Dialogue System）。
+% -- Chat-oriented -- %
+随着在线聊天的流行，社交媒体和论坛积累了大量的对话语料数据，
+其中具有代表性的社交媒体和论坛有推特（Twitter），Reddit和新浪微博（Sina Weibo）等等。
+大量的对话数据使人们可以构建数据驱动的（Data-driven），
+能回答开放性问题的对话系统\upcite{Ritter11}，
+又称为面向闲聊的对话系统（Chat-oriented Dialogue System）。
 这种系统能根据对话的上下文和用户的提问产生语义相关的回答，
-用途有娱乐、语言学习工具和陪伴\upcite{HRED}等等。
+用途有娱乐，语言教学和陪伴\upcite{HRED}等等。
 
-开放领域的对话系统主要考察二人对话，
-两人聊天的历史记录称为上下文（Context），记为$c$；
-当前说话的人说出的话语称为消息（Message），记为$m$；
-另外一个人对该消息的回复称为响应（Response），记为$r$。
+% -- Definitions -- %
+下面定义面向闲聊的对话系统的主要术语。
+本领域考察的场景是两个人交替的用文本（而不是语音）进行对话，
+两人有先后顺序的各说一段话$x, y$，称为一个回合$t = (x, y)$（Turn），
+也称为一轮对话（One Turn of Conversation）。
+一个对话数据样本$D$是回合的序列$D = t_1, t_2, \dots, t_n$，
+它至少包含一轮对话，
+样本的最后一个回合$t_n$称为当前轮（The Current Turn），
+序列$t_1, t_2, \dots, t_{n-1}$称为当前轮的上下文$c$，
+$x_n$称为当前轮的消息$m$，$y_n$称为当前轮的响应$r$，
+在不引起歧义的情况下，“当前轮”可以省略，
+若样本只有一轮对话，则上下文为空序列，也可笼统的把消息称为上下文。
 $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
-系统的输入是$c, m$，输出是$r$，
-也就是输入对话的上下文和消息，输出响应，
-这个问题被称为对话响应生成（Dialogue Response Generation）。
+给定上下文$c$和消息$m$，模型需要预测响应$r$，
+这就是对话响应生成（Dialogue Response Generation）问题。
 
 \begin{figure}[H]
     \includegraphics[width=0.6\textwidth]{figure/context_message_response.png}
@@ -35,84 +42,96 @@ $c,m,r$三者的关系如图~\ref{fig:context_message_response}~所示。
     \label{fig:context_message_response}
 \end{figure}
 
-% Retrieval and Generative.
-对话系统又可以分为生成式对话系统（Generative System）和检索式对话系统（Retrieval-based System）
+% -- Generative System -- %
+面向闲聊的对话系统又可以分为生成式系统（Generative System）和检索式系统（Retrieval System）
 \upcite{corpus_survey,NUC}。
+两者的主要区别是产生输出的机制不同。
 简单来说，如果一个系统能生成训练集里没有出现过的句子，
-就把它称为生成式系统\upcite{HowNot}，反之称为检索式系统。
-生成式系统建立了给定输入句子，所有输出句子的条件概率分布，并从这个分布中生成句子。
-在解码（Decode）时，
-由于可能的句子空间过于庞大，在实际中通常采用某种启发式搜索方法，
-如集束搜索（Beam Search），贪婪搜索（Greedy Search）
-和随机取样（Random Sample）等等，产生一个次优解。
-设$X$为输入句子，$Y$为输出句子，$U$是全部句子的集合，生成式模型的一般表示为：
+就把它称为生成式系统\upcite{HowNot}，反之则称为检索式系统。
+生成式系统估计了给定输入特征$X$，预测结果为$Y$的条件概率$p(Y|X)$，
+并通过搜索概率分布空间产生句子。
+设$U$是所有句子的集合，生成式模型的输出机制可以表示为：
 \begin{align}
-    Y = \argmax_{Y\in U} p(Y|X)
+    Y = \argmax_{Y'\in U} p(Y'|X)
 \end{align}
-实际中$\argmax$会被某种搜索算法代替。
 
-检索式系统根据输入句子从一个数据集$C$中检索输出句子。
-$C$通常由人类撰写的语句组成，并且足够大，使得输出句子不容易重复。
-系统通过某种打分机制，如词频-逆文档频率（Term Frequency-Inverse Document Frequency，TF-IDF）或语义相似度（Semantic Similarity），
-对数据库中的候选句子进行打分，并把得分较高的候选句子作为输出：
+% -- Retrieval System -- %
+检索式系统根据输入特征$X$和数据集$C$中的候选输出$Y'$计算评分$\textit{Score}(X, Y')$，
+并从$C$中检索出评分最高的候选。
+为了使输出自然流畅而且不容易出现重复，$C$通常由大量人类撰写的语句组成。
+常见的评分机制有
+词频-逆文档频率（Term Frequency-Inverse Document Frequency，TF-IDF）
+和语义相似度（Semantic Similarity）等等。
+检索式系统的输出机制可以表示为：
 \begin{align}
     Y = \argmax_{Y\in C} \textit{Score}(Y, X)
 \end{align}
 
-可见，生成式系统和检索式系统的根本区别在于获得输出句子的机制不同。
-这两种方法各有优劣：检索式模型的输出没有语法错误并且可以筛选输出的内容\upcite{NUC}，但是不能生成新句子；
-生成式的模型能端对端的训练而且可以生成新的句子\upcite{Shang}，但是容易生成过短的句子\upcite{AdverEval}。
-在实际环境中，通常将它们作为模型联合体（Model Ensemble）使用\upcite{Two_are_better_than_one}，
-而检索式系统也经常作为生成式系统的基线系统\upcite{Shang,DCGM}。
+这两种方法各有优劣：检索式系统的输出没有语法错误并且可以对输出内容进行限制\upcite{NUC}，但是不能生成新句子；
+生成式系统可以生成新的句子\upcite{Shang}，但是容易生成过短的句子\upcite{AdverEval}。
+两种系统的联合体（Ensemble）通常能比单一系统获得更好的性能\upcite{Two_are_better_than_one}。
+而在实验中，检索式系统也经常作为生成式系统的基线\upcite{Shang,DCGM}。
 
-% RNN, Seq2Seq and Embedding
-生成式模型的流行得益于自然语言处理领域发展的一系列基础技术，包括
-为单词提供平滑特征的词嵌入（Word Embedding）\upcite{NNLM,word2vec,Glove}；
-能对变长序列建模的循环神经网络语言模型（Recurrent Neural Networks Language Model，RNNLM）\upcite{RNNLM}；
-易于训练，能避免梯度消失问题\upcite{VanishingGradient}的循环门单元，如长短期记忆单元（Long Short-Term Memory，LSTM）
-\upcite{LSTM}和门循环单元（Gated Recurrent Unit，GRU）\upcite{GRU}；
-以及序列到序列框架（Sequence to Sequence Framework，Seq2Seq）\upcite{Seq2Seq,GRU}。
+% -- Short Review of Technical Background -- %
+生成式模型的流行得益于自然语言处理领域的一系列基础技术，包括
+能为把单词转化为平滑的向量特征的词嵌入（Word Embedding）\upcite{NNLM,word2vec,Glove}，
+能更有效的对序列建模的循环神经网络语言模型（Recurrent Neural Networks Language Model，RNNLM）\upcite{RNNLM}，
+能避免梯度消失问题\upcite{VanishingGradient}的门单元，
+如长短期记忆（Long Short-Term Memory，LSTM）\upcite{LSTM}和
+带门循环单元（Gated Recurrent Unit，GRU）\upcite{GRU}，
+能端对端的映射序列的序列到序列框架（Sequence to Sequence Framework，Seq2Seq）\upcite{Seq2Seq,GRU}，
+以及能改善长期依赖问题（Long-span Dependency）的注意力机制\upcite{JointTransAlign,EffectiveAttention}。
+这些技术促进了基于神经网络的机器翻译（Neural Machine Translation，NMT）的发展，
+也促使学者们把机器翻译的技术应用到对话响应生成问题上。
 
-% Chatbot in Seq2Seq.
-Seq2Seq框架在自然语言处理的多项任务上都超过了之前的最佳水平，因此被广泛应用到对话生成领域。
-在国外，最早把Seq2Seq用到对话生成领域的是Vinyals等人\upcite{GoogleChatbot}，
+% -- Chatbots Based on Seq2Seq -- %
+在国外，最早把Seq2Seq框架用到生成式对话的是Vinyals等人\upcite{GoogleChatbot}，
 他们在OpenSubtitles\upcite{opensub}
 上训练的模型能回答简单的常识问题，
-并且比基于规则的系统CleverBot\footnote{\url{http://www.cleverbot.com/}}获得了更高的人类评价得分。
+并且比基于规则的系统CleverBot\footnote{\url{http://www.cleverbot.com/}}获得了更高的人类评分。
 
 % -- Li -- %
-Li等人提出了一系列基于Seq2Seq框架的对话系统，包括
-利用最大互信息（Maximum Mutual Information，MMI）增加输出多样性的目标函数\upcite{MMI}；
-在解码器端（Decoder）加入说话人身份信息（Speaker ID），促进输出的人格一致性（Personality Coherence）
-\upcite{persona}；
-利用对抗生成网络（Generative Adversarial Networks，GAN）
-\upcite{GAN}使系统输出和人类输出难以分辨\upcite{Adversarial} 等等。
+Li等人在增加响应的多样性方面做了一系列的工作。
+他们提出使用最大互信息（Maximum Mutual Information，MMI）作为解码的目标函数\upcite{MMI}，
+增加消息-响应和响应-消息两个方向的相关性。
+他们提出的Persona模型\upcite{persona}在解码器端加入了说话人身份（Speaker ID），
+有效的促进了响应的人格一致性（Personality Coherence）。
+他们还把强化学习（Reinforcement Learning，RL）和
+对抗生成网络（Generative Adversarial Networks，GAN）应用到响应生成问题上\upcite{deep_RL,Adversarial}，
+并取得了有意义的进展。
 
 % -- Serban -- %
-Serban等人把Sordoni等人提出的用于查询建议（Query Suggestion）的
-多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}应用到对话生成领域，
-提出了能捕捉对话的层级结构的HRED模型\upcite{HRED}。
-基于HRED，Serban等人又提出了利用随机潜变量（Stochastic Latent Variable）增加对话多样性的Variational Hierarchical Recurrent Encoder-Decoder，即VHRED\upcite{VHRED}；
-以及加入了高层次抽象信息的多精度循环网络（Multiresolution Recurrent Neural Networks，MultiRNN）\upcite{MrRNN}。
+Serban等人扩展了Sordoni等人提出的
+多层编解码器（Hierarchical Recurrent Encoder-Decoder，HRED）\upcite{hred-qs}，
+并将其应用到对话生成领域\upcite{HRED}。
+基于多层编解码器，Serban等人又提出了利用随机隐变量增加对话多样性的隐变量多层编解码器
+（Latent Variable Hierarchical Recurrent Encoder-Decoder，VHRED）\upcite{VHRED}，
+以及加入了高层次抽象信息的多精度循环神经网络（Multiresolution Recurrent Neural Networks，MrRNN）\upcite{MrRNN}。
 
 % -- Shang -- %
-在国内，Shang等人研究了微博数据集上的短文本对话生成问题（Short-Text Conversation），
-提出了以GRU为门单元的编解码器模型（Neural Response Machine，NRM）\upcite{Shang}，
-并在人类评价上取得了比检索式系统和翻译式系统\upcite{Ritter11}更好的成绩。
-Chen Xing等人加入了从预训练LDA模型中获取的主题词（Topic Words），提出了Topic-Aware Seq2Seq \upcite{Topic_Aware}，
+在国内，Shang等人研究了基于新浪微博数据集的短文本对话生成问题\upcite{Shang}，
+并提出了以GRU为门单元的编解码器模型（Neural Response Machine，NRM）。
+他们的模型在人类评价上取得了比检索式系统和基于统计机器翻译
+（Statistical Machine Translation，SMT）的系统更好的成绩。
+Xing等人提出了能利用主题词的Seq2Seq模型\upcite{Topic_Aware}，
 由于篇幅有限，不能一一介绍。
 
 
 \section{课题研究意义}\label{sec:research_meaning}
-% 存在的问题：1. 评估模型的困难性。2. 容易生成Naive响应。
-本领域目前有两个难题：一是评价系统生成的响应的困难性\upcite{HowNot,Shang,deep_RL,deltaBLEU,ADEM}；
-二是如何避免生成单调的响应
-\upcite{MMI,Distill,Ritter11,DCGM,HRED}。
-对第一个难题的一个普遍解释是，和机器翻译相比，对话生成的输出具有更高的熵（Entropy）。
+本领域目前存在两个难题：
+一是如何合理评价面向闲聊的对话系统的性能\upcite{HowNot,Shang,deep_RL,deltaBLEU,ADEM}，
+二是如何避免生成单调无意义的响应，增加响应的多样性\upcite{MMI,Distill,Ritter11,DCGM,HRED}，
+本课题致力于解决第一个难题。
 如表~\ref{tab:multiple_valid_responses}~所示，
-给定一个消息，往往存在大量合理的响应，
-这些响应的语义多种多样，
-和参考响应（Ground Truth）的语义可能完全不同。
+对于一则给定的消息，合理响应的数量不止一个。
+虽然在机器翻译领域，对于源句子的合理翻译也可以有多个，
+但是这些翻译必须在语义上和参考大体一致，并且和源句子的语义完全相同，
+所以，机器翻译的合理输出之间只存在语法和词法层面的多样性。
+而在对话响应生成领域，尽管什么是合理的响应还没有一个明确的定义，
+但从直观上来看，对一个消息的回答不应该是该消息的语义重复，
+所以合理的响应不需要和消息保持语义一致性。
+对合理响应更少的约束条件意味着更大的可能性空间。
+这种固有的多样性导致评价响应生成系统比评价机器翻译系统困难。
 
 \begin{table}
     \centering
@@ -120,22 +139,45 @@ Chen Xing等人加入了从预训练LDA模型中获取的主题词（Topic Words
     \label{tab:multiple_valid_responses}
     \begin{tabular}{rl}
         \toprule
-        \textbf{Query:} & 为什么不领养一个？ \\
+        \textbf{消息：} & 为什么不领养一个？ \\
         & Why not adopt one? \\
-        \textbf{Groundtruth:} & 我也想领养，但是不好找 \\
-        & I hope so, but it's hard to find one \\
+        \textbf{参考：} & 我也想领养，但是不好找。 \\
+        & I hope so, but it's hard to find one. \\
         \midrule
-        \textbf{Candidate 1:} & 恩,我已经在朋友中找了 \\
-        & I'm looking for one from my friends \\
-        \textbf{Candidate 2:} & 巴比伦是稀有品种 \\
-        & Pappilon is a rare breed \\
-        \textbf{Candidate 3:} & 可以哈,谢谢你的建议 \\
-        & OK, thank you for your advice \\
+        \textbf{响应1：} & 恩，我已经在朋友中找了。 \\
+        & I'm looking for one from my friends. \\
+        \textbf{响应2：} & 巴比伦是稀有品种。 \\
+        & Pappilon is a rare breed. \\
+        \textbf{响应3：} & 可以哈。谢谢你的建议。 \\
+        & OK, thank you for your advice. \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-这种固有的多样性决定了评价响应生成系统的困难。
+\begin{table}
+    \centering
+    \caption{}
+    \label{}
+    \begin{tabular}{rl}
+        \toprule
+        \textbf{源句子：} & 该行动指南确保军队永远听党指挥。\\
+        \textbf{参考：} & It is a guide to action that
+        ensures that the military will forever
+        heed Party commands. \\
+        \midrule
+        \textbf{翻译1：} & It is a guide to action which
+        ensures that the military always obeys
+        the commands of the party. \\
+        \textbf{翻译2：} & It is to insure the troops
+        forever hearing the activity guidebook
+        that party direct. \\
+        \textbf{翻译3：} & It is the practical guide for
+        the army always to heed the directions
+        of the party. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
 Liu等人在文献\cite{HowNot}中研究了两类指标，分别是基于词重叠的指标（Word Overlap Based Metrics）
 和基于词嵌入的指标（Embedding Based Metrics），并且发现这些指标在非技术性的Twitter对话数据集
 （Twitter Dialogue Corpus）上和人类评价只有弱相关性，

@@ -119,7 +119,7 @@ Xing等人提出了能利用主题词的Seq2Seq模型\upcite{Topic_Aware}，
 
 \section{课题研究意义}\label{sec:research_meaning}
 本领域目前存在两个难题：
-一是如何合理评价面向闲聊的对话系统的性能\upcite{HowNot,Shang,deep_RL,deltaBLEU,ADEM}，
+一是如何合理评价生成式系统的性能\upcite{HowNot,Shang,deep_RL,deltaBLEU,ADEM}，
 二是如何避免生成单调无意义的响应，增加响应的多样性\upcite{MMI,Distill,Ritter11,DCGM,HRED}，
 本课题致力于解决第一个难题。
 如表~\ref{tab:multiple_valid_responses}~所示，
@@ -132,7 +132,6 @@ Xing等人提出了能利用主题词的Seq2Seq模型\upcite{Topic_Aware}，
 所以合理的响应不需要和消息保持语义一致性。
 对合理响应更少的约束条件意味着更大的可能性空间。
 这种固有的多样性导致评价响应生成系统比评价机器翻译系统困难。
-
 \begin{table}
     \centering
     \caption{合理的响应不唯一\upcite{RUBER}}
@@ -154,53 +153,25 @@ Xing等人提出了能利用主题词的Seq2Seq模型\upcite{Topic_Aware}，
     \end{tabular}
 \end{table}
 
-\begin{table}
-    \centering
-    \caption{}
-    \label{}
-    \begin{tabular}{rl}
-        \toprule
-        \textbf{源句子：} & 该行动指南确保军队永远听党指挥。\\
-        \textbf{参考：} & It is a guide to action that
-        ensures that the military will forever
-        heed Party commands. \\
-        \midrule
-        \textbf{翻译1：} & It is a guide to action which
-        ensures that the military always obeys
-        the commands of the party. \\
-        \textbf{翻译2：} & It is to insure the troops
-        forever hearing the activity guidebook
-        that party direct. \\
-        \textbf{翻译3：} & It is the practical guide for
-        the army always to heed the directions
-        of the party. \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-
-Liu等人在文献\cite{HowNot}中研究了两类指标，分别是基于词重叠的指标（Word Overlap Based Metrics）
-和基于词嵌入的指标（Embedding Based Metrics），并且发现这些指标在非技术性的Twitter对话数据集
-（Twitter Dialogue Corpus）上和人类评价只有弱相关性，
-在技术性的Ubuntu对话数据集（Ubuntu Dialogue Corpus）\upcite{ubuntu_corpus}没有相关性。
-朝着Liu等人提出的新方向，许多学者提出了新的对话指标。
-
-本课题延续Liu等人的工作，对自动评价指标进行深入研究。
-Liu等人已经研究了评价指标与人类评价的相关性，并且发现了它们的弱点。
-本课题进一步研究了评价指标之间的相关性，以及模型的性能在不同数据集上的一致性。
-虽然，目前大多数评价指标尚不能和人类评价一样准确的衡量系统的性能，
-但是对它们性质的研究将有助于理解现有指标的弱点，进而有助于自动化指标的发展。
+本课题试图通过实验证实评价生成式模型的困难性，并指出导致这种困难性的几个方面的原因。
+虽然，目前大多数评价指标尚不具有和人类评价较高的一致性，
+但是对它们的研究将有助于理解现有指标的弱点，从而有助于自动化评估的发展。
+尽管没有使用人类评价，本文对评价指标、模型和数据集的分析还是取得了有意义的结论。
 
 \section{课题研究内容}\label{sec:reseach_content}
-本课题以文献\cite{VHRED}的实验中使用的三个模型LSTM，HRED，VHRED为基线，
-扩展了文献\cite{HowNot}中考察的两类指标，
-并在三个具有代表性的公开数据集：Ubuntu对话数据集，OpenSubtitles和LSDSCC\upcite{LSDSCC}上进行了实验。
-尽管没有进行人类评价，但是本文对指标之间和模型之间的一致性分析还是取得了有意义的结论。
-% 具体是什么结论，现在还不是很清楚。到时候实验一章写完之后，这里再修改。
+Liu等人发现自动评价指标在非技术性的Twitter对话数据集（Twitter Dialogue Corpus）上和人类评价只有弱相关性，
+在技术性的Ubuntu对话数据集（Ubuntu Dialogue Corpus）上和人类评价没有相关性\upcite{HowNot}。
+本课题延续Liu等人的工作，
+研究了评价指标之间的相关性，以及模型的性能在不同数据集上的迁移能力。
+
+本课题以Serban等人在文献\cite{VHRED}的实验中使用的三个模型LSTM，HRED，VHRED为基线，
+扩展了Liu等人在文献\cite{HowNot}中考察的两类指标，即基于词重叠的指标（Word-overlap-based Metrics）
+和基于词嵌入的指标（Word-embedding-based Metrics），
+在三个具有代表性的公开数据集，Ubuntu对话数据集，OpenSubtitles和LSDSCC\upcite{LSDSCC}上进行了实验。
 
 \section{论文组织结构}\label{sec:paper_organization}
 本文的组织结构如下：
-第~\ref{ch:related_work}~章相关工作介绍了本领域的模型，指标和数据集的基本情况。
+第~\ref{ch:related_work}~章相关工作介绍了生成式模型的基本定义和指标，数据集的基本情况。
 第~\ref{ch:method}~章研究方法介绍了本文的实验框架，模型超参数，数据集预处理和指标参数的选择等等。
 第~\ref{ch:experiment}~章实验结果与讨论详细展示了实验数据和结论。
 最后一章结论总结了本课题的研究成果，提出了若干研究方向。
-% 某些写的笼统的地方，等实验结论出来之后，可以改的具体一些。

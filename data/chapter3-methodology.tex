@@ -86,11 +86,6 @@ $n$是测试集的样本数，$(m, d, s)$是模型，数据集和指标组成的
     \label{fig:framework}
 \end{figure}
 
-% why did you choose these models?
-% Show me you really understand these model.
-% Why the selection of models is important?
-% Two reasons: 1. they are seq2seq based. we only investigate s2s.
-% 2. they are trained on 2 corpuses before. Their transferability
 \section{模型选取}\label{sec:model_selection}
 第~\ref{ch:related_work}~章已经介绍了生成式模型的基本概念和数据集、指标的基本情况。
 和相对有限的数据集和指标相比，生成式模型的数量众多，
@@ -321,6 +316,43 @@ Ubuntu上的模型的句子编码器都使用了单向RNN，
 \end{table}
 
 % -- Dataset Preprocessing -- %
+
+\section{数据集选取}\label{sec:dataset_selection}
+本文把注意力集中在三个数据集上：
+Ubuntu对话数据集（Ubuntu Dialogue Corpus），OpenSubtitles，
+LSDSCC数据集（A Large Scale Domain-Specific Conversation Corpus），
+它们代表了三个常见的对话领域：技术支持，电影字幕和在线论坛。
+
+% --------- Ubuntu ---------- %
+Ubuntu对话数据集（下文简称Ubuntu）
+是Lowe等人从Freenode IRC网络的Ubuntu板块的聊天日志\footnote{\url{https://irclogs.ubuntu.com/}}
+中获取的技术性两人多轮对话。
+这个数据集包含了大量技术符号，比如路径，命令，URL，还有笔误（Typo），缩写（Abbreviation）和俚语（Slang）。
+它的样本数量多达930,000（接近1M），庞大的数据量为数据驱动的模型提供了极佳的试验场。
+它的多轮特性为模型提供了更长的上下文，有助于模型生成更有意义的响应。
+
+% --------- OpenSubtitles -------- %
+OpenSubtitles是开源双语数据集项目（The Open Parallel Corpus，OPUS）的一部分。
+它是从一个人们可以自由上传和下载电影字幕的网站\footnote{\url{http://www.opensubtitles.org}}的数据库中获取的，
+庞大而充满噪音的开放领域数据集，对话数量高达80M。
+由于OPUS的目的是收集机器翻译所需要的双语数据集（Parallel Corpus），OpenSubtitles也是一个双语数据集，
+它里面并没有对话数据集所需要的轮信息（Turn Information），
+而且也没有区分旁白，独白和对白。
+Sordoni等人把OpenSubtitles用到对话领域\upcite{GoogleChatbot}，
+他们把相邻的两个句子分别视为消息和响应，并且每一个句子既是消息又是响应。
+Li等人对OpenSubtitles也采用了类似的办法\upcite{MMI,persona,Future,DiverseBeam,
+Distill,deep_RL,Adversarial}。
+
+% --------- LSDSCC ------------- %
+大规模特定领域对话数据集（A Large Scale Domain-Specific Conversational Corpus，LSDSCC）
+是一个特定领域的单轮对话数据集\upcite{LSDSCC}。
+它的训练集包含738,095个样本；它的词汇表比较大，达到了50K。
+作者从Reddit的电影板块\footnote{\url{https://www.reddit.com/r/datasets}}中获取原始数据，
+设计了一套尽可能保留语料信息的清理程序，还使让人类评价员对消息和响应的相关度进行评价，
+最终得到一个高质量的消息-响应对数据集（Query-Reply Pair Corpus）。
+作者还用信息检索的方法构建了一个多重参考测评集，并基于此提出了一系列衡量响应多样性的指标。
+
+
 \section{数据集预处理}
 \label{sec:dataset_proprecessing}
 本文使用的Ubuntu对话数据集直接来自Serban等人的项目

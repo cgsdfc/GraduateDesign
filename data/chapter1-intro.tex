@@ -114,7 +114,7 @@ Xing等人提出了能利用主题词的Seq2Seq模型\upcite{Topic_Aware}，
 
 
 \section{课题研究意义}\label{sec:research_meaning}
-本领域目前存在两个难题：
+本领域目前面临两个难题：
 一是如何合理评价生成式系统的性能\upcite{HowNot,Shang,deep_RL,deltaBLEU,ADEM}，
 二是如何避免生成单调无意义的响应，增加响应的多样性\upcite{MMI,Distill,Ritter11,DCGM,HRED}，
 本课题致力于解决第一个难题。
@@ -150,7 +150,7 @@ Xing等人提出了能利用主题词的Seq2Seq模型\upcite{Topic_Aware}，
     \end{tabular}
 \end{table}
 
-本课题试图通过实验证实评价生成式模型的困难性，并指出导致这种困难性的几个方面的原因。
+本文试图通过实验证实评价生成式模型的困难性，并指出导致这种困难性的几个方面的原因。
 虽然，目前大多数评价指标尚不具有和人类评价较高的一致性，
 但是对它们的研究将有助于理解现有指标的弱点，从而有助于自动化评估的发展。
 尽管没有使用人类评价，本文对评价指标、模型和数据集的分析还是取得了有意义的结论。
@@ -158,16 +158,16 @@ Xing等人提出了能利用主题词的Seq2Seq模型\upcite{Topic_Aware}，
 \section{课题研究内容}\label{sec:reseach_content}
 Liu等人发现自动评价指标在非技术性的Twitter对话数据集上和人类评价只有弱相关性，
 在技术性的Ubuntu对话数据集上和人类评价没有相关性\upcite{HowNot}。
-本课题延续Liu等人的工作，
+本文延续Liu等人的工作，
 研究了评价指标之间的相关性，以及模型的性能在不同数据集上的迁移能力。
 
-本课题以Serban等人在文献\cite{VHRED}的实验中使用的三个模型LSTM，HRED，VHRED为基线，
+本文以Serban等人在文献\cite{VHRED}的实验中使用的三个模型LSTM，HRED，VHRED为基线，
 扩展了Liu等人在文献\cite{HowNot}中考察的两类指标，即基于词重叠的指标和基于词嵌入的指标，
 在三个具有代表性的公开数据集，Ubuntu对话数据集，OpenSubtitles和LSDSCC上进行了实验。
 
 \section{论文组织结构}\label{sec:paper_organization}
 本文的组织结构如下：
-第~\ref{ch:related_work}~章相关工作介绍了生成式模型的基本定义和指标，数据集的基本情况。
+第~\ref{ch:related_work}~章相关工作介绍了生成式模型的基本定义以及指标和数据集的基本情况。
 第~\ref{ch:method}~章研究方法介绍了本文的实验框架，模型超参数，数据集预处理和指标参数的选择等等。
 第~\ref{ch:experiment}~章实验结果与讨论详细展示了实验数据和结论。
-最后一章结论总结了本课题的研究成果，提出了若干研究方向。
+最后一章结论总结了本文的研究成果，提出了若干研究方向。

@@ -19,9 +19,9 @@
 % -- RNN -- %
 生成式模型需要把一个长度可变的序列$X$映射到另一个长度可变的序列$Y$，且$X$和$Y$的长度可以不相等。
 循环神经网络（RNN）为这个问题提供了自然的解决方案。
-RNN的基本思想是：序列由有序的元素组成，每一个时刻（Time Step）输入一个元素，同时更新内部的隐藏状态（Hidden State），然后输出一个元素。
+它的基本思想是：序列由有序的元素组成，每一个时刻（Time Step）输入一个元素，同时更新内部的隐藏状态（Hidden State），然后输出一个元素。
 如图~\ref{fig:RNN_unrolled}~所示，
-在时间轴上展开的RNN和一般的前馈神经网络（Feed Forward Neural Networks）很相似，不过所有时刻共享一个权重矩阵$A$，
+在时间轴上展开的RNN和一般的前馈神经网络（Feed Forward Neural Networks）很相似，不过所有时刻都共享一个权重矩阵$A$，
 该矩阵又称为循环矩阵（Recurrent Matrix），它实现了对输入序列的编码。
 \begin{figure}[H]
     \centering
@@ -59,8 +59,8 @@ $o_t$是RNN在$t$时刻的输出向量，$V$是词汇表的大小，
     h_i &= \sigma \left( x_i^T W_{in} + h_{i-1}^T W_{hh} \right)
 \end{align}
 
-$W_{in}$是输入矩阵，$W_{out}$是输出矩阵，$W_{hh}$是循环矩阵，
-$\sigma$是激活函数。
+$W_{in}$是输入矩阵，$W_{out}$是输出矩阵，$W_{hh}$是循环矩阵，它们都是模型的参数；
+$\sigma$是常见的激活函数。
 RNN语言模型在训练时最大化训练集上的句子的对数概率：
 \begin{align}
     \mathcal{L(X)} = \sum_{i=1}^n \log p(x_i|x_1, x_2, \dots, x_{i-1})
@@ -68,12 +68,13 @@ RNN语言模型在训练时最大化训练集上的句子的对数概率：
 
 \subsection{Seq2Seq框架}\label{subsec:Seq2Seq}
 % ------------------ Seq2Seq ------------------ %
+Seq2Seq框架是一种基于RNN的编解码器模型（Encoder-Decoder Model）。
 如图~\ref{fig:Seq2Seq}~所示，
 Seq2Seq框架使用两个具有独立参数的RNN分别作为编码器和解码器。
-首先，编码器把输入序列$X$编码成一个定长向量$v$。
-该向量又称为思考向量（Though Vector），
-是编码器在最后一个时刻$t_{n}$的隐藏状态（Last Hidden State）。
-接着，解码器以$v$为初始隐藏状态（Initial Hidden State）生成输出序列。
+首先，编码器把输入序列$X$编码成一个定长向量$v$，
+该向量又称为思维向量（Though Vector），
+是编码器在最后一个时刻$t_{n}$的隐藏状态。
+接着，解码器以$v$为初始隐藏状态生成输出序列。
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figure/Seq2Seq.png}
@@ -83,13 +84,11 @@ Seq2Seq框架使用两个具有独立参数的RNN分别作为编码器和解码�
 
 通过先把输入序列$X$变换成某种压缩编码$v$，
 再把$v$还原为另一个序列$Y$，
-Seq2Seq对公式~\ref{eqn:generative_cond_prob}~作了如下转化：
+Seq2Seq对公式~\ref{eqn:generative_cond_prob}~中的条件概率作了如下分解：
 \begin{align}
-    h_i &= f(x_i ,h_{i-1}), v = h_n \\
-    p(y_1, y_2, \dots, y_m|x_1, x_2, \dots, x_n) &=
-    \prod_{i=1}^m p(y_i|v, y_1, y_2, \dots, y_{i-1})
+    p(y_1, y_2, \dots, y_m|x_1, x_2, \dots, x_n) &= \prod_{i=1}^m p(y_i|v, y_1, y_2, \dots, y_{i-1}) \\
+    v = h_n, h_i &= f(x_i ,h_{i-1})
 \end{align}
-
 $h_n$是编码器的最后一个时刻的隐藏状态，$f$是编码器RNN所使用的门单元的抽象表示。
 编码器和解码器以同一个目标函数一起训练。
 
@@ -108,7 +107,7 @@ Seq2Seq一般引入注意力机制（Attention Mechanism）
 所以在解码过程中，需要使用某种启发式搜索算法从所有可能的输出中产生一个近似最优解，
 这些算法又称为解码算法。
 最简单的解码算法是贪心搜索（Greedy Search），
-如公式~\ref{eqn:greedy_search}~所示，该算法在每一时刻都选择使当前句子的条件概率最大的单词。
+如公式~\ref{eqn:greedy_search}~所示，该算法在每一时刻都选择使当前部分生成的句子的条件概率最大的单词。
 因为公式~\ref{eqn:greedy_search}~中的各个$y_i$都不是独立的，
 而受之前输出的单词的影响，所以贪心搜索不能保证得到条件概率最大的输出序列。
 \begin{align}
@@ -143,18 +142,18 @@ Seq2Seq一般引入注意力机制（Attention Mechanism）
 为了增加模型输出的多样性，学者们提出了许多改进的解码算法。
 Li等人提出了Diverse Beam算法\upcite{DiverseBeam}，
 该算法在标准集束搜索中加入对来自相同父节点的候选的惩罚，
-即鼓励来自不同父节点的候选。
+即鼓励来自不同父节点的候选单词。
 他们发现来自不同父节点的单词通常比来自相同父节点的单词更具有语义多样性。
 % -- MMI -- %
 Li等人还提出了以最大互信息（Maximum Mutual Information，MMI）为目标函数的解码算法\upcite{MMI}。
 他们训练了一个最大化正向概率$p(Y|X)$的模型和
-一个最大化反向概率）$p(X|Y)$的模型，
-并用反向概率对利用正向概率生成的候选集进行重新排序。
+一个最大化反向概率$p(X|Y)$的模型，
+并用反向概率对用正向概率生成的候选句子列表进行重新排序。
 
 % -- Stochastic Greedy Sampling -- %
 Li等人还提出了随机贪心取样（Stochastic Greedy Sampling）算法\upcite{Distill}，
-以求在随机取样和贪心搜索之间找到一个平衡点。
-该算法只在条件概率最高的前$K$个候选单词中取样，
+以求在随机取样和贪心搜索之间找到一个最佳的平衡点。
+该算法只在条件概率最高的前$K$个候选单词中随机取样，
 参数$K$控制了随机取样和贪心搜索之间的比例：
 $K$越大，算法越接近随机取样，$K$越小，算法越接近贪心搜索。
 这些改进的解码算法在分别在不同程度上提高了响应的多样性。
@@ -212,7 +211,7 @@ BLEU的最终公式为：
 
 % ------------ ROUGE -------------- %
 面向召回率的摘要评估指标
-（Recall-oriented Understudy for Gisting Evaluation，ROUGE）\upcite{ROUGE}
+（Recall-Oriented Understudy for Gisting Evaluation，ROUGE）\upcite{ROUGE}
 是自动摘要领域（Automatic Summarization）的经典指标。
 它的变形有ROUGE-N，ROUGE-L，ROUGE-W和ROUGE-S等，分别使用了不同的特征，
 如n-gram共现数、最长公共子序列（Longest Common Subsequence，LCS）和二元跳词（Skip-Bigram）等。
@@ -221,7 +220,7 @@ BLEU的最终公式为：
     \textit{F1-score} = \frac{(1 + \beta^2) RP}{R + \beta^2 P}
 \end{align}
 参数$\beta$控制准确率和召回率的相对比例。
-以下无特殊说明时，当指标是句子层面的时候，$n$是系统句子的长度，$m$是参考句子的长度；
+下面介绍ROUGE的各种变形，无特殊说明时，当指标是句子层面的时候，$n$是系统句子的长度，$m$是参考句子的长度；
 当指标是摘要层面的时候，$n$是系统摘要的总单词数，$m$是参考摘要的总单词数。
 
 ROUGE-N利用了n-gram共现数，其公式为：
@@ -261,10 +260,10 @@ $\textit{LCS}_\cup(r_i, C)$是参考句子$r_i$和候选摘要$C$（由多个句
     P_{wlcs} &= f^{-1} \left( \frac{\textit{WLCS}(X, Y)}{f(n)} \right) \\
     \textit{ROUGE-W} &= \frac{(1 + \beta^2) R_{wlcs}P_{wlcs}}{R_{wlcs} + \beta^2 P_{wlcs}}
 \end{align}
-$\textit{WLCS}$是两个序列的加权LCS，它奖励连续的最长公共子序列。
+$\textit{WLCS}$是两个序列的加权最长公共子序列，它奖励连续的最长公共子序列。
 摘要层面的ROUGE-W与摘要层面的ROUGE-L类似。
 
-二元跳词是句子中顺序不变的一对单词，两个单词之间可以有任意数量的其他单词。
+二元跳词是保持在句子中的顺序不变的一对单词，两个单词之间可以有任意数量的其他单词。
 基于二元跳词的句子层面ROUGE-S定义为：
 \begin{align}
     R_{skip2} &= \frac{\textit{SKIP2}(X, Y)}{C(m, 2)} \\
@@ -276,13 +275,12 @@ $C(\cdot, \cdot)$为组合数。
 ROUGE-SU是ROUGE-S加入了一元词匹配（Unigram Matching）的扩展。
 
 % ----------------- METEOR ----------------- %
-基于显式次序的翻译指标（
+基于显式顺序的翻译指标（
 Metric for Evaluation of Translation with Explicit ORdering，METEOR）
 \upcite{METEOR}是针对BLEU的一些弱点作了改进的机器翻译的指标。
 与BLEU相比，METEOR在句子水平上与人类评价有更好的相关性。
 METEOR首先计算系统输出和参考输出之间的一元词匹配，这些匹配由多个可配置的模块计算产生，
-包括Exact，Porter-stem，WordNet-synonymy等等，
-分别表示严格匹配，Porter词根匹配和WordNet同义词匹配。
+包括严格匹配（Exact），Porter词根匹配（Porter-Stemmer）和WordNet同义词匹配（WordNet-Synonymy）等等。
 接着，METEOR在一元词匹配上计算一个对齐，并得到准确率和召回率，进而得到F1得分：
 \begin{align}
     \textit{Fmean} = \frac{10PR}{R + 9P}
@@ -300,8 +298,7 @@ METEOR的最终公式为：
 
 % --------- Perplexity ------------ %
 困惑度（Perplexity，PPL）是一种衡量统计语言模型性能的指标。
-困惑度为$P$的一个模型可以形象的描述为
-该模型在预测一个词的时候，平均需要从大约$P$个单词中等可能的选出一个。
+困惑度为$P$意味着一个模型在预测一个单词的时候，平均需要从大约$P$个单词中等可能的选出一个。
 因此，困惑度越低，语言模型在选择一个单词时就越不“困惑”。
 困惑度的计算公式为：
 \begin{align}
@@ -311,7 +308,7 @@ $\#words$是样本的总单词数，
 $N$是用于测试的样本数，$x_i$是一个样本，在语言模型中它是一个句子，
 在生成式模型中它是一对输入输出序列$(X, Y)$；
 $p(x_i)$是模型估计的概率，
-一个好的模型应该对测试集的样本给出较高的概率。
+一个好的模型应该对测试集的样本（正样本）给出较高的概率。
 
 % --------- embedding based ------------ %
 基于词嵌入的指标是一类基于分布式假设
@@ -349,8 +346,8 @@ $e_r^{ex}$是参考输出的向量极值表示，$e_{\hat{r}}^{ex}$是系统输�
 
 贪心匹配（Greedy Matching）
 得名于加权二部图（Weighted Bipartite Graph）的最大匹配问题\upcite{GreedyAndOptimal}：
-把两个句子的单词看做二部图的节点，任意两个节点之间有一条边，定义边上的权重为两个单词的余弦相似度，
-问如何构造一个匹配，使其中的边的权重之和最大。贪心匹配给出了一种贪心算法：
+把两个句子的单词看做一个二部图的所有节点，任意两个节点之间有一条边，定义该边上的权重为两个单词的余弦相似度。
+问题是：如何构造一个匹配，使其中的边的权重之和最大。贪心匹配给出了一种贪心算法：
 \begin{align}
     G(r, \hat{r}) = \frac{
     \sum_{w \in r} \max_{\hat{w} \in \hat{r}} \cos(e_w, e_{\hat{w}})
@@ -359,7 +356,7 @@ $e_r^{ex}$是参考输出的向量极值表示，$e_{\hat{r}}^{ex}$是系统输�
     G(r, \hat{r}) + G(\hat{r}, r)
     }{2}
 \end{align}
-除了上述三种组合方法外，还有很多其他方法\upcite{VectorCompose}。
+关于基于词嵌入的指标，值得指出的是：除了上述三种组合方法外，还有很多其他方法\upcite{VectorCompose}。
 
 % -------- Distinct-N ---------- %
 如公式~\ref{eqn:distinct_n}~所示，Distinct-N是Li等人提出的衡量句子n-gram多样性的指标\upcite{MMI}，
@@ -438,7 +435,7 @@ Kannan等人初步尝试了基于对抗生成网络的对抗式评价
 他们训练了一个鉴别器（Discriminator）来区分一个响应是来自系统还是来自人类，
 并且发现鉴别器能捕捉到基于Seq2Seq的模型倾向于生成短句子和通用句子的缺点。
 基于相似的思路，Li等人在文献\cite{Adversarial}中构建了完整的对抗生成网络，
-提出了训练和评价的一体框架。
+提出了训练和评价的整体框架。
 关于对抗生成网络的内容超出了本文的范围，所以不再描述。
 
 % -- Usage of Metrics -- %

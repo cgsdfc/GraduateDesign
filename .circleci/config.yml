@@ -18,9 +18,17 @@ jobs:
       - run:
           name: Install MS core fonts.
           command: |
-            apt-get install wget cabextract xfonts-utils -y
+            apt-get install wget cabextract xfonts-utils unzip -y
             wget http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
             dpkg -i ttf-mscorefonts-installer_3.6_all.deb
+
+      - run:
+          name: Install Xingkai
+          command: |
+            wget https://www.wfonts.com/download/data/2014/06/01/stxingkai/stxingkai.zip
+            unzip stxingkai.zip
+            cp chinese.stxingka.ttt /usr/local/share/fonts/
+            fc-cache -fv
 
       - run:
           name: Compile PDF.

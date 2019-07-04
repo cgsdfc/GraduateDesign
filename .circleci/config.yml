@@ -33,7 +33,7 @@ jobs:
       - run:
           name: Compile PDF.
           command: |
-            latexmk main.tex -xelatex
+            latexmk main.tex -xelatex -f
 
       - persist_to_workspace:
           root: /root

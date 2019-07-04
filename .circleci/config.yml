@@ -1,0 +1,50 @@
+version: 2
+
+executors:
+  my-executor:
+    working_directory: /root
+
+jobs:
+  build:
+    environment:
+    docker:
+      - image: teruo41/ubuntu-texlive:latest
+    steps:
+      - checkout
+      - run:
+          command: |
+            latexmk main.tex -xelatex
+      - persist_to_workspace:
+          root: /root
+          paths:
+            - project
+
+  publish-github-release:
+    docker:
+      - image: cibuilds/github:0.10
+    steps:
+      - attach_workspace:
+          at: /root
+      - run:
+          name: "Publish Release on GitHub"
+          command: |
+            cd /root/project/papers/${TARGET_DIR}
+            cp main.pdf main_${CIRCLE_TAG}.pdf
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ,main_${CIRCLE_TAG}.pdf
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+      - publish-github-release:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/

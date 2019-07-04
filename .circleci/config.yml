@@ -15,8 +15,12 @@ jobs:
           name: Install MS core fonts.
           command: |
             sudo apt-get install ttf-mscorefonts-installer
+
+      - run:
+          name: Compile PDF.
           command: |
             latexmk main.tex -xelatex
+
       - persist_to_workspace:
           root: /root
           paths:

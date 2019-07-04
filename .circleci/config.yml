@@ -27,7 +27,7 @@ jobs:
           command: |
             wget https://www.wfonts.com/download/data/2014/06/01/stxingkai/stxingkai.zip
             unzip stxingkai.zip
-            cp chinese.stxingka.ttt /usr/local/share/fonts/
+            cp chinese.stxingka.ttf /usr/local/share/fonts/
             fc-cache -fv
 
       - run:

@@ -44,3 +44,4 @@ info
 tmp/
 .~*
 clone/
+.vscode/settings.json

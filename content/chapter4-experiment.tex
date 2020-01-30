@@ -17,13 +17,13 @@
 % ------------------------- %
 \section{系统层面得分}\label{sec:system_scores}
 表~\ref{tab:systemScoresAll}~展示了各个模型在不同数据集上测定的各项指标的系统层面得分， 加粗的得分是三个系统中的最优者。 句子平均长度（\#words）没有加粗，因为它是一个参考数据。 从表中的数据来看， 在LSDSCC上HRED取得了除ROUGE-4外所有指标的最优， 在OpenSubtitles上，VHRED取得了除了ADEM和Distinct-N之外所有指标 的最优， 在Ubuntu上情况比较复杂：HRED取得9个指标的最优， LSTM取得了6个指标的最优， VHRED取得了3个指标的最优。 如果把在一个数据集上取得最优指标最多的模型称为在该数据集上的 最优模型的话， 从总体上看，HRED是所有数据集上的最优模型， 因为它在LSDSCC和OpenSubtitles都是最优模型。 但是观察在每一项指标上取得最优的模型时发现， 不同数据集上的取得最优的模型往往不相同。 为了了解不同模型在不同数据集上的表现， 本文对每一个指标的系统层面得分绘制了柱形图。
-\input{data/system_scores.tex}
+\input{content/system_scores.tex}
 
 % -- BLEU -- %
 图~\ref{fig:BLEU_system}~是BLEU的系统得分柱形图。 BLEU-1和BLEU-2的情况比较类似： 从总体上看，模型在Ubuntu的得分普遍高于在另外两个数据集上的得分， 而HRED和VHRED在所有数据集上都比LSTM表现好， 在Ubuntu上，VHRED超过了HRED，但在另外两个数据集上， HRED都一致的超过了VHRED。 模型的BLEU-1得分在虽然在不同数据集之间相差较大， 但在同一个数据集内却相差不大。 然而，模型的BLEU-2，BLEU-3，BLEU-4得分即便在同一个数据集内也相差很大。
 
 BLEU-3和BLEU-4的情况比较类似： 从总体上看，没有哪一个数据集的得分要普遍高于其他数据集上的得分。 在所有数据集上，HRED和VHRED的得分仍然普遍比LSTM高， 虽然有时候优势不太明显 。 VHRED在OpenSubtitles上大幅度的超过了HRED， 但在另外两个数据集上，HRED都超过了VHRED。 从绝对数量的角度来看，BLEU的得分随着N的增大而减小， 这是因为两个句子的n-gram共现数随着$N$的增大而减少。
-\input{data/barplot_group/BLEU.tex}
+\input{content/barplot_group/BLEU.tex}
 
 % -- ADEM_AND_EMB -- %
 图~\ref{fig:ADEM_EB_system}~是基于词嵌入的指标和ADEM的系统得分柱形图。 值得注意的是，ADEM对所有数据集上的所有模型的打分都非常接近2.6。 从表~\ref{tab:ADEM_system}~看出， 当数据集不同时，ADEM的分数在百分位变化， 当数据集相同而模型不同时，ADEM的分数在千分位之后（包括千分位）变化， 这表明数据集对ADEM得分的影响要大于模型的影响。
@@ -42,12 +42,12 @@ BLEU-3和BLEU-4的情况比较类似： 从总体上看，没有哪一个数据�
     \end{tabular}
 \end{table}
 从数据集的角度，所有模型在Ubuntu上的得分好于在OpenSubtitles的得分， 而后者要好于在LSDSCC上的得分。 从模型的角度，在LSDSCC上，HRED的得分好于VHRED的得分， 后者要好于LSTM的得分。 在OpenSubtitles上，HRED的得分好于LSTM的得分， 后者要好于VHRED的得分。 在Ubuntu上，最好的模型是LSTM，其次是HRED，最后是VHRED。 从上述分析来看，HRED在两个数据集上得分最优， VHRED在两个数据集上得分最差， LSTM在三个数据集上排名各不相同。 尽管得分的差异很小（最大值和最小值之间只相差0.019）， 而且各个数据集上模型的排名都不相同，但是还是可以看出， HRED在ADEM指标上表现较好，而VHRED则较差。 这可能是因为实验中没有用预训练的HRED初始化VHRED。
-\input{data/barplot_group/ADEM_EB.tex}
+\input{content/barplot_group/ADEM_EB.tex}
 
 和ADEM相比，基于词嵌入的指标表现的更具有一致性。 Average，Greedy和Extrema三种指标虽然在绝对数值上有些差异， 但是图像的模式却非常相似。 从总体来看，在所有数据集和指标上，HRED和VHRED都比LSTM表现的好。 在LSDSCC上，这三个指标很难将模型区分开来， 事实上，所有模型在LSDSCC上的某个指标都倾向于得到相同的分数。 基于分析这是因为LSDSCC的测试集样本太少（300个）， 没有足够多的样本令模型之间的差异展现出来。 在测试集样本数比较多的OpenSubtitles上，三个模型的区别比较明显， 但是由于OpenSubtitles的噪音比较大，话题比较分散， 模型相对比较容易产生话题相关的响应， 导致三个模型的区分不是特别明显。 在Ubuntu上，三个模型的区分最明显， HRED和VHRED超过了LSTM，拉开了较大距离。 这是因为Ubuntu是一个技术领域的数据集， 含有大量技术词汇，如\texttt{apt-get}，\texttt{java}等等。 模型必须能捕捉到消息中的技术相关的语义并生成相关的句子才能的高分， 这要求模型对消息的主题有很强的捕捉能力。 HRED和VHRED比LSTM多了编码器结构，可以肯定它们捕捉消息主题的能力更强。 此外，模型在三个数据集上的区分度的不同也和数据集的对话轮数有关， LSDSCC是单轮对话，OpenSubtitles是3轮对话，而Ubuntu是多轮对话。 多轮对话数据集更有利于能够利用它们的HRED和VHRED。
 
 % -- ROUGE -- %
-\input{data/barplot_group/ROUGE.tex}
+\input{content/barplot_group/ROUGE.tex}
 图~\ref{fig:ROUGE_system}~是ROUGE的系统得分柱形图。 从总体上看， 不同数据集上的模型在ROUGE-1，ROUGE-2，ROUGE-L和ROUGE-W的得分都不为0， 但在ROUGE-3和ROUGE-4上，多个模型的得分接近0， 这是正常的，因为一般来说，响应和参考之间的高阶n-gram重叠非常少。 ROUGE-1，ROUGE-L和ROUGE-W的图像非常相似。 在这三个指标上，在LSDSCC和OpenSubtitles上，HRED和VHRED超过了LSTM， 但在Ubuntu上，LSTM却超过了HRED和VHRED； 除此之外，各个数据集内三个模型的排名也基本一致， 但是模型之间的差距有时很大，比如LSDSCC上的ROUGE-2， 有时很小，比如OpenSubtitles上的ROUGE-1。
 
 在ROUGE-3和ROUGE-4上，LSTM的得分在所有数据集上普遍很低， 而HRED和VHRED在某些数据集上得分也很低， 在Ubuntu上，所有模型的得分都很低。 令人注目的是，VHRED在OpenSubtitles和LSDSCC上都取得了不错的成绩， 而HRED的表现在LSDSCC上较好，在OpenSubtitles上较差。
@@ -56,7 +56,7 @@ BLEU-3和BLEU-4的情况比较类似： 从总体上看，没有哪一个数据�
 图~\ref{fig:Other_system}~是Distinct-N， METEOR和句子长度的系统得分图。 在Ubuntu上的模型的句子长度明显大于 在LSDSCC上的模型，而后者大于在OpenSubtitles上的模型。 第~\ref{sec:dataset_proprecessing}~节表明， 各数据集在训练集的平均句子长度上的关系是：Ubuntu大于LSDSCC大于OpenSubtitles。 模型生成的响应的长度和训练集的平均句子长度具有一致性， 这是因为训练的目标函数是最大化训练集样本的对数概率， 所以模型倾向于模仿训练集的统计特征。
 
 Distinct-N对模型的区分度不高， 在同一个数据集上训练的模型，它们的Distinct-N都比较接近。 从数据集的角度，OpenSubtitles上的模型的Distinct-1较高， 而Ubuntu上的模型的Distinct-2较高。 METEOR似乎受句子长度的影响较大， 在句子长度较大的Ubuntu上，模型的METEOR得分要比其他数据集上的得分高得多。 而LSDSCC上的METEOR也比OpenSubtitles上的得分略高。 METEOR对不同模型的区分度不是很大， 但从总体上看，HRED和VHRED比LSTM的表现要好。
-\input{data/barplot_group/Other.tex}
+\input{content/barplot_group/Other.tex}
 
 % -- Conclusion -- %
 本节利用柱状图分析了模型，数据集和指标的系统层面得分。 在一些图中，各个模型的得分差异不是十分明显， 为了突显得分的差异，本文把观察的维度分成数据集和模型两个维度， 并分别绘制了箱体图。 通过箱体图得出的结论是相同的，但是由于图像的数量较多，所以放在了附录。 附录~\ref{ch:dataset_system_dist}~从 数据集的维度和模型的维度展示了不同指标的系统层面得分。
@@ -74,7 +74,7 @@ Distinct-N对模型的区分度不高， 在同一个数据集上训练的模型
 $\mu$是$x$的平均值，$\sigma$是$x$的标准差，$x'$是归一化之后的数据。 为了使读者能快速检阅所有指标的分布情况， 本文对所有模型和数据集的组合采用了案例分析（Case Study）的方法， 详细分析了模型为HRED，数据集为OpenSubtitles的各项指标的分布。 附录~\ref{ch:metric_dist}~展示了所有的组合上的指标分布。
 
 % -- BLEU -- %
-\input{data/distplot_group/BLEU.tex}
+\input{content/distplot_group/BLEU.tex}
 图~\ref{fig:BLEU_dist}~是BLEU的N取1到4时的分布图。
 由于加入了平滑处理，所以大部分得分都有非零数值，
 在均值附近集中了大量的句子，
@@ -90,17 +90,17 @@ BLEU-2至4的分布都非常相似，
 图像不对称， 峰值比高斯分布的峰值$1 / \sqrt{2 \pi} \approx 0.4$高。
 
 % -- ADEM_AND_EB -- %
-\input{data/distplot_group/ADEM_EB.tex}
+\input{content/distplot_group/ADEM_EB.tex}
 图~\ref{fig:ADEM_EB_dist}~是基于词嵌入的指标和ADEM指标的分布图。 因为ADEM可以看做是一种更高级的词嵌入指标，所以把它和其他词嵌入指标并列。 四个图像均呈钟型曲线，峰值非常接近0.4，峰值的横坐标则非常接近0。 ADEM曲线显示出几乎完美的对称，Greedy曲线的对称度次之， Average曲线向右边偏移，Extrema曲线向左边偏移。 ADEM和词嵌入指标有相似之处。 从句子向量的组合方式来看， Average的组合方法是平均值，Extrema的组合方法是极端值， 而ADEM的组合方法是预训练的VHRED编码器。 与其他词嵌入指标不同的是，ADEM考虑了上下文的影响， 使用神经网络对上下文，响应和参考三者加权， 并且显式的优化了和人类评价的相关性， 可见其采用的机制比一般的基于词嵌入的指标更加复杂。 Lowe在文献\cite{ADEM}中指出，ADEM倾向于保守打分， 即人类评价给高分的句子，ADEM倾向于给稍低的分数。 从ADEM的分布曲线上可以验证这一点： 得分高于平均值的句子与得分低于平均值的句子几乎一样多， 说明它不倾向于打高分或者低分。 值得注意的是，这些指标的分布非常接近高斯分布， 本文尚不清楚背后的原理是什么。 解释这些指标的分布接近高斯分布的原因将会是后续工作的一个方面。
 
 % -- ROUGE -- %
-\input{data/distplot_group/ROUGE.tex}
+\input{content/distplot_group/ROUGE.tex}
 图~\ref{fig:ROUGE_dist}~是ROUGE系列指标的分布图。 从曲线的形状来看，大致可分为两类： ROUGE-1，ROUGE-L，ROUGE-W是一类， ROUGE-2，ROUGE-3，ROUGE-4是一类。 ROUGE-2这类图像的特点是几乎所有句子的得分都集中在均值， 其他区域几乎没有任何句子。 这是因为实验中没有对ROUGE指标做任何平滑处理， 所以除了个别句子外，其他句子都得了零分。 这表明ROUGE-N指标当$N > 1$时捕捉不到任何n-gram重叠。
 
 另一方面，ROUGE-1类指标更像是BLEU-1指标的噪化版本， 它们都是双峰曲线，而且第一个峰值对应的点$(x_1, y_1)$和 第二个峰值对应的点$(x_2, y_2)$都有相似的坐标。 上述现象的原因是所有的响应和参考基本上没有$N > 1$的n-gram重叠， 基于最长公共子序列的匹配退化成了一元词匹配。
 
 % -- Other -- %
-\input{data/distplot_group/Other.tex}
+\input{content/distplot_group/Other.tex}
 图~\ref{fig:Other_dist}~是Distinct-N，METEOR和\#words的分布图。 Distinct-1的分布呈现两极分化， 在均值附近和均值右边较远处都聚集了大量句子。 Distinct-N的分母是句子的长度（\#words）， 分子是句子中互不相同的n-gram数量。 从图~\ref{fig:words_dist}~来看，句子的长度集中在均值附近， 长于均值的句子比短于均值的句子多， 这表明Distinct-N的值主要受分子影响。 Distinct-1的曲线表明，极大部分句子的各异的单词数量都接近平均值， 但也有少部分句子各异的单词数量远远小于平均值。
 % -- Distinct-2 -- %
 Distinct-2的图像没有出现两极分化， 这是因为二元词的空间比一元词的空间更大， 一个句子互不相同的二元词通常多于互不相同的一元词。 图像的特点是：
